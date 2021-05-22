@@ -1,0 +1,133 @@
+FROM debian:testing-slim
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set up renderer user
+RUN adduser --disabled-password --gecos "" renderer
+
+RUN apt-get update
+RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+
+#install nodejs
+RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
+  && apt-get update \
+  && apt-get install -y nodejs
+
+RUN apt-get install -y --no-install-recommends \
+  make \
+  cmake \
+  g++ \
+  git-core \
+  libboost-dev \
+  libboost-system-dev \
+  libboost-filesystem-dev \
+  libexpat1-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libpq-dev \
+  libproj-dev \
+  lua5.3 \
+  liblua5.3-dev\
+  osmium-tool \
+  postgresql-client \
+  python3-pip
+
+# Install python libraries
+RUN pip3 install requests \ 
+  && pip3 install pyyaml
+
+# Install latest osm2pgsql
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 \
+  && cd /home/renderer/src/osm2pgsql \
+  && rm -rf .git \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make \
+  && make install \
+  && mkdir /nodes \
+  && chown renderer:renderer /nodes \
+  && rm -rf /home/renderer/src/osm2pgsql
+
+RUN apt-get install -y --no-install-recommends \
+  apache2-dev \
+  autoconf \
+  automake \
+  libtool-bin \
+  libmapnik-dev 
+
+# Install mod_tile and renderd
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone https://github.com/mariocki/mod_tile.git --depth 1 \
+  && cd mod_tile \
+  && rm -rf .git \
+  && ./autogen.sh \
+  && ./configure \
+  && make \
+  && make install \
+  && ldconfig \
+  && cd ..
+
+# Copy update scripts
+COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/
+RUN chmod +x /usr/bin/openstreetmap-tiles-update-expire \
+  && mkdir -p /var/log/tiles \
+  && chmod a+rw /var/log/tiles 
+
+# Install trim_osc.py helper script
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone https://github.com/zverik/regional \
+  && cd regional \
+  && git checkout 889d630a1e1a1bacabdd1dad6e17b49e7d58cd4b \
+  && rm -rf .git \
+  && chmod u+x /home/renderer/src/regional/trim_osc.py  
+
+# Configure stylesheet
+RUN npm install -g carto@0.18.2 
+RUN cd /openstreetmap-carto \
+  && ls -l \
+  && carto project.mml > mapnik.xml 
+
+RUN apt-get install -y --no-install-recommends \
+  python3-psycopg2 
+
+RUN apt-get purge \
+  apache2-dev \
+  autoconf \
+  automake \
+  libtool-bin \
+  libmapnik-dev \
+  make \
+  cmake \
+  g++ \
+  git-core \
+  libboost-dev \
+  libboost-system-dev \
+  libboost-filesystem-dev \
+  libexpat1-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libpq-dev \
+  libproj-dev \
+  liblua5.3-dev\
+  python3-pip
+
+RUN apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+RUN npm purge
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+# Start running
+COPY ./scripts/import/run.sh /
+COPY ./scripts/import/indexes.sql /
+RUN chmod +x /run.sh
+ENTRYPOINT ["/run.sh"]
+CMD []
+

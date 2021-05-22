@@ -1,0 +1,75 @@
+version: "3"
+
+networks:
+  my_network:
+    external: false
+
+services:
+  import:
+    build:
+      context: .
+      dockerfile: Dockerfile.import
+    image: mariocki/osm-server-import:v1
+    volumes:
+      - type: bind
+        source: ~/mod_tile
+        target: /var/lib/mod_tile
+      - ~/data.osm.pbf:/data.osm.pbf
+      - ~/data.poly:/data.poly
+      - ./openstreetmap-carto:/openstreetmap-carto
+    links:
+      - db
+    env_file:
+      - .env
+    networks:
+      - my_network
+  kosmtik:
+    image: mariocki/osm-server-kosmtik:v1
+    build:
+      context: .
+      dockerfile: Dockerfile.kosmtik
+    volumes:
+      - type: bind
+        source: ./openstreetmap-carto
+        target: /openstreetmap-carto
+    links:
+      - db
+    ports:
+      - "6789:6789"
+    env_file:
+      - .env
+    networks:
+      - my_network
+  maps:
+    image: mariocki/osm-server-maps:v1
+    build:
+      context: .
+      dockerfile: Dockerfile.maps
+    volumes:
+      - type: bind
+        source: ./openstreetmap-carto
+        target: /openstreetmap-carto
+    links:
+      - db
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    networks:
+      - my_network
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.psql
+    image: mariocki/osm-server-db:v1
+    volumes:
+      - type: bind
+        source: ~/gis
+        target: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    command: "-c config_file=/etc/postgresql/postgresql.conf"
+    networks:
+      - my_network

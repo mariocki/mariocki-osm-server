@@ -1,0 +1,132 @@
+FROM debian:testing-slim
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set up renderer user
+RUN adduser --disabled-password --gecos "" renderer
+
+RUN apt-get update
+RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+
+RUN apt-get install -y --no-install-recommends \
+  make \
+  cmake \
+  g++ \
+  git-core \
+  libboost-dev \
+  libboost-system-dev \
+  libboost-filesystem-dev \
+  libexpat1-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libpq-dev \
+  libproj-dev \
+  lua5.3 \
+  liblua5.3-dev\
+  osmium-tool \
+  postgresql-client \
+  python3-pip 
+
+RUN apt-get install -y --no-install-recommends \
+  apache2 \
+  apache2-dev \
+  autoconf \
+  automake \
+  libtool-bin \
+  libmapnik-dev 
+
+# Install mod_tile and renderd
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone https://github.com/mariocki/mod_tile.git --depth 1 \
+  && cd mod_tile \
+  && rm -rf .git \
+  && ./autogen.sh \
+  && ./configure \
+  && make -j $(nproc) \
+  && make install \
+  && make install-mod_tile \  
+  && ldconfig \
+  && cd ..
+
+# Configure renderd
+RUN sed -i 's/renderaccount/renderer/g' /usr/local/etc/renderd.conf \
+  && sed -i 's/\/truetype//g' /usr/local/etc/renderd.conf \
+  && sed -i 's/hot/tile/g' /usr/local/etc/renderd.conf
+
+# Configure Apache
+RUN mkdir -p /var/lib/mod_tile \
+  && chown renderer /var/lib/mod_tile \
+  && mkdir -p /var/run/renderd \
+  && chown renderer /var/run/renderd \
+  && echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
+  && echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/conf-available/mod_headers.conf \
+  && a2enconf mod_tile && a2enconf mod_headers
+COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Copy update scripts
+COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/
+RUN chmod +x /usr/bin/openstreetmap-tiles-update-expire \
+  && mkdir -p /var/log/tiles \
+  && chmod a+rw /var/log/tiles \
+  && ln -s /home/renderer/src/mod_tile/osmosis-db_replag /usr/bin/osmosis-db_replag \
+  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
+
+# Install trim_osc.py helper script
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone https://github.com/zverik/regional \
+  && cd regional \
+  && git checkout 889d630a1e1a1bacabdd1dad6e17b49e7d58cd4b \
+  && rm -rf .git \
+  && chmod u+x /home/renderer/src/regional/trim_osc.py
+
+# Install render_list_geo helper script
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone https://github.com/alx77/render_list_geo.pl \
+  && cd render_list_geo.pl \
+  && rm -rf .git
+
+# configure rsyslog and logging
+RUN apt-get install -y rsyslog
+COPY logrotate.conf /etc/
+RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
+
+# Setup Munin
+RUN apt-get install -y \
+  apache2-utils \
+  libapache2-mod-fcgid \
+  libcgi-fast-perl \
+  munin
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+COPY ./configs/maps/munin.conf /etc/munin/
+COPY ./configs/maps/apache24.conf /etc/munin/
+RUN chown -R munin:www-data /var/log/munin \
+  && chmod 755 /var/log/munin \
+  && chmod ug+w /var/log/munin/* \
+  && mkdir -p /var/cache/munin/www \
+  && chown munin:www-data /var/cache/munin/www \
+  && chmod 755 /var/cache/munin/www \
+  && ln -s /home/renderer/src/mod_tile/munin/* /etc/munin/plugins/ \
+  && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
+
+# Configure stylesheet
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone --single-branch https://github.com/mariocki/openstreetmap-carto.git --depth 1 \
+  && cd openstreetmap-carto \
+  && rm -rf .git \
+  && npm install -g carto@0.18.2 \
+  && carto project.mml > mapnik.xml 
+
+# Copy site
+ADD siteroot /var/www/html/
+
+# Start running
+COPY ./scripts/maps/run.sh /
+RUN chmod +x /run.sh
+ENTRYPOINT ["/run.sh"]
+CMD []  
