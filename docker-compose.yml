@@ -15,7 +15,7 @@ services:
       - ~/data.osm.pbf:/data.osm.pbf
       - ~/data.poly:/data.poly
       - ./openstreetmap-carto:/openstreetmap-carto
-    links:
+    depends_on:
       - db
     env_file:
       - .env
@@ -28,7 +28,7 @@ services:
       dockerfile: Dockerfile.kosmtik
     volumes:
       - ./openstreetmap-carto:/openstreetmap-carto
-    links:
+    depends_on:
       - db
     ports:
       - "6789:6789"
@@ -44,7 +44,7 @@ services:
     volumes:
       - ~/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
-    links:
+    depends_on:
       - db
     ports:
       - "8080:80"
@@ -57,6 +57,7 @@ services:
       context: .
       dockerfile: Dockerfile.psql
     image: mariocki/osm-server-db:v1
+    shm_size: "1gb"
     volumes:
       - ~/gis:/var/lib/postgresql/data
     ports:
