@@ -4,18 +4,21 @@ set -x
 
 # Error if no data is provided
 if [ ! -f /data.osm.pbf ] && [ -z "$DOWNLOAD_PBF" ]; then
-  echo "WARNING: No import file at /data.osm.pbf."
-  exit
+    echo "WARNING: No import file at /data.osm.pbf."
+    exit
 fi
 
 if [ -n "$DOWNLOAD_PBF" ]; then
-  echo "INFO: Download PBF file: $DOWNLOAD_PBF"
-  wget "$WGET_ARGS" "$DOWNLOAD_PBF" -O /data.osm.pbf
-  if [ -n "$DOWNLOAD_POLY" ]; then
-    echo "INFO: Download PBF-POLY file: $DOWNLOAD_POLY"
-    wget "$WGET_ARGS" "$DOWNLOAD_POLY" -O /data.poly
-  fi
+    echo "INFO: Download PBF file: $DOWNLOAD_PBF"
+    wget "$WGET_ARGS" "$DOWNLOAD_PBF" -O /data.osm.pbf
+    if [ -n "$DOWNLOAD_POLY" ]; then
+        echo "INFO: Download PBF-POLY file: $DOWNLOAD_POLY"
+        wget "$WGET_ARGS" "$DOWNLOAD_POLY" -O /data.poly
+    fi
 fi
+
+cd /openstreetmap-carto
+carto project.mml > mapnik.xml
 
 # determine and set osmosis_replication_timestamp (for consecutive updates)
 osmium fileinfo /data.osm.pbf >/var/lib/mod_tile/data.osm.pbf.info
@@ -27,11 +30,11 @@ sudo -u renderer openstreetmap-tiles-update-expire $REPLICATION_TIMESTAMP
 
 # copy polygon file if available
 if [ -f /data.poly ]; then
-  sudo -u renderer cp /data.poly /var/lib/mod_tile/data.poly
+    sudo -u renderer cp /data.poly /var/lib/mod_tile/data.poly
 fi
 
 # Import data
-#sudo -u renderer osm2pgsql -H db -d gis --create --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${OSM2PGSQL_EXTRA_ARGS}
+sudo -u renderer osm2pgsql -H db -d gis --create --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${OSM2PGSQL_EXTRA_ARGS}
 
 # Create indexes
 psql -h db -U ${PGUSER} -d gis -f /indexes.sql

@@ -6,7 +6,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN adduser --disabled-password --gecos "" renderer
 
 RUN apt-get update
-RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl
 
 #install nodejs
 RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
@@ -16,6 +16,7 @@ RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
 # Style dependencies
 RUN apt-get update \
   && apt-get install --no-install-recommends -y \
+  git-core \
   gnupg \
   postgresql-client \
   python3 \
@@ -28,27 +29,27 @@ RUN apt-get update \
   ttf-unifont \
   unzip
 
-# Kosmtik with plugins, forcing prefix to /usr because bionic sets
-# npm prefix to /usr/local, which breaks the install
-RUN npm set prefix /usr && npm install -g kosmtik
+# Kosmtik with plugins, forcing prefix to /usr
+# taken from https://github.com/kosmtik/kosmtik/issues/302
+RUN npm set prefix /usr \
+  && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik \
+  && npm install -g leaflet \ 
+  && npm install -g leaflet-editinosm \
+  && npm install -g leaflet.photon \
+  && npm install -g osmtogeojson \
+  && npm install -g git+https://github.com/kosmtik/kosmtik-fetch-remote \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-overlay \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-map-compare \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-osm-data-overlay \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-mapnik-reference \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-open-in-josm \ 
+  && npm install -g git+https://github.com/kosmtik/kosmtik-geojson-overlay 
 
-WORKDIR /usr/lib/node_modules/kosmtik/
-RUN kosmtik plugins --install kosmtik-overpass-layer \
-  --install kosmtik-fetch-remote \
-  --install kosmtik-overlay \
-  --install kosmtik-open-in-josm \
-  --install kosmtik-map-compare \
-  --install kosmtik-osm-data-overlay \
-  --install kosmtik-mapnik-reference \
-  --install kosmtik-geojson-overlay \
-  && cp /root/.config/kosmtik.yml /tmp/.kosmtik-config.yml
+COPY ./scripts/kosmtik/kosmtik.yml /tmp/.kosmtik-config.yml
 
 RUN apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
-
-RUN mkdir -p /openstreetmap-carto
-WORKDIR /openstreetmap-carto
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 

@@ -8,37 +8,49 @@ RUN adduser --disabled-password --gecos "" renderer
 RUN apt-get update
 RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
 
-RUN apt-get install -y --no-install-recommends \
-  make \
-  cmake \
-  g++ \
-  git-core \
-  libboost-dev \
-  libboost-system-dev \
-  libboost-filesystem-dev \
-  libexpat1-dev \
-  zlib1g-dev \
-  libbz2-dev \
-  libpq-dev \
-  libproj-dev \
-  lua5.3 \
-  liblua5.3-dev\
-  osmium-tool \
-  postgresql-client \
-  python3-pip 
+#install nodejs
+RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
+  && apt-get update \
+  && apt-get install -y nodejs
 
 RUN apt-get install -y --no-install-recommends \
   apache2 \
   apache2-dev \
+  apache2-utils \
   autoconf \
   automake \
+  cmake \
+  cron \
+  g++ \
+  git-core \
+  libapache2-mod-fcgid \
+  libboost-dev \
+  libboost-filesystem-dev \
+  libboost-system-dev \
+  libbz2-dev \
+  libcgi-fast-perl \
+  libexpat1-dev \
+  liblua5.3-dev\
+  libmapnik-dev \ 
+  libpq-dev \
+  libproj-dev \
   libtool-bin \
-  libmapnik-dev 
+  logrotate \
+  lua5.3 \
+  make \
+  mapnik-utils \
+  munin \
+  osmium-tool \
+  postgresql-client \
+  postgis \
+  python3-pip \
+  rsyslog \
+  zlib1g-dev 
 
 # Install mod_tile and renderd
 RUN mkdir -p /home/renderer/src \
   && cd /home/renderer/src \
-  && git clone https://github.com/mariocki/mod_tile.git --depth 1 \
+  && git clone -b switch2osm https://github.com/mariocki/mod_tile.git --depth 1 \
   && cd mod_tile \
   && rm -rf .git \
   && ./autogen.sh \
@@ -50,9 +62,7 @@ RUN mkdir -p /home/renderer/src \
   && cd ..
 
 # Configure renderd
-RUN sed -i 's/renderaccount/renderer/g' /usr/local/etc/renderd.conf \
-  && sed -i 's/\/truetype//g' /usr/local/etc/renderd.conf \
-  && sed -i 's/hot/tile/g' /usr/local/etc/renderd.conf
+COPY ./configs/maps/renderd.conf  /usr/local/etc/renderd.conf
 
 # Configure Apache
 RUN mkdir -p /var/lib/mod_tile \
@@ -61,7 +71,8 @@ RUN mkdir -p /var/lib/mod_tile \
   && chown renderer /var/run/renderd \
   && echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
   && echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/conf-available/mod_headers.conf \
-  && a2enconf mod_tile && a2enconf mod_headers
+  && a2enconf mod_tile \
+  && a2enconf mod_headers
 COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Copy update scripts
@@ -89,19 +100,11 @@ RUN mkdir -p /home/renderer/src \
   && rm -rf .git
 
 # configure rsyslog and logging
-RUN apt-get install -y rsyslog
-COPY logrotate.conf /etc/
+COPY ./configs/maps/logrotate.conf /etc/
 RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 
-# Setup Munin
-RUN apt-get install -y \
-  apache2-utils \
-  libapache2-mod-fcgid \
-  libcgi-fast-perl \
-  munin
-
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-
+# configure munin
+RUN mkdir -p /etc/munin/plugins/
 COPY ./configs/maps/munin.conf /etc/munin/
 COPY ./configs/maps/apache24.conf /etc/munin/
 RUN chown -R munin:www-data /var/log/munin \
@@ -114,16 +117,14 @@ RUN chown -R munin:www-data /var/log/munin \
   && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
 
 # Configure stylesheet
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone --single-branch https://github.com/mariocki/openstreetmap-carto.git --depth 1 \
-  && cd openstreetmap-carto \
-  && rm -rf .git \
-  && npm install -g carto@0.18.2 \
-  && carto project.mml > mapnik.xml 
-
+RUN npm install -g carto 
 # Copy site
+
 ADD siteroot /var/www/html/
+
+RUN apt-get clean autoclean -y \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 # Start running
 COPY ./scripts/maps/run.sh /

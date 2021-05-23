@@ -14,23 +14,30 @@ RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
   && apt-get install -y nodejs
 
 RUN apt-get install -y --no-install-recommends \
-  make \
+  apache2-dev \
+  autoconf \
+  automake \
   cmake \
   g++ \
+  gdal-bin \
   git-core \
   libboost-dev \
-  libboost-system-dev \
   libboost-filesystem-dev \
-  libexpat1-dev \
-  zlib1g-dev \
+  libboost-system-dev \
   libbz2-dev \
+  libexpat1-dev \
+  liblua5.3-dev\
+  libmapnik-dev \
   libpq-dev \
   libproj-dev \
+  libtool-bin \
   lua5.3 \
-  liblua5.3-dev\
+  make \
   osmium-tool \
   postgresql-client \
-  python3-pip
+  python3-pip \
+  python3-psycopg2 \
+  zlib1g-dev 
 
 # Install python libraries
 RUN pip3 install requests \ 
@@ -51,17 +58,10 @@ RUN mkdir -p /home/renderer/src \
   && chown renderer:renderer /nodes \
   && rm -rf /home/renderer/src/osm2pgsql
 
-RUN apt-get install -y --no-install-recommends \
-  apache2-dev \
-  autoconf \
-  automake \
-  libtool-bin \
-  libmapnik-dev 
-
 # Install mod_tile and renderd
 RUN mkdir -p /home/renderer/src \
   && cd /home/renderer/src \
-  && git clone https://github.com/mariocki/mod_tile.git --depth 1 \
+  && git clone -b switch2osm https://github.com/mariocki/mod_tile.git --depth 1 \
   && cd mod_tile \
   && rm -rf .git \
   && ./autogen.sh \
@@ -87,40 +87,11 @@ RUN mkdir -p /home/renderer/src \
   && chmod u+x /home/renderer/src/regional/trim_osc.py  
 
 # Configure stylesheet
-RUN npm install -g carto@0.18.2 
-RUN cd /openstreetmap-carto \
-  && ls -l \
-  && carto project.mml > mapnik.xml 
+RUN npm install -g carto
 
-RUN apt-get install -y --no-install-recommends \
-  python3-psycopg2 
-
-RUN apt-get purge \
-  apache2-dev \
-  autoconf \
-  automake \
-  libtool-bin \
-  libmapnik-dev \
-  make \
-  cmake \
-  g++ \
-  git-core \
-  libboost-dev \
-  libboost-system-dev \
-  libboost-filesystem-dev \
-  libexpat1-dev \
-  zlib1g-dev \
-  libbz2-dev \
-  libpq-dev \
-  libproj-dev \
-  liblua5.3-dev\
-  python3-pip
-
-RUN apt-get clean autoclean \
+RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
-
-RUN npm purge
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
