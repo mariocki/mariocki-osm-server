@@ -97,7 +97,7 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Start running
 COPY ./scripts/import/run.sh /
-COPY ./scripts/import/indexes.sql /
+COPY ./openstreetmap-carto/indexes.sql /
 RUN chmod +x /run.sh
 ENTRYPOINT ["/run.sh"]
 CMD []
