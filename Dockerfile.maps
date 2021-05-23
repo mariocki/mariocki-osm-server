@@ -118,13 +118,15 @@ RUN chown -R munin:www-data /var/log/munin \
 
 # Configure stylesheet
 RUN npm install -g carto 
-# Copy site
-
-ADD siteroot /var/www/html/
 
 RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+# Copy site
+ADD siteroot /var/www/html/
 
 # Start running
 COPY ./scripts/maps/run.sh /
