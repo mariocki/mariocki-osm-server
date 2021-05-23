@@ -18,7 +18,7 @@ if [ -n "$DOWNLOAD_PBF" ]; then
 fi
 
 cd /openstreetmap-carto
-carto project.mml > mapnik.xml
+carto project.mml >mapnik.xml
 
 # determine and set osmosis_replication_timestamp (for consecutive updates)
 osmium fileinfo /data.osm.pbf >/var/lib/mod_tile/data.osm.pbf.info
@@ -34,7 +34,7 @@ if [ -f /data.poly ]; then
 fi
 
 # Import data
-sudo -u renderer osm2pgsql -H db -d gis --create --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${OSM2PGSQL_EXTRA_ARGS}
+sudo -u renderer osm2pgsql -H db -d gis --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${1:---append}
 
 # Create indexes
 psql -h db -U ${PGUSER} -d gis -f /indexes.sql
