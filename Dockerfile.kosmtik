@@ -45,13 +45,13 @@ RUN npm set prefix /usr \
   && npm install -g git+https://github.com/kosmtik/kosmtik-open-in-josm \ 
   && npm install -g git+https://github.com/kosmtik/kosmtik-geojson-overlay 
 
-COPY ./scripts/kosmtik/kosmtik.yml /tmp/.kosmtik-config.yml
-
 RUN apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+COPY ./configs/kosmtik/kosmtik.yml /tmp/.kosmtik-config.yml
 
 # Start running
 COPY ./scripts/kosmtik/run.sh /
