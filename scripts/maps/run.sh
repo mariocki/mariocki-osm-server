@@ -6,7 +6,7 @@ set -x
 rm -rf /tmp/*
 
 cd /openstreetmap-carto
-carto project.mml > mapnik.xml
+carto project.mml >mapnik.xml
 
 # Configure Apache CORS
 if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
@@ -14,9 +14,10 @@ if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
 fi
 
 # Initialize Apache
-service apache2 restart
 service rsyslog restart
 service munin restart
+service munin-node restart
+service apache2 restart
 
 # Configure renderd threads
 sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /usr/local/etc/renderd.conf
@@ -35,4 +36,3 @@ child=$!
 wait "$child"
 
 exit 0
-
