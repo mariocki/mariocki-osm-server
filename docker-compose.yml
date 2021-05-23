@@ -42,6 +42,7 @@ services:
       context: .
       dockerfile: Dockerfile.maps
     volumes:
+      - ~/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
     links:
       - db
