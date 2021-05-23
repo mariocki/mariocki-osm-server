@@ -31,6 +31,11 @@ stop_handler() {
 }
 trap stop_handler SIGTERM
 
+# UK
+#./render_list_geo.pl -n 4 -z 10 -Z 13 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
+# London
+#./render_list_geo.pl -f -n 4 -z 14 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
+
 sudo -u renderer renderd -f -c /usr/local/etc/renderd.conf &
 child=$!
 wait "$child"
