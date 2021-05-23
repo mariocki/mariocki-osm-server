@@ -1,6 +1,9 @@
 FROM postgis/postgis:12-master
 
-COPY ./configs/db/postgresql.conf /etc/postgresql/postgresql.conf
 COPY ./scripts/db/tune-postgis.sh /docker-entrypoint-initdb.d/tune-postgis.sh
 COPY ./scripts/db/init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+COPY ./configs/db/postgresql.conf /etc/postgresql/postgresql.conf
 
