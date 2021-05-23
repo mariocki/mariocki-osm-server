@@ -1,8 +1,0 @@
-plugins:
-- kosmtik-fetch-remote
-- kosmtik-overlay
-- kosmtik-map-compare
-- kosmtik-osm-data-overlay
-- kosmtik-mapnik-reference # this needs --mapnik-version 3.0.20
-- kosmtik-open-in-josm # this only works locally
-- kosmtik-geojson-overlay
