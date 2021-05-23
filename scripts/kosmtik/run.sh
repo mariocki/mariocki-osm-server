@@ -1,10 +1,6 @@
 #!/bin/sh
 
-# Creating default Kosmtik settings file
-if [ ! -e ".kosmtik-config.yml" ]; then
-    cp /tmp/.kosmtik-config.yml .kosmtik-config.yml
-fi
-export KOSMTIK_CONFIGPATH=".kosmtik-config.yml"
+export KOSMTIK_CONFIGPATH="/.kosmtik-config.yml"
 
 cd /openstreetmap-carto
 
