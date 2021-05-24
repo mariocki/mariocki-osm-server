@@ -62,8 +62,14 @@ RUN mkdir -p /home/renderer/src \
   && ldconfig \
   && cd ..
 
-# Configure renderd
-COPY ./configs/maps/renderd.conf  /usr/local/etc/renderd.conf
+# Configure stylesheet
+RUN npm install -g carto 
+
+RUN apt-get clean autoclean -y \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache
 RUN mkdir -p /var/lib/mod_tile \
@@ -76,29 +82,16 @@ RUN mkdir -p /var/lib/mod_tile \
   && a2enconf mod_headers
 COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Copy update scripts
-COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/
-RUN chmod +x /usr/bin/openstreetmap-tiles-update-expire \
-  && mkdir -p /var/log/tiles \
-  && chmod a+rw /var/log/tiles \
-  && ln -s /home/renderer/src/mod_tile/osmosis-db_replag /usr/bin/osmosis-db_replag \
-  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
-
-# Install trim_osc.py helper script
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone https://github.com/zverik/regional \
-  && cd regional \
-  && git checkout 889d630a1e1a1bacabdd1dad6e17b49e7d58cd4b \
-  && rm -rf .git \
-  && chmod u+x /home/renderer/src/regional/trim_osc.py
-
-# Install render_list_geo helper script
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone https://github.com/alx77/render_list_geo.pl \
-  && cd render_list_geo.pl \
-  && rm -rf .git
+# Configure renderd
+COPY ./configs/maps/renderd.conf  /usr/local/etc/renderd.conf
+RUN cp /home/renderer/src/mod_tile/debian/renderd.init /etc/init.d/renderd \
+  && chmod a+x /etc/init.d/renderd \
+  && sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
+  && cp /home/renderer/src/mod_tile/debian/renderd.service /lib/systemd/system/ \
+  && ln -s /etc/init.d/renderd /etc/rc2.d/S01renderd \
+  && ln -s /etc/init.d/renderd /etc/rc3.d/S01renderd \
+  && ln -s /etc/init.d/renderd /etc/rc4.d/S01renderd \
+  && ln -s /etc/init.d/renderd /etc/rc5.d/S01renderd
 
 # configure rsyslog and logging
 COPY ./configs/maps/logrotate.conf /etc/
@@ -115,14 +108,23 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && ln -s /home/renderer/src/mod_tile/munin/* /etc/munin/plugins/ \
   && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
 
-# Configure stylesheet
-RUN npm install -g carto 
+# Copy update scripts
+COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/
+RUN chmod +x /usr/local/bin/openstreetmap-tiles-update-expire \
+  && mkdir -p /var/log/tiles \
+  && chmod a+rw /var/log/tiles \
+  && ln -s /home/renderer/src/mod_tile/osmosis-db_replag /usr/bin/osmosis-db_replag \
+  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
 
-RUN apt-get clean autoclean -y \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}
+# Install trim_osc.py helper script
+# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
+COPY ./scripts/maps/trim_osc.py /usr/local/bin/
+RUN chmod a+x /usr/local/bin/trim_osc.py
 
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+# Install render_list_geo helper script
+# https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
+COPY ./scripts/maps/render_list_geo.pl /usr/local/bin/
+RUN chmod a+x /usr/local/bin/render_list_geo.pl
 
 # Copy site
 ADD siteroot /var/www/html/

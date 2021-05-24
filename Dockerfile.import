@@ -71,21 +71,6 @@ RUN mkdir -p /home/renderer/src \
   && ldconfig \
   && cd ..
 
-# Copy update scripts
-COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/
-RUN chmod +x /usr/bin/openstreetmap-tiles-update-expire \
-  && mkdir -p /var/log/tiles \
-  && chmod a+rw /var/log/tiles 
-
-# Install trim_osc.py helper script
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone https://github.com/zverik/regional \
-  && cd regional \
-  && git checkout 889d630a1e1a1bacabdd1dad6e17b49e7d58cd4b \
-  && rm -rf .git \
-  && chmod u+x /home/renderer/src/regional/trim_osc.py  
-
 # Configure stylesheet
 RUN npm install -g carto
 
@@ -94,6 +79,17 @@ RUN apt-get clean autoclean -y \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+# Copy update scripts
+COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/
+RUN chmod +x /usr/bin/openstreetmap-tiles-update-expire \
+  && mkdir -p /var/log/tiles \
+  && chmod a+rw /var/log/tiles 
+
+# Install trim_osc.py helper script
+# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
+COPY ./scripts/import/trim_osc.py /usr/local/bin/
+RUN chmod a+x /usr/local/bin/trim_osc.py
 
 # Start running
 COPY ./scripts/import/run.sh /

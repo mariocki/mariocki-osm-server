@@ -67,3 +67,16 @@ services:
     command: "-c config_file=/etc/postgresql/postgresql.conf"
     networks:
       - my_network
+  pghero:
+    build:
+      context: .
+      dockerfile: Dockerfile.pghero
+    depends_on:
+      - db
+      - maps
+    ports:
+      - "8081:8080"
+    env_file:
+      - .env
+    networks:
+      - my_network

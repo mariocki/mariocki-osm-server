@@ -58,6 +58,7 @@
         </select><br />
         <input type="checkbox" id="kml" name="kml" value="KML">
         <label for="kml">Show KML layer</label><br />
+        <label id="zoom"></label><br />
     </div>
 
     <script>
@@ -124,6 +125,10 @@
                 var showKml = this.checked;
                 setKMLLayer(showKml);
             });
+
+        map.on('zoomend', function(ev) {
+            document.getElementById('zoom').innerHTML = map.getZoom();
+        });
     </script>
 </body>
 
