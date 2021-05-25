@@ -140,7 +140,7 @@ else
     /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
     m_ok "downloading diff"
 
-    if ! $OSMOSIS_BIN --read-replication-interval workingDirectory=$WORKOSM_DIR --simplify-change --write-xml-change $CHANGE_FILE 1>&2 2>"$OSMOSISLOG"; then
+    if ! $OSMOSIS_BIN --read-replication-interval workingDirectory=$WORKOSM_DIR --simplify-change --write-xml-change $CHANGE_FILE 1>&2 2>>"$OSMOSISLOG"; then
         m_error "Osmosis error"
     fi
 
@@ -159,7 +159,7 @@ else
     # tiles in range to the list (note the "-" rather than ":" in the "-e"
     # parameter).
     #------------------------------------------------------------------------------
-    if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 1>&2 2>"$PGSQLLOG"; then
+    if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 1>&2 2>>"$PGSQLLOG"; then
         m_error "osm2pgsql error"
     fi
 

@@ -71,6 +71,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.pghero
+    image: mariocki/osm-server-pghero:v1
     depends_on:
       - db
       - maps
