@@ -36,6 +36,18 @@ service cron restart
 # manchester
 # render_list_geo.pl -f -n 2 -z 8 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt
 
-sleep infinity
+chsum1=""
+
+cd /openstreetmap-carto
+
+while [[ true ]]; do
+    chsum2=$(md5sum project.mml)
+    if [[ $chsum1 != $chsum2 ]]; then
+        carto project.mml >mapnik.xml
+        service renderd restart
+        chsum1=$chsum2
+    fi
+    sleep 5
+done
 
 exit 0
