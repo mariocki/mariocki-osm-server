@@ -34,9 +34,13 @@ RUN apt-get install -y --no-install-recommends \
   lua5.3 \
   make \
   osmium-tool \
+  osmosis \
   postgresql-client \
+  python \
+  python3-lxml \  
   python3-pip \
   python3-psycopg2 \
+  python3-shapely \
   zlib1g-dev 
 
 # Install python libraries

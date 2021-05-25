@@ -22,7 +22,7 @@ OSM2PGSQL_BIN=osm2pgsql
 TRIM_BIN=trim_osc.py
 
 DBNAME=gis
-OSM2PGSQL_OPTIONS="-d $DBNAME -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
+OSM2PGSQL_OPTIONS="-d $DBNAME -H db -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
 
 #------------------------------------------------------------------------------
 # When using trim_osc.py we can define either a bounding box (such as this
@@ -31,7 +31,7 @@ OSM2PGSQL_OPTIONS="-d $DBNAME -G --hstore --tag-transform-script /openstreetmap-
 # This area will usually correspond to the data originally loaded.
 #------------------------------------------------------------------------------
 TRIM_POLY_FILE="/var/lib/mod_tile/data.poly"
-TRIM_OPTIONS="-d $DBNAME"
+TRIM_OPTIONS="-d $DBNAME --host db"
 TRIM_REGION_OPTIONS="-p $TRIM_POLY_FILE"
 
 BASE_DIR=/var/lib/mod_tile
@@ -66,22 +66,25 @@ EXPIRY_MAXZOOM=20
 
 m_info() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1"
 }
 
 m_error() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1"
 
     m_info "resetting state"
     /bin/cp $WORKOSM_DIR/last.state.txt $WORKOSM_DIR/state.txt || true
 
-    rm "$CHANGE_FILE" || true
-    rm "$EXPIRY_FILE.$$" || true
-    rm "$LOCK_FILE"
+    rm -f "$CHANGE_FILE" || true
+    rm -f "$EXPIRY_FILE.$$" || true
+    rm -f "$LOCK_FILE" || true
     exit
 }
 
 m_ok() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1"
 }
 
 getlock() {
@@ -183,7 +186,9 @@ else
         m_info "Expiry failed"
     fi
 
-    rm "$EXPIRY_FILE.$$"
+    if [ -f "$EXPIRY_FILE.$$" ]; then
+        rm -f "$EXPIRY_FILE.$$"
+    fi
 
     #------------------------------------------------------------------------------
     # Only remove the lock file after expiry (if system is slow we want to delay

@@ -42,11 +42,31 @@ RUN apt-get install -y --no-install-recommends \
   munin \
   munin-node \
   osmium-tool \
+  osmosis \
   postgresql-client \
   postgis \
+  python \
+  python3-lxml \  
   python3-pip \
+  python3-psycopg2 \  
+  python3-shapely \
   rsyslog \
   zlib1g-dev 
+
+# Install latest osm2pgsql
+RUN mkdir -p /home/renderer/src \
+  && cd /home/renderer/src \
+  && git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 \
+  && cd /home/renderer/src/osm2pgsql \
+  && rm -rf .git \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make \
+  && make install \
+  && mkdir /nodes \
+  && chown renderer:renderer /nodes \
+  && rm -rf /home/renderer/src/osm2pgsql
 
 # Install mod_tile and renderd
 RUN mkdir -p /home/renderer/src \
@@ -112,8 +132,8 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
 COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/
 RUN chmod +x /usr/local/bin/openstreetmap-tiles-update-expire \
   && mkdir -p /var/log/tiles \
-  && chmod a+rw /var/log/tiles \
-  && ln -s /home/renderer/src/mod_tile/osmosis-db_replag /usr/bin/osmosis-db_replag \
+  && chmod -R a+rw /var/log/tiles \
+  && ln -s /home/renderer/src/mod_tile/osmosis-db_replag /usr/local/bin/osmosis-db_replag \
   && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
 
 # Install trim_osc.py helper script

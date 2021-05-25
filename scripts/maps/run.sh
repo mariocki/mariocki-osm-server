@@ -16,6 +16,10 @@ fi
 # Configure renderd threads
 sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /usr/local/etc/renderd.conf
 
+if [ ! -f /var/lib/mod_tile/.osmosis/state.txt ]; then
+    sudo -u renderer /usr/local/bin/openstreetmap-tiles-update-expire "$(</var/lib/mod_tile/replication_timestamp.txt)"
+fi
+
 # Initialize Apache
 service rsyslog restart
 service munin restart
