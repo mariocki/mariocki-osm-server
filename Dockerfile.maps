@@ -94,6 +94,8 @@ COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
 ## Configure renderd
 COPY ./configs/maps/renderd.conf  /etc/renderd.conf
+# https://raw.githubusercontent.com/openstreetmap/mod_tile/master/utils/munin/replication_delay
+COPY ./configs/maps/replication_delay /etc/munin/plugins/
 RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
   && ln -s /usr/share/munin/plugins/renderd* /etc/munin/plugins/ \
   && ln -s /usr/share/munin/plugins/mod_tile* /etc/munin/plugins/
