@@ -24,6 +24,7 @@ RUN apt-get install -y --no-install-recommends \
   g++ \
   git-core \
   libapache2-mod-fcgid \
+  libapache2-mod-tile \
   libboost-dev \
   libboost-filesystem-dev \
   libboost-system-dev \
@@ -51,6 +52,7 @@ RUN apt-get install -y --no-install-recommends \
   python3-pip \
   python3-psycopg2 \  
   python3-shapely \
+  renderd \
   rsyslog \
   zlib1g-dev 
 
@@ -68,20 +70,6 @@ RUN mkdir -p /home/renderer/src \
   && mkdir /nodes \
   && chown renderer:renderer /nodes \
   && rm -rf /home/renderer/src/osm2pgsql
-
-# Install mod_tile and renderd
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone -b switch2osm https://github.com/mariocki/mod_tile.git --depth 1 \
-  && cd mod_tile \
-  && rm -rf .git \
-  && ./autogen.sh \
-  && ./configure \
-  && make -j $(nproc) \
-  && make install \
-  && make install-mod_tile \  
-  && ldconfig \
-  && cd ..
 
 # Configure stylesheet
 RUN npm install -g carto 
@@ -103,16 +91,9 @@ RUN mkdir -p /var/lib/mod_tile \
   && a2enconf mod_headers
 COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Configure renderd
-COPY ./configs/maps/renderd.conf  /usr/local/etc/renderd.conf
-RUN cp /home/renderer/src/mod_tile/debian/renderd.init /etc/init.d/renderd \
-  && chmod a+x /etc/init.d/renderd \
-  && sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
-  && cp /home/renderer/src/mod_tile/debian/renderd.service /lib/systemd/system/ \
-  && ln -s /etc/init.d/renderd /etc/rc2.d/S01renderd \
-  && ln -s /etc/init.d/renderd /etc/rc3.d/S01renderd \
-  && ln -s /etc/init.d/renderd /etc/rc4.d/S01renderd \
-  && ln -s /etc/init.d/renderd /etc/rc5.d/S01renderd
+## Configure renderd
+COPY ./configs/maps/renderd.conf  /etc/renderd.conf
+RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd
 
 # configure rsyslog and logging
 COPY ./configs/maps/logrotate.conf /etc/

@@ -14,7 +14,7 @@ if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
 fi
 
 # Configure renderd threads
-sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /usr/local/etc/renderd.conf
+sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /etc/renderd.conf
 
 if [ ! -f /var/lib/mod_tile/.osmosis/state.txt ]; then
     sudo -u renderer /usr/local/bin/openstreetmap-tiles-update-expire "$(</var/lib/mod_tile/replication_timestamp.txt)"
@@ -35,7 +35,7 @@ service cron restart
 sudo -u renderer munin-cron
 
 # UK
-# render_list_geo.pl -n 4 -z 7 -Z 9 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
+# render_list_geo.pl -f -n 3 -z 11 -Z 15 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
 
 # London
 # render_list_geo.pl -f -n 2 -z 8 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
