@@ -20,6 +20,10 @@ if [ ! -f /var/lib/mod_tile/.osmosis/state.txt ]; then
     sudo -u renderer /usr/local/bin/openstreetmap-tiles-update-expire "$(</var/lib/mod_tile/replication_timestamp.txt)"
 fi
 
+# do this here as its a volume
+chown munin.www-data /var/lib/munin
+chmod g+w /var/lib/munin
+
 # Initialize Apache
 service rsyslog restart
 service munin restart

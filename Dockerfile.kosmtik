@@ -16,16 +16,17 @@ RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
 # Style dependencies
 RUN apt-get update \
   && apt-get install --no-install-recommends -y \
-  git-core \
-  gnupg \
-  postgresql-client \
-  python3 \
-  python3-distutils \
   fonts-hanazono \
   fonts-noto-cjk \
   fonts-noto-hinted \
   fonts-noto-unhinted \
+  git-core \
+  gnupg \
   mapnik-utils \
+  postgresql-client \
+  procps \
+  python3 \
+  python3-distutils \
   ttf-unifont \
   unzip
 

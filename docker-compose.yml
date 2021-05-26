@@ -11,9 +11,9 @@ services:
       dockerfile: Dockerfile.import
     image: mariocki/osm-server-import:v1
     volumes:
-      - ~/mod_tile:/var/lib/mod_tile
-      - ~/data.osm.pbf:/data.osm.pbf
-      - ~/data.poly:/data.poly
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
+      - ~/osm-maps/data.osm.pbf:/data.osm.pbf
+      - ~/osm-maps/data.poly:/data.poly
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
@@ -42,7 +42,8 @@ services:
       context: .
       dockerfile: Dockerfile.maps
     volumes:
-      - ~/mod_tile:/var/lib/mod_tile
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
+      - ~/osm-maps/munin:/var/lib/munin
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
@@ -59,7 +60,7 @@ services:
     image: mariocki/osm-server-db:v1
     shm_size: "1gb"
     volumes:
-      - ~/gis:/var/lib/postgresql/data
+      - ~/osm-maps/gis:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     env_file:
@@ -74,7 +75,6 @@ services:
     image: mariocki/osm-server-pghero:v1
     depends_on:
       - db
-      - maps
     ports:
       - "8081:8080"
     env_file:
