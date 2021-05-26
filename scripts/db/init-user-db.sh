@@ -1,7 +1,7 @@
 #!/bin/bash
 
 createuser renderer
-createdb -E UTF8 -O renderer gis
+createdb -E UTF8 -O renderer ${PGDATABASE}
 psql -c "ALTER USER renderer PASSWORD '${PGPASSWORD:-renderer}'"
 psql -d gis -c "CREATE EXTENSION postgis;"
 psql -d gis -c "CREATE EXTENSION hstore;"
