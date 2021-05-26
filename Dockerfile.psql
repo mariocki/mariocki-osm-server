@@ -1,9 +1,18 @@
 FROM postgis/postgis:12-master
 
+RUN apt-get update
+RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get install -y --no-install-recommends \
+  libnet-cidr-perl \
+  libdbd-pg-perl \
+  libdbi-perl \
+  munin-node 
+
 COPY ./scripts/db/tune-postgis.sh /docker-entrypoint-initdb.d/tune-postgis.sh
 COPY ./scripts/db/init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
+COPY ./configs/db/munin-node.conf /etc/munin/munin-node.conf
 COPY ./configs/db/postgresql.conf /etc/postgresql/postgresql.conf
-
+RUN ln -s /usr/share/munin/plugins/postgres* /etc/munin/plugins/ 
