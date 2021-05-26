@@ -21,8 +21,8 @@ OSMOSIS_BIN=osmosis
 OSM2PGSQL_BIN=osm2pgsql
 TRIM_BIN=trim_osc.py
 
-DBNAME=gis
-OSM2PGSQL_OPTIONS="-d $DBNAME -H db -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
+DBNAME=$PGDATABASE
+OSM2PGSQL_OPTIONS="-d $DBNAME -H $PGHOST -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
 
 #------------------------------------------------------------------------------
 # When using trim_osc.py we can define either a bounding box (such as this
@@ -31,7 +31,7 @@ OSM2PGSQL_OPTIONS="-d $DBNAME -H db -G --hstore --tag-transform-script /openstre
 # This area will usually correspond to the data originally loaded.
 #------------------------------------------------------------------------------
 TRIM_POLY_FILE="/var/lib/mod_tile/data.poly"
-TRIM_OPTIONS="-d $DBNAME --host db"
+TRIM_OPTIONS="-d $DBNAME --host $PGHOST"
 TRIM_REGION_OPTIONS="-p $TRIM_POLY_FILE"
 
 BASE_DIR=/var/lib/mod_tile

@@ -34,10 +34,10 @@ if [ -f /data.poly ]; then
 fi
 
 # Import data
-sudo -u renderer osm2pgsql -H db -d gis --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${1:---append}
+sudo -u renderer osm2pgsql -H ${PGHOST} -d ${PGDATABASE} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf ${1:---append}
 
 # Create indexes
-psql -h db -U ${PGUSER} -d gis -f /indexes.sql
+psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -f /indexes.sql
 
 #Import external data
 sudo chown -R renderer: /home/renderer/src
