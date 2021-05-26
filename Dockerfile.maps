@@ -31,7 +31,8 @@ RUN apt-get install -y --no-install-recommends \
   libbz2-dev \
   libcgi-fast-perl \
   libexpat1-dev \
-  liblua5.3-dev\
+  liblua5.3-dev \
+  libluajit-5.1-dev \
   libmapnik-dev \ 
   libpq-dev \
   libproj-dev \
@@ -64,7 +65,7 @@ RUN mkdir -p /home/renderer/src \
   && rm -rf .git \
   && mkdir build \
   && cd build \
-  && cmake .. \
+  && cmake -D WITH_LUAJIT=ON .. \
   && make \
   && make install \
   && mkdir /nodes \
@@ -93,8 +94,8 @@ COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
 ## Configure renderd
 COPY ./configs/maps/renderd.conf  /etc/renderd.conf
-RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
-  && ln -s /usr/share/munin/plugins/* /etc/munin/plugins/ 
+RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd
+#  && ln -s /usr/share/munin/plugins/* /etc/munin/plugins/ 
 
 # configure rsyslog and logging
 COPY ./configs/maps/logrotate.conf /etc/
