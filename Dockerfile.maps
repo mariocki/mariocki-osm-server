@@ -93,7 +93,8 @@ COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
 ## Configure renderd
 COPY ./configs/maps/renderd.conf  /etc/renderd.conf
-RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd
+RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
+  && ln -s /usr/share/munin/plugins/* /etc/munin/plugins/ 
 
 # configure rsyslog and logging
 COPY ./configs/maps/logrotate.conf /etc/
@@ -107,7 +108,6 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && chmod -R 775 /var/log/munin \
   && chmod -R 775 /var/run/munin \
   && chmod -R 775 /var/cache/munin/www \
-  && ln -s /home/renderer/src/mod_tile/munin/* /etc/munin/plugins/ \
   && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
 
 # Copy update scripts

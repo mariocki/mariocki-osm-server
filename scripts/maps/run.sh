@@ -32,7 +32,7 @@ service apache2 restart
 service renderd restart
 service cron restart
 
-sudo -u renderer munin-cron
+sudo -u munin munin-cron
 
 # UK
 # render_list_geo.pl -f -n 3 -z 11 -Z 15 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
