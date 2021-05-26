@@ -51,7 +51,7 @@ chsum1=""
 cd /openstreetmap-carto
 
 while [[ true ]]; do
-    chsum2=$(md5sum project.mml)
+    chsum2=$(md5deep -r -l . | sort | md5sum)
     if [[ $chsum1 != $chsum2 ]]; then
         carto project.mml >mapnik.xml
         service renderd restart

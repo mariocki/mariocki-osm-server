@@ -39,6 +39,7 @@ RUN apt-get install -y --no-install-recommends \
   lua5.3 \
   make \
   mapnik-utils \
+  md5deep \
   munin \
   munin-node \
   osmium-tool \
