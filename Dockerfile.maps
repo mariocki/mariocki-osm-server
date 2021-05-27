@@ -98,7 +98,8 @@ COPY ./configs/maps/renderd.conf  /etc/renderd.conf
 COPY ./configs/maps/replication_delay /etc/munin/plugins/
 RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
   && ln -s /usr/share/munin/plugins/renderd* /etc/munin/plugins/ \
-  && ln -s /usr/share/munin/plugins/mod_tile* /etc/munin/plugins/
+  && ln -s /usr/share/munin/plugins/mod_tile* /etc/munin/plugins/ \
+  && chmod a+x /etc/munin/plugins/replication_delay
 
 # configure rsyslog and logging
 COPY ./configs/maps/logrotate.conf /etc/
