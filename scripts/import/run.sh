@@ -2,6 +2,12 @@
 
 set -x
 
+# Clean /tmp
+rm -rf /tmp/*
+
+compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/openstreetmap-tiles-update-expire-orig >/usr/local/bin/openstreetmap-tiles-update-expire
+chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
+
 # Error if no data is provided
 if [ ! -f /data.osm.pbf ] && [ -z "$DOWNLOAD_PBF" ]; then
     echo "WARNING: No import file at /data.osm.pbf."

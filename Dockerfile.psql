@@ -1,7 +1,7 @@
 FROM postgis/postgis:12-master
 
 RUN apt-get update
-RUN apt-get install -y screen vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
 RUN apt-get install -y --no-install-recommends \
   libnet-cidr-perl \
   libdbd-pg-perl \

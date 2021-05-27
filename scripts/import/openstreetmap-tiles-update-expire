@@ -20,8 +20,8 @@ OSMOSIS_BIN=osmosis
 OSM2PGSQL_BIN=osm2pgsql
 TRIM_BIN=trim_osc.py
 
-DBNAME=$PGDATABASE
-OSM2PGSQL_OPTIONS="-d $DBNAME -H $PGHOST -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
+DBNAME=${PGDATABASE}
+OSM2PGSQL_OPTIONS="-d ${DBNAME} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
 
 #------------------------------------------------------------------------------
 # When using trim_osc.py we can define either a bounding box (such as this
@@ -30,7 +30,7 @@ OSM2PGSQL_OPTIONS="-d $DBNAME -H $PGHOST -G --hstore --tag-transform-script /ope
 # This area will usually correspond to the data originally loaded.
 #------------------------------------------------------------------------------
 TRIM_POLY_FILE="/var/lib/mod_tile/data.poly"
-TRIM_OPTIONS="-d $DBNAME --host $PGHOST"
+TRIM_OPTIONS="-d ${DBNAME} --host ${PGHOST}"
 TRIM_REGION_OPTIONS="-p $TRIM_POLY_FILE"
 
 BASE_DIR=/var/lib/mod_tile
@@ -65,12 +65,10 @@ EXPIRY_MAXZOOM=20
 
 m_info() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1"
 }
 
 m_error() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1" >>"$RUNLOG"
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1"
 
     m_info "resetting state"
     /bin/cp $WORKOSM_DIR/last.state.txt $WORKOSM_DIR/state.txt || true
@@ -83,7 +81,6 @@ m_error() {
 
 m_ok() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1"
 }
 
 getlock() {
