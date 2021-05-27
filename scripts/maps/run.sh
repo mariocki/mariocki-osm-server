@@ -41,14 +41,14 @@ sudo -u munin munin-cron
 # UK
 # render_list_geo.pl -f -n 3 -z 11 -Z 15 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
 
-# London
+# London 51.5074/-0.1278
 # render_list_geo.pl -f -n 2 -z 8 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
 
 # stanstead airport
 # render_list_geo.pl -f -n 4 -z 6 -Z 16 -x 0.05 -X 0.42 -y 51.80 -Y 51.92 -m ajt
 
-# manchester
-# render_list_geo.pl -f -n 2 -z 8 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt
+# manchester 53.4808/-2.2426
+# render_list_geo.pl -f -n 2 -z 13 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt
 
 chsum1=""
 
