@@ -9,7 +9,6 @@ set -e
 #------------------------------------------------------------------------------
 export PATH=.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ACCOUNT=renderer
-cd /home/$ACCOUNT/src/mod_tile/
 
 #------------------------------------------------------------------------------
 # Extra OSM2PGSQL_OPTIONS may need setting if a tag transform script is

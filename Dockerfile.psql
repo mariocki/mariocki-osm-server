@@ -16,3 +16,6 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 COPY ./configs/db/munin-node.conf /etc/munin/munin-node.conf
 COPY ./configs/db/postgresql.conf /etc/postgresql/postgresql.conf
 RUN ln -s /usr/share/munin/plugins/postgres* /etc/munin/plugins/ 
+
+#RUN update-rc.d munin-node defaults
+#RUN sed -i "s/echo 'PostgreSQL Database directory appears to contain a database; Skipping initialization'/echo \`gosu root service munin-node start\`/" /usr/local/bin/docker-entrypoint.sh
