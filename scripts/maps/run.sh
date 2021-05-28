@@ -33,16 +33,16 @@ service rsyslog restart
 service munin restart
 service munin-node restart
 service apache2 restart
-service renderd restart
+#service renderd restart
 service cron restart
 
 sudo -u munin munin-cron
 
 # UK
-# render_list_geo.pl -f -n 3 -z 11 -Z 15 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
+# render_list_geo.pl -f -n 3 -z 09 -Z 13 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
 
 # London 51.5074/-0.1278
-# render_list_geo.pl -f -n 2 -z 8 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
+# render_list_geo.pl -f -n 2 -z 13 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
 
 # stanstead airport
 # render_list_geo.pl -f -n 4 -z 6 -Z 16 -x 0.05 -X 0.42 -y 51.80 -Y 51.92 -m ajt
@@ -55,13 +55,19 @@ chsum1=""
 cd /openstreetmap-carto
 
 while [[ true ]]; do
+
+    if ! pgrep -x renderd >/dev/null 2>&1; then
+        echo $(date) "renderd stopped ... restarting " | logger
+        service renderd restart
+    fi
+
     chsum2=$(md5deep -r -l . | sort | md5sum)
     if [[ $chsum1 != $chsum2 ]]; then
         carto project.mml >mapnik.xml
         service renderd restart
         chsum1=$chsum2
     fi
-    sleep 5
+    sleep 1
 done
 
 exit 0
