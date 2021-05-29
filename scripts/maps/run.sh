@@ -39,7 +39,7 @@ service cron restart
 sudo -u munin munin-cron
 
 # UK
-# render_list_geo.pl -f -z 09 -Z 14 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
+# render_list_geo.pl -f -n 6 -z 09 -Z 14 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
 
 # London 51.5074/-0.1278
 # render_list_geo.pl -f -n 2 -z 13 -Z 16 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
@@ -56,7 +56,7 @@ cd /openstreetmap-carto
 
 while [[ true ]]; do
 
-    if [[ ! pgrep -x renderd >/dev/null 2>&1 ]]; then
+    if ! pgrep -x renderd >/dev/null 2>&1; then
         echo $(date) "renderd stopped ... restarting " | logger
         service renderd restart
     fi
@@ -67,6 +67,7 @@ while [[ true ]]; do
         service renderd restart
         chsum1=$chsum2
     fi
+
     sleep 1
 done
 
