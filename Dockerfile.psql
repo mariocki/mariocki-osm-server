@@ -1,12 +1,16 @@
 FROM postgis/postgis:12-master
 
 RUN apt-get update
+
 RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+
 RUN apt-get install -y --no-install-recommends \
-  libnet-cidr-perl \
+  cron \
   libdbd-pg-perl \
   libdbi-perl \
-  munin-node 
+  libnet-cidr-perl \
+  munin-node \
+  rsyslog
 
 COPY ./scripts/db/tune-postgis.sh /docker-entrypoint-initdb.d/tune-postgis.sh
 COPY ./scripts/db/init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh
