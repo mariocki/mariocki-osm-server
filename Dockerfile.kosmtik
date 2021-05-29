@@ -23,6 +23,7 @@ RUN apt-get update \
   git-core \
   gnupg \
   mapnik-utils \
+  patch \
   postgresql-client \
   procps \
   python3 \
@@ -44,7 +45,7 @@ RUN npm set prefix /usr \
   && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik-osm-data-overlay \ 
   && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik-mapnik-reference \ 
   && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik-open-in-josm \ 
-  && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik-geojson-overlay 
+  && npm install --unsafe-perm -g git+https://github.com/kosmtik/kosmtik-geojson-overlay
 
 RUN apt-get clean autoclean \
   && apt-get autoremove --yes \
@@ -52,6 +53,9 @@ RUN apt-get clean autoclean \
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
+COPY ./patches/kosmtik.patch /kosmtik.patch
+RUN cd /usr/lib/node_modules/kosmtik \
+  && patch -p1 < /kosmtik.patch
 COPY ./configs/kosmtik/kosmtik.yml /.kosmtik-config.yml
 
 # Start running

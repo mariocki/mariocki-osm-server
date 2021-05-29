@@ -1,0 +1,383 @@
+diff --git a/src/back/Project.js b/src/back/Project.js
+index 499cad6..26e8f9d 100644
+--- a/src/back/Project.js
++++ b/src/back/Project.js
+@@ -16,11 +16,12 @@ class Project extends ConfigEmitter {
+             fs.mkdirSync(this.dataDir);
+         } catch (err) {}
+         this.mapnik = require('mapnik');
++        this.mapnik.Logger.setSeverity(this.mapnik.Logger.NONE);
+         this.mapnikPool = require('mapnik-pool')(this.mapnik);
+         this.mapnik.register_default_fonts();
+         this.mapnik.register_system_fonts();
+         this.mapnik.register_default_input_plugins();
+-        this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'), {recurse: true});
++        this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'), { recurse: true });
+         this.changeState('init');
+         this.cachePath = path.join('tmp', this.id);
+         this.beforeState('loaded', this.initMetaCache);
+@@ -62,13 +63,13 @@ class Project extends ConfigEmitter {
+         this.render();
+         this.config.log('Loading map…');
+         if (!options.bufferSize) options.bufferSize = this.mml.bufferSize || 256;
+-        if(!options.size) options.size = this.metatileSize() * (options.scale || 1);
+-        this.mapPool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
++        if (!options.size) options.size = this.metatileSize() * (options.scale || 1);
++        this.mapPool = this.mapnikPool.fromString(this.xml, options, { base: this.root });
+         this.config.log('Map ready');
+         return this.mapPool;
+     };
+ 
+-    export(options, callback) {
++    export (options, callback) {
+         var format = options.format;
+         if (!this.config.exporters[format]) throw 'Unknown format ' + format;
+         var Exporter = require(this.config.exporters[format]).Exporter;
+@@ -88,7 +89,7 @@ class Project extends ConfigEmitter {
+             loadTime: this.loadTime,
+             layers: this.mml.Layer || []
+         };
+-        this.emitAndForward('tofront', {options: options});
++        this.emitAndForward('tofront', { options: options });
+         return options;
+     };
+ 
+@@ -117,14 +118,15 @@ class Project extends ConfigEmitter {
+     };
+ 
+     initMetaCache(e) {
+-        var self = this, cacheFiles = [],
++        var self = this,
++            cacheFiles = [],
+             dir = this.getMetaCacheDir();
+-        Utils.mkdirs(dir, function (err) {
++        Utils.mkdirs(dir, function(err) {
+             if (err) throw err;
+             self.config.log('Creating metatiles cache dir', dir);
+             if (self.config.parsed_opts.keepcache) return e.continue();
+             self.config.log('Deleting previous metatiles', dir);
+-            Utils.cleardir(dir, function (err) {
++            Utils.cleardir(dir, function(err) {
+                 if (err) throw err;
+                 e.continue();
+             });
+@@ -132,8 +134,9 @@ class Project extends ConfigEmitter {
+     };
+ 
+     initVectorCache(e) {
+-        var self = this, dir = this.getVectorCacheDir();
+-        Utils.mkdirs(dir, function (err) {
++        var self = this,
++            dir = this.getVectorCacheDir();
++        Utils.mkdirs(dir, function(err) {
+             if (err) throw err;
+             self.config.log('Created vector cache dir', dir);
+             e.continue();
+diff --git a/src/back/ProjectServer.js b/src/back/ProjectServer.js
+index 4ba8293..d71eb9b 100644
+--- a/src/back/ProjectServer.js
++++ b/src/back/ProjectServer.js
+@@ -14,19 +14,19 @@ class ProjectServer {
+         this.parent = parent;
+         this._pollQueue = [];
+         var self = this,
+-            onChange = function (type, filename) {
++            onChange = function(type, filename) {
+                 if (filename) {
+                     if (filename.indexOf('.') === 0) return;
+                     self.project.config.log('File', filename, 'changed on disk');
+                 }
+-                self.addToPollQueue({isDirty: true});
++                self.addToPollQueue({ isDirty: true });
+             };
+-        this.project.when('loaded', function () {
++        this.project.when('loaded', function() {
+             try {
+                 self.initMapPools();
+             } catch (err) {
+                 console.log(err.message);
+-                self.addToPollQueue({error: err.message});
++                self.addToPollQueue({ error: err.message });
+             }
+             fs.watch(self.project.filepath, onChange);
+             for (var style of self.project.mml.Stylesheet) {
+@@ -48,8 +48,8 @@ class ProjectServer {
+         else if (urlpath === '/reload/') this.reload(res);
+         else if (urlpath === '/clear-vector-cache/') this.clearVectorCache(res);
+         else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(urlpath, uri, req, res, this.project);
+-        else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
+-        else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query () {self.queryTile(els[2], els[3], els[4], res, uri.query);});
++        else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile() { self.serveTile(els[2], els[3], els[4], res, uri.query); });
++        else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query() { self.queryTile(els[2], els[3], els[4], res, uri.query); });
+         else this.parent.notFound(urlpath, res);
+     };
+ 
+@@ -75,18 +75,18 @@ class ProjectServer {
+             y = yels[0],
+             scale = yels[1] ? parseInt(yels[1], 10) : 1,
+             mapScale = scale * (this.project.mml.scale || 1),
+-            size = this.project.tileSize() * scale,  // retina?
+-            mapPool = scale === 2 ? this.retinaPool : this.mapPool;
+-        mapPool.acquire(function (err, map) {
+-            var release = function () {mapPool.release(map);};
++            size = this.project.tileSize() * scale, // retina?
++            mapPool = this.mapPool;
++        mapPool.acquire(function(err, map) {
++            var release = function() { mapPool.release(map); };
+             if (err) return self.raise(err.message, res);
+             var tileClass = self.project.mml.source ? VectorBasedTile : self.project.metatile() === 1 ? Tile : MetatileBasedTile;
+-            var tile = new tileClass(z, x, y, {size: size, metatile: self.project.metatile(), mapScale: mapScale});
+-            return tile.render(self.project, map, function (err, im) {
++            var tile = new tileClass(z, x, y, { size: size, metatile: self.project.metatile(), mapScale: mapScale });
++            return tile.render(self.project, map, function(err, im) {
+                 if (err) return self.raise(err.message, res, release);
+-                im.encode('png', function (err, buffer) {
++                im.encode('png', function(err, buffer) {
+                     if (err) return self.raise(err.message, res, release);
+-                    res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
++                    res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': buffer.length });
+                     res.write(buffer);
+                     res.end();
+                     release();
+@@ -97,12 +97,12 @@ class ProjectServer {
+ 
+     jsontile(z, x, y, res, query) {
+         var self = this;
+-        this.vectorMapPool.acquire(function (err, map) {
+-            var release = function () {self.vectorMapPool.release(map);};
++        this.vectorMapPool.acquire(function(err, map) {
++            var release = function() { self.vectorMapPool.release(map); };
+             if (err) return self.raise(err.message, res);
+             var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+-            var tile = new tileClass(z, x, y, {metatile: 1});
+-            return tile.renderToVector(self.project, map, function (err, tile) {
++            var tile = new tileClass(z, x, y, { metatile: 1 });
++            return tile.renderToVector(self.project, map, function(err, tile) {
+                 if (err) return self.raise(err.message, res, release);
+                 var content;
+                 try {
+@@ -112,8 +112,8 @@ class ProjectServer {
+                     // return an empty geojson;
+                     content = '{"type": "FeatureCollection", "features": []}';
+                 }
+-                if (typeof content !== 'string') content = JSON.stringify(content);  // Mapnik 3.1.0 now returns a string
+-                res.writeHead(200, {'Content-Type': 'application/javascript', 'Access-Control-Allow-Origin': '*'});
++                if (typeof content !== 'string') content = JSON.stringify(content); // Mapnik 3.1.0 now returns a string
++                res.writeHead(200, { 'Content-Type': 'application/javascript', 'Access-Control-Allow-Origin': '*' });
+                 res.write(content);
+                 res.end();
+                 release();
+@@ -123,19 +123,19 @@ class ProjectServer {
+ 
+     pbftile(z, x, y, res) {
+         var self = this;
+-        this.vectorMapPool.acquire(function (err, map) {
+-            var release = function () {self.vectorMapPool.release(map);};
++        this.vectorMapPool.acquire(function(err, map) {
++            var release = function() { self.vectorMapPool.release(map); };
+             if (err) return self.raise(err.message, res);
+             var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+             try {
+-                var tile = new tileClass(z, x, y, {metatile: 1});
++                var tile = new tileClass(z, x, y, { metatile: 1 });
+             } catch (err) {
+                 return self.raise(err.message, res, release);
+             }
+-            return tile.renderToVector(self.project, map, function (err, tile) {
++            return tile.renderToVector(self.project, map, function(err, tile) {
+                 if (err) return self.raise(err.message, res, release);
+                 var content = tile.getData();
+-                res.writeHead(200, {'Content-Type': 'application/x-protobuf', 'Access-Control-Allow-Origin': '*'});
++                res.writeHead(200, { 'Content-Type': 'application/x-protobuf', 'Access-Control-Allow-Origin': '*' });
+                 res.write(content);
+                 res.end();
+                 release();
+@@ -145,25 +145,25 @@ class ProjectServer {
+ 
+     xraytile(z, x, y, res, query) {
+         var self = this;
+-        this.vectorMapPool.acquire(function (err, map) {
+-            var release = function () {self.vectorMapPool.release(map);};
++        this.vectorMapPool.acquire(function(err, map) {
++            var release = function() { self.vectorMapPool.release(map); };
+             if (err) return self.raise(err.message, res, release);
+             var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+-            var tile = new tileClass(z, x, y, {metatile: 1, buffer_size: 1});
+-            return tile.renderToVector(self.project, map, function (err, t) {
++            var tile = new tileClass(z, x, y, { metatile: 1, buffer_size: 1 });
++            return tile.renderToVector(self.project, map, function(err, t) {
+                 if (err) return self.raise(err.message, res, release);
+                 if (t.getData().length == 0) {
+-                    res.writeHead(204, {'Content-Type': 'image/png', 'Content-Length': 0});
++                    res.writeHead(204, { 'Content-Type': 'image/png', 'Content-Length': 0 });
+                     res.end();
+                     release();
+                     return;
+                 }
+-                var xtile = new XRayTile(z, x, y, t.getData(), {layer: query.layer, background: query.background});
+-                xtile.render(self.project, map, function (err, im) {
++                var xtile = new XRayTile(z, x, y, t.getData(), { layer: query.layer, background: query.background });
++                xtile.render(self.project, map, function(err, im) {
+                     if (err) return self.raise(err.message, res, release);
+-                    im.encode('png', function (err, buffer) {
++                    im.encode('png', function(err, buffer) {
+                         if (err) return self.raise(err.message, res, release);
+-                        res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
++                        res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': buffer.length });
+                         res.write(buffer);
+                         res.end();
+                         release();
+@@ -177,18 +177,20 @@ class ProjectServer {
+         var self = this;
+         lat = parseFloat(lat);
+         lon = parseFloat(lon);
+-        this.vectorMapPool.acquire(function (err, map) {
+-            var release = function () {self.vectorMapPool.release(map);};
++        this.vectorMapPool.acquire(function(err, map) {
++            var release = function() { self.vectorMapPool.release(map); };
+             var xy = GeoUtils.zoomLatLngToXY(z, lat, lon),
+-                x = xy[0], y = xy[1];
++                x = xy[0],
++                y = xy[1];
+             if (err) return self.raise(err.message, res, release);
+             var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+-            var tile = new tileClass(z, x, y, {metatile: 1});
+-            return tile.renderToVector(self.project, map, function (err, t) {
++            var tile = new tileClass(z, x, y, { metatile: 1 });
++            return tile.renderToVector(self.project, map, function(err, t) {
+                 if (err) return self.raise(err.message, res, release);
+-                var options = {tolerance: parseInt(query.tolerance, 10) || 100};
+-                var results = [], layers = [];
+-                var doQuery = function (results, options) {
++                var options = { tolerance: parseInt(query.tolerance, 10) || 100 };
++                var results = [],
++                    layers = [];
++                var doQuery = function(results, options) {
+                     var features = t.query(lon, lat, options);
+                     for (var i = 0; i < features.length; i++) {
+                         results.push({
+@@ -207,7 +209,7 @@ class ProjectServer {
+                         doQuery(results, options);
+                     }
+                 }
+-                res.writeHead(200, {'Content-Type': 'application/javascript'});
++                res.writeHead(200, { 'Content-Type': 'application/javascript' });
+                 res.write(JSON.stringify(results));
+                 res.end();
+                 release();
+@@ -226,19 +228,19 @@ class ProjectServer {
+ 
+     clearVectorCache(res) {
+         var self = this;
+-        Utils.cleardir(this.project.getVectorCacheDir(), function (err) {
++        Utils.cleardir(this.project.getVectorCacheDir(), function(err) {
+             if (err) return self.raise(err.message, res);
+             res.writeHead(204, {
+                 'Content-Length': 0,
+-                'Content-Type': 'text/html'  // Firefox complains without Content-Type, even if the body is empty.
++                'Content-Type': 'text/html' // Firefox complains without Content-Type, even if the body is empty.
+             });
+             res.end();
+         });
+     };
+ 
+-    export(res, options) {
++    export (res, options) {
+         var self = this;
+-        this.project.export(options, function (err, buffer) {
++        this.project.export(options, function(err, buffer) {
+             if (err) return self.raise(err.message, res);
+             res.writeHead(200, {
+                 'Content-Disposition': 'attachment; filename: "xxxx"'
+@@ -255,8 +257,8 @@ class ProjectServer {
+         var css = this.project.config._css.reduce(function(a, b) {
+             return a + '<link rel="stylesheet" href="' + b + '" />\n';
+         }, '');
+-        fs.readFile(path.join(kosmtik.src, 'front/project.html'), {encoding: 'utf8'}, function(err, data) {
+-            if(err) throw err;
++        fs.readFile(path.join(kosmtik.src, 'front/project.html'), { encoding: 'utf8' }, function(err, data) {
++            if (err) throw err;
+             data = data.replace('%%JS%%', js);
+             data = data.replace('%%CSS%%', css);
+             res.writeHead(200, {
+@@ -274,14 +276,15 @@ class ProjectServer {
+     raise(message, res, cb) {
+         console.trace();
+         console.log(message);
+-        if (message) this.addToPollQueue({error: message});
++        if (message) this.addToPollQueue({ error: message });
+         res.writeHead(500);
+         res.end();
+         if (cb) cb();
+     };
+ 
+     poll(res) {
+-        var data = '', len;
++        var data = '',
++            len;
+         if (this._pollQueue.length) {
+             data = JSON.stringify(this._pollQueue);
+             this._pollQueue = [];
+@@ -302,13 +305,10 @@ class ProjectServer {
+         } catch (err) {
+             return this.raise(err.message, res);
+         }
+-        this.project.when('loaded', function () {
++        this.project.when('loaded', function() {
+             self.mapPool.drain(function() {
+                 self.mapPool.destroyAllNow();
+             });
+-            self.vectorMapPool.drain(function() {
+-                self.vectorMapPool.destroyAllNow();
+-            });
+             try {
+                 self.initMapPools();
+             } catch (err) {
+@@ -323,8 +323,7 @@ class ProjectServer {
+ 
+     initMapPools() {
+         this.mapPool = this.project.createMapPool();
+-        this.retinaPool = this.project.createMapPool({scale: 2});
+-        this.vectorMapPool = this.project.createMapPool({size: 256});
++        this.vectorMapPool = this.mapPool;
+     };
+ }
+ 
+diff --git a/src/back/renderer/Carto.js b/src/back/renderer/Carto.js
+index 7c5d82b..0e43a6a 100644
+--- a/src/back/renderer/Carto.js
++++ b/src/back/renderer/Carto.js
+@@ -14,24 +14,24 @@ class Carto {
+                 effects: []
+             },
+             options = {
+-                mapnik_version: this.project.mml.mapnik_version || this.project.config.parsed_opts.mapnik_version
++                mapnik_version: this.project.mml.mapnik_version || this.project.config.parsed_opts.mapnik_version,
++                quiet: true
+             };
+         this.project.config.log('Using mapnik version', options.mapnik_version);
+         var output = new carto.Renderer(env, options).render(this.project.mml);
+-    
++
+         if (output.msg) {
+-            output.msg.forEach(function (v) {
++            output.msg.forEach(function(v) {
+                 if (v.type === 'error') {
+                     console.error(carto.Util.getMessageToPrint(v));
+-                }
+-                else if (v.type === 'warning') {
+-                    console.warn(carto.Util.getMessageToPrint(v));
++                } else if (v.type === 'warning') {
++                    //console.warn(carto.Util.getMessageToPrint(v));
+                 }
+             });
+         }
+-    
++
+         return output.data;
+     };
+ };
+ 
+-exports = module.exports = { Renderer: Carto };
++exports = module.exports = { Renderer: Carto };
+\ No newline at end of file
