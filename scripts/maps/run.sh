@@ -36,7 +36,7 @@ service apache2 restart
 #service renderd restart
 service cron restart
 
-sudo -u munin munin-cron
+sudo -u munin munin-cron &
 
 # UK
 # render_list_geo.pl -f -n 6 -z 9 -Z 14 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
@@ -68,7 +68,7 @@ while [[ true ]]; do
         chsum1=$chsum2
     fi
 
-    sleep 1
+    sleep 5
 done
 
 exit 0
