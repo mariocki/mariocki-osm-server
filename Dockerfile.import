@@ -93,7 +93,7 @@ RUN cd /usr/local/lib/python3.9/dist-packages/elevation \
 
 # Start running
 COPY ./scripts/import/run.sh /
-COPY ./openstreetmap-carto/indexes.sql /
+COPY ./openstreetmap-carto/indexes.psql /
 RUN chmod +x /run.sh
 ENTRYPOINT ["/run.sh"]
 CMD []

@@ -38,7 +38,7 @@ import_map_data() {
     sudo -u renderer osm2pgsql -H ${PGHOST} -d ${PGDATABASE} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
 
     # Create indexes
-    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -f /indexes.sql
+    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -f /indexes.psql
 
     #Import external data
     sudo chown -R renderer: /home/renderer/src
@@ -86,8 +86,13 @@ for a in $(find cache -name *.tif); do
     gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
 
     ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-    shp2pgsql -a -e -g way -s 4326:900913 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
+    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
+    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+
+    # to correct a projection use this...
+    # psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
 done
 
-psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
 exit 0
