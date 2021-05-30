@@ -4,7 +4,7 @@
         exec "$@"
  }
 
-+/etc/init.d/munin-node start
++gosu root /etc/init.d/munin-node start
 +
  if ! _is_sourced; then
         _main "$@"
