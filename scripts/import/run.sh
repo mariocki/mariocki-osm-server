@@ -63,16 +63,32 @@ sleep infinity
 ## import contours
 ## from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
 #
+
+cd /data
+
 ## Download data if need-be (slow)
 #if [[ ! -f /data/srtm_30m.tif ]]; then
 #    eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
+#    eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
 #fi
 #
-## Calculate 10 m contours
-#gdal_contour -i 10 -f "ESRI Shapefile" -a height /data/srtm_30m.tif /data/srtm_30m_contours_10m
-#
-## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-#shp2pgsql -p -I -g way -s 4326:900913 /data/srtm_30m_contours_10m/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE}
-#shp2pgsql -d -e -g way -s 4326:900913 /data/srtm_30m_contours_10m/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE}
+
+mkdir -p vrt tif
+rm -f contour.log
+for a in $(find cache -name *.tif); do
+
+    fname=${a##*/}
+
+    echo "processing ${fname}" >>contour.log
+    gdalbuildvrt vrt/${fname%.tif}.vrt $a >>contour.log 2>&1
+
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 vrt/${fname%.tif}.vrt tif/${fname%.tif}-t.tif >>contour.log 2>&1
+
+    mkdir -p contours/${fname%.tif}
+    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
+
+    ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
+    shp2pgsql -a -e -g way -s 4326:900913 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+done
 
 exit 0
