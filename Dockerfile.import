@@ -36,6 +36,8 @@ RUN apt-get install -y --no-install-recommends \
   make \
   osmium-tool \
   osmosis \
+  patch \
+  postgis \
   postgresql-client \
   python \
   python3-lxml \  
@@ -47,7 +49,7 @@ RUN apt-get install -y --no-install-recommends \
 
 # Install python libraries
 RUN pip3 install requests \ 
-  && pip3 install pyyaml
+  && pip3 install pyyaml elevation
 
 # Install latest osm2pgsql
 RUN mkdir -p /home/renderer/src \
@@ -83,6 +85,11 @@ RUN mkdir -p /var/log/tiles \
 # https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
 COPY ./scripts/import/trim_osc.py /usr/local/bin/
 RUN chmod a+x /usr/local/bin/trim_osc.py
+
+# patch elevation to allow a reasonable number of downloads
+COPY ./patches/elevation.patch /elevation.patch
+RUN cd /usr/local/lib/python3.9/dist-packages/elevation \
+  && patch < /elevation.patch
 
 # Start running
 COPY ./scripts/import/run.sh /

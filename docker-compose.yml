@@ -12,8 +12,7 @@ services:
     image: mariocki/osm-server-import:v1
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
-      - ~/osm-maps/data.osm.pbf:/data.osm.pbf
-      - ~/osm-maps/data.poly:/data.poly
+      - ~/osm-maps/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
