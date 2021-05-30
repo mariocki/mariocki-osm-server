@@ -89,10 +89,5 @@ for a in $(find cache -name *.tif); do
     shp2pgsql -a -e -g way -s 4326:900913 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
 done
 
-for a in $(find cache -name *.tif); do
-
-    fname=${a##*/}
-
-    echo "processing ${fname}"
-done
+psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
 exit 0
