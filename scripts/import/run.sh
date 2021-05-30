@@ -63,9 +63,7 @@ sleep infinity
 ## import contours
 ## from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
 #
-
 cd /data
-
 ## Download data if need-be (slow)
 #if [[ ! -f /data/srtm_30m.tif ]]; then
 #    eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
@@ -91,4 +89,10 @@ for a in $(find cache -name *.tif); do
     shp2pgsql -a -e -g way -s 4326:900913 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
 done
 
+for a in $(find cache -name *.tif); do
+
+    fname=${a##*/}
+
+    echo "processing ${fname}"
+done
 exit 0
