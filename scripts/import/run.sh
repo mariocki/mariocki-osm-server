@@ -71,7 +71,8 @@ sleep infinity
 ## Calculate 10 m contours
 #gdal_contour -i 10 -f "ESRI Shapefile" -a height /data/srtm_30m.tif /data/srtm_30m_contours_10m
 #
+## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
 #shp2pgsql -p -I -g way -s 4326:900913 /data/srtm_30m_contours_10m/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE}
-#shp2pgsql -a -g way -s 4326:900913 /data/srtm_30m_contours_10m/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE}
+#shp2pgsql -d -e -g way -s 4326:900913 /data/srtm_30m_contours_10m/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE}
 
 exit 0
