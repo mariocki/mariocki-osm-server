@@ -60,16 +60,17 @@ echo "Done..."
 
 sleep infinity
 
+exit 0
+
 ## import contours
-## from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
+## taken from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
 #
 cd /data
-## Download data if need-be (slow)
-#if [[ ! -f /data/srtm_30m.tif ]]; then
-#    eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
-#    eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
-#fi
-#
+# Download data if need-be (slow)
+if [[ ! -f /data/srtm_30m.tif ]]; then
+    ##eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
+    eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
+fi
 
 mkdir -p vrt tif
 rm -f contour.log
@@ -94,5 +95,3 @@ for a in $(find cache -name *.tif); do
     # to correct a projection use this...
     # psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
 done
-
-exit 0
