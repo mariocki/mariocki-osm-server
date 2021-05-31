@@ -40,7 +40,11 @@ Then run:
 
 ```
 docker-compose up --build import
-sudo adduser $USER postgres
+```
+
+If you want to be able to view whats in the database folder then:
+```
+sudo adduser $SUDO_USER postgres
 sudo chown -R .postgres ~/osm-maps/gis
 sudo find ~/osm-maps/gis/ -type d -exec chmod g+rx {} \;
 sudo find ~/osm-maps/gis/ -type f -exec chmod g+r {} \;
