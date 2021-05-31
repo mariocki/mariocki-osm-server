@@ -24,6 +24,7 @@ mkdir -p ~/osm-maps/data
 sudo useradd postgres -u 999
 ```
 
+### Importing Data
 Download a pbf from https://download.geofabrik.de/ and save it into the data folder and name it data.osm.pbf:
 
 ```
@@ -37,13 +38,12 @@ Download the poly file and save it into the data folder and name it data.poly:
 curl https://download.geofabrik.de/europe/liechtenstein.poly -o ~/osm-maps/data/data.poly
 ```
 
-Then run:
-
+Then run this, this will create a postgis database server and start importing the data into the database.
 ```
 docker-compose up --build import
 ```
 
-If you want to be able to view whats in the database folder then:
+Once the import has completed if you want to be able to view whats in the database folder then:
 ```
 sudo adduser $SUDO_USER postgres
 sudo chown -R .postgres ~/osm-maps/gis
@@ -51,39 +51,39 @@ sudo find ~/osm-maps/gis/ -type d -exec chmod g+rx {} \;
 sudo find ~/osm-maps/gis/ -type f -exec chmod g+r {} \;
 ```
 
-This will create a postgis database server and start importing the data into the database.
-
 [Optional]
 Create a postgres user on the sql box to stop some scripts from complaining.
+You only need to do this once.
 ```
 psql -U renderer -h localhost -d gis -c "CREATE USER postgres SUPERUSER;"
 ```
 
-Once the import has completed run:
+### Viewing your maps
+To view your maps run this and open a browser at http://localhost:8080/.
 ```
-docker-compose up maps
+docker-compose up -d maps
 ```
 
-and open a browser at http://localhost:8080/.
-
-If you want to monitor the database then run:
+### Monitoring the database
+[Optional]
+If you want to monitor the database then run this and open a browser at http://localhost:8081/.
 ```
-docker-compose up pghero
+docker-compose up -d pghero
 ```
-and open a browser at http://localhost:8081/.
 
-If you want to start editing the carto styles then run:
+### Editing the map style
+[Optional]
+If you want to start editing the carto styles then run this and open a browser at http://localhost:6789/openstreetmap-carto/#4/0.00/0.00
 ```
 docker-compose up kosmtik
 ```
-and open a browser at http://localhost:6789/openstreetmap-carto/#4/0.00/0.00
 More information about Kosmtik can be found here https://github.com/kosmtik/kosmtik
 
 ## Adding more countries to your database
 Edit docker-compose.yml and remove the following line: `    command: --create`.
+And then repeat the instructions under "Importing Data"
 
 ## Importing contour lines
-
 :warning: This can take quite a long time to run. :warning:
 
 Make sure you don't have any datafiles in the data folder (or else it'll try and re-import them :smile:):
