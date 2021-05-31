@@ -78,7 +78,7 @@ Edit docker-compose.yml and remove the following line: `    command: --create`.
 
 ## Importing contour lines
 
-:warning: This can take quite a logn time to run.
+:warning: This can take quite a long time to run. :warning:
 
 Make sure you don't have any datafiles in the data folder (or else it'll try and re-import them :smile:):
 ```
@@ -127,4 +127,4 @@ for a in $(find cache -name *.tif); do
 done
 ```
 
-And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
+And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
