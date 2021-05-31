@@ -19,7 +19,7 @@ import_map_data() {
     fi
 
     cd /openstreetmap-carto
-    carto project.mml >mapnik.xml 2> >(grep -v "Styles do not match")
+    carto project.mml >mapnik.xml 2>/dev/null
 
     # determine and set osmosis_replication_timestamp (for consecutive updates)
     osmium fileinfo /data/data.osm.pbf >/var/lib/mod_tile/data.osm.pbf.info
