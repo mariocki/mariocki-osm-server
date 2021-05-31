@@ -53,6 +53,12 @@ sudo find ~/osm-maps/gis/ -type f -exec chmod g+r {} \;
 
 This will create a postgis database server and start importing the data into the database.
 
+[Optional]
+Create a postgres user on the sql box to stop some scripts from complaining.
+```
+psql -U renderer -h localhost -d gis -c "CREATE USER postgres SUPERUSER;"
+```
+
 Once the import has completed run:
 ```
 docker-compose up maps
@@ -88,7 +94,7 @@ mv ~/osm-maps/data/data.poly ~/osm-maps/data/data-old.poly
 
 start and connect to the import server:
 ```
-docker-compose up import
+docker-compose up -d import
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
@@ -117,13 +123,14 @@ for a in $(find cache -name *.tif); do
 
     mkdir -p contours/${fname%.tif}
     gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
+done
 
-    ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_idx ON contour USING GIST (way);" >>contour.log 2>&1
-    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
+## pick a random contour.shp file from in the contour directory ... doesn't matter which.
+shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 
+for a in $(find contours -name *.shp); do
+    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 done
 ```
 

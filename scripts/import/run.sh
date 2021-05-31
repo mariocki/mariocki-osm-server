@@ -64,9 +64,9 @@ exit 0
 
 ##### import contours
 ##### taken from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
-####
+#####
 ###cd /data
-#### Download data if need-be (slow)
+##### Download data if need-be (slow)
 ###if [[ ! -f /data/srtm_30m.tif ]]; then
 ###    ##eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
 ###    eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
@@ -85,13 +85,15 @@ exit 0
 ###
 ###    mkdir -p contours/${fname%.tif}
 ###    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
-###
-###    ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-###    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
-###    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
-###    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
-###    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
-###
-###    # to correct a projection use this...
-###    # psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
 ###done
+###
+##### https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
+###shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+###
+###for a in $(find contours -name *.shp); do
+###    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+###done
+###
+##### to correct a projection use this...
+#### psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
+###
