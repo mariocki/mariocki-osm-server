@@ -39,7 +39,7 @@ service cron restart
 sudo -u munin munin-cron &
 
 # UK
-# render_list_geo.pl -a -f -n 4 -z 9 -Z 14 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
+# render_list_geo.pl -a -f -n 4 -z 12 -Z 16 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt
 
 # London 51.5074/-0.1278
 # render_list_geo.pl -a -f -n 4 -z 15 -Z 18 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt
