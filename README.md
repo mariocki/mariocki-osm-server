@@ -2,6 +2,7 @@
 
 Containerised OpenStreetMap server based off the instructions found at : https://switch2osm.org/serving-tiles/manually-building-a-tile-server-debian-11/
 
+:construction::construction::construction::construction::construction::construction::construction:
 ## Instructions
 Clone this git repo to your local machine:
 
@@ -77,8 +78,17 @@ Edit docker-compose.yml and remove the following line: `    command: --create`.
 
 ## Importing contour lines
 
-Connect to the import server:
+:warning: This can take quite a logn time to run.
+
+Make sure you don't have any datafiles in the data folder (or else it'll try and re-import them :smile:):
 ```
+mv ~/osm-maps/data/data.osm.pbf ~/osm-maps/data/data-old.osm.pbf 
+mv ~/osm-maps/data/data.poly ~/osm-maps/data/data-old.poly
+```
+
+start and connect to the import server:
+```
+docker-compose up import
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
