@@ -43,14 +43,6 @@ Then run this, this will create a postgis database server and start importing th
 docker-compose up --build import
 ```
 
-Once the import has completed if you want to be able to view whats in the database folder then:
-```
-sudo adduser $SUDO_USER postgres
-sudo chown -R .postgres ~/osm-maps/gis
-sudo find ~/osm-maps/gis/ -type d -exec chmod g+rx {} \;
-sudo find ~/osm-maps/gis/ -type f -exec chmod g+r {} \;
-```
-
 [Optional]
 Create a postgres user on the sql box to stop some scripts from complaining.
 You only need to do this once.
