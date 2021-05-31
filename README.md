@@ -20,6 +20,7 @@ gh repo clone gravitystorm/openstreetmap-carto
 Create a folder in your home directory named "osm-maps/data":
 ```
 mkdir -p ~/osm-maps/data
+sudo useradd postgres -u 999
 ```
 
 Download a pbf from https://download.geofabrik.de/ and save it into the data folder and name it data.osm.pbf:
@@ -39,6 +40,10 @@ Then run:
 
 ```
 docker-compose up --build import
+sudo adduser $USER postgres
+sudo chown -R .postgres ~/osm-maps/gis
+sudo find ~/osm-maps/gis/ -type d -exec chmod g+rx {} \;
+sudo find ~/osm-maps/gis/ -type f -exec chmod g+r {} \;
 ```
 
 This will create a postgis database server and start importing the data into the database.

@@ -69,10 +69,7 @@ services:
     networks:
       - my_network
   pghero:
-    build:
-      context: .
-      dockerfile: Dockerfile.pghero
-    image: mariocki/osm-server-pghero:v1
+    image: ankane/pghero
     depends_on:
       - db
     ports:
