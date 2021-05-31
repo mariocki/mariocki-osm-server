@@ -51,11 +51,10 @@ if (($options->{x} || $options->{x}==0) &&
       $n = 2;
 
       #be careful! y and Y used in reversed order
-      $cmd="render_list -a -z ".$iz." -Z ".$iz." -x ".$x." -X ".$X." -y ".$Y." -Y ".$y;
+      $cmd="render_list -a -f -z ".$iz." -Z ".$iz." -x ".$x." -X ".$X." -y ".$Y." -Y ".$y;
       if ($options->{n}) {$cmd = $cmd." -n ".$options->{n}};
       if ($options->{m}) {$cmd = $cmd." -m ".$options->{m}};
       if ($options->{l}) {$cmd = $cmd." -l ".$options->{l}};
-      if ($options->{f}) {$cmd = $cmd." -f ".$options->{f}};
       if ($options->{s}) {$cmd = $cmd." -s ".$options->{s}};
       if ($options->{t}) {$cmd = $cmd." -t ".$options->{t}};
       print $cmd."\n";
