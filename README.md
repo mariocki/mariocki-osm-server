@@ -75,6 +75,26 @@ More information about Kosmtik can be found here https://github.com/kosmtik/kosm
 Edit docker-compose.yml and remove the following line: `    command: --create`.
 And then repeat the instructions under "Importing Data"
 
+## Bulk rendering
+Connect to the maps server and run one of the lines shown below:
+```
+docker-compose up -d maps
+docker exec -it mariocki-osm-server_maps_1 /bin/bash
+```
+
+UK
+
+`render_list_geo.pl -a -f -z 10 -Z 16 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt`
+
+London 51.5074/-0.1278
+
+`render_list_geo.pl -a -f -z 15 -Z 18 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt`
+
+manchester 53.4808/-2.2426
+
+`render_list_geo.pl -a -f -z 15 -Z 18 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
+
+
 ## Importing contour lines
 :warning: This can take quite a long time to run. :warning:
 
