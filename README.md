@@ -121,7 +121,7 @@ for a in $(find cache -name *.tif); do
     ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
     shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_idx ON contour USING GIST (way);" >>contour.log 2>&1
     shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 
 done
