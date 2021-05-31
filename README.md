@@ -2,7 +2,7 @@
 
 Containerised OpenStreetMap server based off the instructions found at : https://switch2osm.org/serving-tiles/manually-building-a-tile-server-debian-11/
 
-:construction::construction::construction::construction::construction::construction::construction:
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction: Work In Progreess :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 ## Instructions
 Clone this git repo to your local machine:
 
