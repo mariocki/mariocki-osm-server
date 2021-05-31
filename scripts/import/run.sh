@@ -91,6 +91,7 @@ exit 0
 ###shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 ###
 ###for a in $(find contours -name *.shp); do
+###    echo "Processing" $a >>contour.log
 ###    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 ###done
 ###
