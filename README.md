@@ -25,20 +25,20 @@ mkdir -p ~/osm-maps/data
 Download a pbf from https://download.geofabrik.de/ and save it into the data folder and name it data.osm.pbf:
 
 ```
-wget https://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf -O ~/osm-data/data/data.osm.pbf
+curl https://download.geofabrik.de/europe/liechtenstein-latest.osm.pbf -o ~/osm-maps/data/data.osm.pbf
 ```
 
 [Optional]
 Download the poly file and save it into the data folder and name it data.poly:
 
 ```
-wget https://download.geofabrik.de/europe/liechtenstein.poly -O ~/osm-data/data/data.poly
+curl https://download.geofabrik.de/europe/liechtenstein.poly -o ~/osm-maps/data/data.poly
 ```
 
 Then run:
 
 ```
-docker-compose up import
+docker-compose up --build import
 ```
 
 This will create a postgis database server and start importing the data into the database.
@@ -63,6 +63,8 @@ docker-compose up kosmtik
 and open a browser at http://localhost:6789/openstreetmap-carto/#4/0.00/0.00
 More information about Kosmtik can be found here https://github.com/kosmtik/kosmtik
 
+## Adding more countries to your database
+Edit docker-compose.yml and remove the following line: `    command: --create`.
 
 ## Importing contour lines
 
@@ -71,7 +73,7 @@ Connect to the import server:
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
-and run these steps:
+run these steps:
 ```
 ## import contours
 ## taken from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
@@ -98,10 +100,12 @@ for a in $(find cache -name *.tif); do
     gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
 
     ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
-    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
-    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
-    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
+    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 
 done
 ```
+
+And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik

@@ -10,7 +10,7 @@ compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /de
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 
 cd /openstreetmap-carto
-carto project.mml >mapnik.xml
+carto project.mml >mapnik.xml 2>/dev/null
 
 # Configure Apache CORS
 if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
@@ -63,7 +63,7 @@ while [[ true ]]; do
 
     chsum2=$(md5deep -r -l . | sort | md5sum)
     if [[ $chsum1 != $chsum2 ]]; then
-        carto project.mml >mapnik.xml
+        carto project.mml >mapnik.xml 2>/dev/null
         service renderd restart
         chsum1=$chsum2
     fi

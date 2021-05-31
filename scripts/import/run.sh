@@ -35,10 +35,10 @@ import_map_data() {
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -H ${PGHOST} -d ${PGDATABASE} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
+    sudo -u renderer osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
 
     # Create indexes
-    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -f /indexes.psql
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
 
     #Import external data
     sudo chown -R renderer: /home/renderer/src
@@ -48,10 +48,10 @@ import_map_data() {
     touch /var/lib/mod_tile/planet-import-complete
 }
 
-# Error if no data is provided
+chown -R renderer /var/lib/mod_tile
 if [ -f /data/data.osm.pbf ] || [ ! -z "$DOWNLOAD_PBF" ]; then
     echo "Importing map data."
-    import_map_data
+    import_map_data $1
 else
     echo "no data files founds, doing nothing."
 fi
@@ -87,11 +87,11 @@ exit 0
 ###    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
 ###
 ###    ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
-###    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
-###    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
-###    psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
-###    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} >>contour.log 2>&1
+###    shp2pgsql -p -I -g way -s 4326:3857 contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+###    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour OWNER TO renderer;" >>contour.log 2>&1
+###    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "CREATE INDEX contour_height_ap ON contour USING GIST (way);" >>contour.log 2>&1
+###    shp2pgsql -a -e -g way -s 4326:3857 contours/${fname%.tif}/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
 ###
 ###    # to correct a projection use this...
-###    # psql -h ${PGHOST} -U ${PGUSER} -d ${PGDATABASE} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
+###    # psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "ALTER TABLE contour ALTER COLUMN way TYPE geometry(Point,3857) USING ST_Transform(geom,3857);"
 ###done
