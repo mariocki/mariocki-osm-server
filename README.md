@@ -151,6 +151,7 @@ And then add contours to your carto style as shown here https://wiki.openstreetm
 https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
 https://wiki.openstreetmap.org/wiki/HikingBikingMaps/HillShading
 https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
+https://gis.stackexchange.com/a/162390
 
 Assuming you have followed the steps above for contours...
 ```
