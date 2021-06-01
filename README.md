@@ -84,15 +84,15 @@ docker exec -it mariocki-osm-server_maps_1 /bin/bash
 
 UK
 
-`render_list_geo.pl -a -f -z 10 -Z 16 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt`
+`render_list_geo.pl -f -z 6 -Z 13 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt`
 
 London 51.5074/-0.1278
 
-`render_list_geo.pl -a -f -z 15 -Z 18 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt`
+`render_list_geo.pl -f -z 14 -Z 18 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt`
 
 manchester 53.4808/-2.2426
 
-`render_list_geo.pl -a -f -z 15 -Z 18 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
+`render_list_geo.pl -f -z 14 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
 
 
 ## Importing contour lines
@@ -122,29 +122,52 @@ if [[ ! -f /data/srtm_30m.tif ]]; then
     eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
 fi
 
-mkdir -p vrt tif
-rm -f contour.log
+mkdir -p vrt tif translated
 for a in $(find cache -name *.tif); do
 
     fname=${a##*/}
 
-    echo "processing ${fname}" >>contour.log
-    gdalbuildvrt vrt/${fname%.tif}.vrt $a >>contour.log 2>&1
+    gdalbuildvrt vrt/${fname%.tif}.vrt $a
 
-    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 vrt/${fname%.tif}.vrt tif/${fname%.tif}-t.tif >>contour.log 2>&1
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 vrt/${fname%.tif}.vrt translated/${fname%.tif}
 
     mkdir -p contours/${fname%.tif}
-    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height tif/${fname%.tif}-t.tif contours/${fname%.tif} >>contour.log 2>&1
+    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height translated/${fname%.tif} contours/${fname%.tif}
 done
 
 ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
 ## pick a random contour.shp file from in the contour directory ... doesn't matter which.
-shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
 for a in $(find contours -name *.shp); do
     echo "Processing" $a >>contour.log
-    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 done
 ```
 
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
+
+### Hillshading
+Assuming you have followed the steps above for contours...
+```
+mkdir -p warpedtif hillshade
+
+for a in tif/*.tif; do 
+    gdalwarp -of GTiff -co "TILED=YES" -srcnodata 32767 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -rcs -order 3 -tr 30 30 -multi $a warpedtif/${a##*/};
+done
+
+for a in warpedtif/*.tif; do 
+    gdaldem hillshade $a hillshade/${a##*/} -z 2;
+done
+```
+
+Copy the hillshade folder to /var/lib/mod_tile/.
+
+Run this and copy the contents of hillshade.mml into your project.mml
+```
+i=0
+for a in $(find /var/lib/mod_tile/hillshade/*); do 
+  echo { \"id\": \"hillshade-$i\", \"class\": \"hillshade\", \"geometry\": \"raster\", \"extent\": [-9.5, 49, 2.75, 62], \"srs-name\": \"900913\", \"srs\": \"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over\", \"Datasource\": { \"file\": \"$a\", \"type\": \"gdal\" }, \"properties\": { \"minzoom\": 8 } }, >> hillshade.mml; 
+  ((i=i+1))
+done
+```
