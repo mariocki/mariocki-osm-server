@@ -27,6 +27,7 @@ services:
       context: .
       dockerfile: Dockerfile.kosmtik
     volumes:
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db

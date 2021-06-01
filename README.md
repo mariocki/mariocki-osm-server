@@ -148,6 +148,10 @@ done
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
 
 ### Hillshading
+https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
+https://wiki.openstreetmap.org/wiki/HikingBikingMaps/HillShading
+https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
+
 Assuming you have followed the steps above for contours...
 ```
 mkdir -p warpedtif hillshade
@@ -157,13 +161,13 @@ for a in tif/*.tif; do
 done
 
 for a in warpedtif/*.tif; do 
-    gdaldem hillshade $a hillshade/${a##*/} -z 2;
+    gdaldem hillshade $a hillshade/${a##*/} -co "TILED=YES" -co "COMPRESS=LZW" -combined -z 3;
 done
 ```
 
 Copy the hillshade folder to /var/lib/mod_tile/.
 
-Run this and copy the contents of hillshade.mml into your project.mml
+Run this and copy the contents of hillshade.mml into your project.mml __after__ the landcover layer.
 ```
 i=0
 for a in $(find /var/lib/mod_tile/hillshade/*); do 
