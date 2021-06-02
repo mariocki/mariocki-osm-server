@@ -7,12 +7,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN adduser --disabled-password --gecos "" renderer
 
 RUN apt-get update
-RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
 
 #install nodejs
 RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
   && apt-get update \
-  && apt-get install -y nodejs
+  && apt-get install -y nodejs --no-install-recommends
 
 RUN apt-get install -y --no-install-recommends \
   gdal-bin \
@@ -34,9 +34,8 @@ RUN apt-get install -y --no-install-recommends \
 RUN pip3 install requests \ 
   && pip3 install pyyaml elevation
 
-COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
-
 # Install latest osm2pgsql
+COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
 RUN apt-get install -y /osm2pgsql-git.deb \
   && mkdir /nodes \
   && chown renderer:renderer /nodes 

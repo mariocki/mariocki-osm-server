@@ -7,12 +7,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN adduser --disabled-password --gecos "" renderer
 
 RUN apt-get update
-RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
 
 #install nodejs
 RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
   && apt-get update \
-  && apt-get install -y nodejs
+  && apt-get install -y nodejs --no-install-recommends
 
 RUN apt-get install -y --no-install-recommends \
   apache2 \
@@ -29,8 +29,8 @@ RUN apt-get install -y --no-install-recommends \
   munin-node \
   osmium-tool \
   osmosis \
-  postgresql-client \
   postgis \
+  postgresql-client \
   python \
   python3-lxml \  
   python3-pip \
@@ -39,9 +39,8 @@ RUN apt-get install -y --no-install-recommends \
   renderd \
   rsyslog 
 
-COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
-
 # Install latest osm2pgsql
+COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
 RUN apt-get install -y /osm2pgsql-git.deb \
   && mkdir /nodes \
   && chown renderer:renderer /nodes 
