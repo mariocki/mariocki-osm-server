@@ -82,9 +82,11 @@ docker-compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 
+`/usr/local/bin/bulkrender.sh`
+
 UK
 
-`render_list_geo.pl -f -z 6 -Z 13 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt`
+`render_list_geo.pl -z 6 -Z 16 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt`
 
 London 51.5074/-0.1278
 

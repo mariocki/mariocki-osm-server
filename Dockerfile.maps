@@ -135,6 +135,8 @@ RUN chmod a+x /usr/local/bin/trim_osc.py
 # https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
 COPY ./scripts/maps/render_list_geo.pl /usr/local/bin/
 RUN chmod a+x /usr/local/bin/render_list_geo.pl
+COPY ./scripts/maps/bulkrender.sh /usr/local/bin/
+RUN chmod a+x /usr/local/bin/bulkrender.sh
 
 # Copy site
 ADD siteroot /var/www/html/
