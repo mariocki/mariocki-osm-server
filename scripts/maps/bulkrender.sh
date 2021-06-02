@@ -11,7 +11,7 @@ while read a; do
   echo "PID is " $PID
 
   while kill -0 $PID 2>/dev/null; do
-    if grep -q Socket /tmp/xx; then
+    if grep -q socket /tmp/xx; then
       echo "process died, restarting"
       kill -9 $PID
       sleep 1
@@ -23,6 +23,7 @@ while read a; do
       PID=$!
       echo "new PID is " $PID
     fi
+    sleep 5
   done
 
   sleep 5

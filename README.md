@@ -142,7 +142,7 @@ done
 shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
 for a in $(find contours -name *.shp); do
-    echo "Processing" $a >>contour.log
+    echo "Processing" $a
     shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 done
 ```
@@ -157,10 +157,11 @@ https://gis.stackexchange.com/a/162390
 
 Assuming you have followed the steps above for contours...
 ```
+cd /data
 mkdir -p warpedtif hillshade
 
 for a in tif/*.tif; do 
-    gdalwarp -of GTiff -co "TILED=YES" -srcnodata 32767 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -rcs -order 3 -tr 30 30 -multi $a warpedtif/${a##*/};
+    gdalwarp -of GTiff -co "TILED=YES" -srcnodata 32767 -t_srs "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" -rcs -order 3 -tr 30 30 -multi $a warpedtif/${a##*/};
 done
 
 for a in warpedtif/*.tif; do 
