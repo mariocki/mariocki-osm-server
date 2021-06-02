@@ -1,3 +1,4 @@
+FROM mariocki/osm-server-build-stage:v1 AS build-stage
 FROM debian:testing-slim
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -15,31 +16,13 @@ RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
 
 RUN apt-get install -y --no-install-recommends \
   apache2 \
-  apache2-dev \
   apache2-utils \
-  autoconf \
-  automake \
-  cmake \
   cron \
-  g++ \
-  git-core \
   libapache2-mod-fcgid \
   libapache2-mod-tile \
-  libboost-dev \
-  libboost-filesystem-dev \
-  libboost-system-dev \
-  libbz2-dev \
   libcgi-fast-perl \
-  libexpat1-dev \
-  liblua5.3-dev \
-  libluajit-5.1-dev \
-  libmapnik-dev \ 
-  libpq-dev \
-  libproj-dev \
-  libtool-bin \
   logrotate \
   lua5.3 \
-  make \
   mapnik-utils \
   md5deep \
   munin \
@@ -54,23 +37,14 @@ RUN apt-get install -y --no-install-recommends \
   python3-psycopg2 \  
   python3-shapely \
   renderd \
-  rsyslog \
-  zlib1g-dev 
+  rsyslog 
+
+COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
 
 # Install latest osm2pgsql
-RUN mkdir -p /home/renderer/src \
-  && cd /home/renderer/src \
-  && git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 \
-  && cd /home/renderer/src/osm2pgsql \
-  && rm -rf .git \
-  && mkdir build \
-  && cd build \
-  && cmake -D WITH_LUAJIT=ON .. \
-  && make \
-  && make install \
+RUN apt-get install -y /osm2pgsql-git.deb \
   && mkdir /nodes \
-  && chown renderer:renderer /nodes \
-  && rm -rf /home/renderer/src/osm2pgsql
+  && chown renderer:renderer /nodes 
 
 # Configure stylesheet
 RUN npm install -g carto 

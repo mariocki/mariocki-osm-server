@@ -79,3 +79,12 @@ services:
       - .env
     networks:
       - my_network
+  build-stage:
+    build:
+      context: .
+      dockerfile: Dockerfile.build-stage
+    image: mariocki/osm-server-build-stage:v1
+    env_file:
+      - .env
+    networks:
+      - my_network
