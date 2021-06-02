@@ -5,51 +5,26 @@ networks:
     external: false
 
 services:
-  import:
+  db:
     build:
       context: .
-      dockerfile: Dockerfile.import
-    image: mariocki/osm-server-import:v1
+      dockerfile: Dockerfile.psql
+    image: mariocki/osm-server-db:v1
+    shm_size: "1gb"
     volumes:
-      - ~/osm-maps/mod_tile:/var/lib/mod_tile
-      - ~/osm-maps/data:/data
-      - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
+      - ~/osm-maps/gis:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     env_file:
       - .env
-    command: --create
+    command: "-c config_file=/etc/postgresql/postgresql.conf"
     networks:
       - my_network
-  kosmtik:
-    image: mariocki/osm-server-kosmtik:v1
+  build-stage:
     build:
       context: .
-      dockerfile: Dockerfile.kosmtik
-    volumes:
-      - ~/osm-maps/mod_tile:/var/lib/mod_tile
-      - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
-    ports:
-      - "6789:6789"
-    env_file:
-      - .env
-    networks:
-      - my_network
-  maps:
-    image: mariocki/osm-server-maps:v1
-    build:
-      context: .
-      dockerfile: Dockerfile.maps
-    volumes:
-      - ~/osm-maps/mod_tile:/var/lib/mod_tile
-      - ~/osm-maps/munin:/var/lib/munin
-      - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
-    ports:
-      - "8080:80"
+      dockerfile: Dockerfile.build-stage
+    image: mariocki/osm-server-build-stage:v1
     env_file:
       - .env
     networks:
@@ -69,19 +44,37 @@ services:
       - .env
     networks:
       - my_network
-  db:
+  import:
     build:
       context: .
-      dockerfile: Dockerfile.psql
-    image: mariocki/osm-server-db:v1
-    shm_size: "1gb"
+      dockerfile: Dockerfile.import
+    image: mariocki/osm-server-import:v1
     volumes:
-      - ~/osm-maps/gis:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
+      - ~/osm-maps/data:/data
+      - ./openstreetmap-carto:/openstreetmap-carto
+    depends_on:
+      - db
     env_file:
       - .env
-    command: "-c config_file=/etc/postgresql/postgresql.conf"
+    command: --create
+    networks:
+      - my_network
+  maps:
+    image: mariocki/osm-server-maps:v1
+    build:
+      context: .
+      dockerfile: Dockerfile.maps
+    volumes:
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
+      - ~/osm-maps/munin:/var/lib/munin
+      - ./openstreetmap-carto:/openstreetmap-carto
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
     networks:
       - my_network
   pghero:
@@ -94,11 +87,18 @@ services:
       - .env
     networks:
       - my_network
-  build-stage:
+  kosmtik:
+    image: mariocki/osm-server-kosmtik:v1
     build:
       context: .
-      dockerfile: Dockerfile.build-stage
-    image: mariocki/osm-server-build-stage:v1
+      dockerfile: Dockerfile.kosmtik
+    volumes:
+      - ~/osm-maps/mod_tile:/var/lib/mod_tile
+      - ./openstreetmap-carto:/openstreetmap-carto
+    depends_on:
+      - db
+    ports:
+      - "6789:6789"
     env_file:
       - .env
     networks:
