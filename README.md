@@ -2,7 +2,7 @@
 
 Containerised OpenStreetMap server based off the instructions found at : https://switch2osm.org/serving-tiles/manually-building-a-tile-server-debian-11/
 
-:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction: Work In Progreess :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction: Work In Progreess :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 ## Instructions
 Clone this git repo to your local machine:
 
@@ -76,13 +76,17 @@ Edit docker-compose.yml and remove the following line: `    command: --create`.
 And then repeat the instructions under "Importing Data"
 
 ## Bulk rendering
-Connect to the maps server and run one of the lines shown below:
+Connect to the maps server:
 ```
 docker-compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 
-`/usr/local/bin/bulkrender.sh`
+and run one of the lines shown below which will generate the commands you need to run.
+You can run `render_list_geo.pl -h` to view all the options.
+
+Taken from: https://github.com/alx77/render_list_geo.pl/blob/master/render_list_geo.pl
+
 
 UK
 
@@ -152,16 +156,19 @@ done
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
 
 ### Hillshading
-https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
-https://wiki.openstreetmap.org/wiki/HikingBikingMaps/HillShading
-https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
-https://gis.stackexchange.com/a/162390
+Refs:
 
 Assuming you have followed the steps above for contours...
 
+start and connect to the import server if not already done:
+```
+docker-compose up -d import
+docker exec -it mariocki-osm-server_import_1 /bin/bash
+```
+
 Copy the hillshade folder to `/var/lib/mod_tile/`
 
-Run this and copy the contents of hillshade.mml into your project.mml __after__ the landcover layers.
+Run this and copy the contents of hillshade.mml into your `openstreetmap-carto/project.mml` __after__ the landcover layers.
 
 :warning: I use the JSON format MML file, if you use yaml you will need to change this.
 
@@ -181,3 +188,24 @@ edit `openstreetmap-carto/style/landcover.mss` and add the following lines just 
   raster-scaling: bilinear;
 }
 ```
+
+## References
+
+## Original step-by-step guide
+* https://switch2osm.org/serving-tiles/manually-building-a-tile-server-debian-11/
+## PGHero
+* https://github.com/ankane/pghero
+
+## Kosmtik
+* https://github.com/kosmtik/kosmtik
+## Bulk Rendering
+* https://github.com/alx77/render_list_geo.pl/blob/master/render_list_geo.pl
+## Contours
+* https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
+* https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
+
+## Hillshading
+* https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
+* https://wiki.openstreetmap.org/wiki/HikingBikingMaps/HillShading
+* https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
+* https://gis.stackexchange.com/a/162390
