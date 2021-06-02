@@ -118,23 +118,25 @@ run these steps:
 ## taken from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
 #
 cd /data
+mkdir -p cache vrt translated warped hillshade
 # Download data if need-be (slow)
-if [[ ! -f /data/srtm_30m.tif ]]; then
-    ##eio clip -o /data/srtm_30m.tif --bounds -12.42 49.55 2.17 61.26 #uk+eire
-    eio seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
-fi
+eio --cache_dir=/tmp/cache seed --bounds -12.42 49.55 2.17 61.26 --cache_dir /data/cache #uk+eire
 
-mkdir -p vrt tif translated
 for a in $(find cache -name *.tif); do
-
     fname=${a##*/}
 
     gdalbuildvrt vrt/${fname%.tif}.vrt $a
 
-    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 vrt/${fname%.tif}.vrt translated/${fname%.tif}
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 vrt/${fname%.tif}.vrt translated/${fname}
+
+    for a in translated/*.tif; do 
+        gdalwarp -of GTiff -co "TILED=YES" -srcnodata 32767 -t_srs "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" -rcs -order 3 -tr 30 30 -multi $a warped/${a##*/};
+    done
 
     mkdir -p contours/${fname%.tif}
-    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height translated/${fname%.tif} contours/${fname%.tif}
+    gdal_contour -q -i 10 -f "ESRI Shapefile" -a height warped/${fname} contours/${fname%.tif}
+
+    gdaldem hillshade warped/${fname} hillshade/${fname} -co "TILED=YES" -co "COMPRESS=DEFLATE" -combined -z 3;
 done
 
 ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
@@ -156,26 +158,26 @@ https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
 https://gis.stackexchange.com/a/162390
 
 Assuming you have followed the steps above for contours...
-```
-cd /data
-mkdir -p warpedtif hillshade
 
-for a in tif/*.tif; do 
-    gdalwarp -of GTiff -co "TILED=YES" -srcnodata 32767 -t_srs "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" -rcs -order 3 -tr 30 30 -multi $a warpedtif/${a##*/};
-done
+Copy the hillshade folder to `/var/lib/mod_tile/`
 
-for a in warpedtif/*.tif; do 
-    gdaldem hillshade $a hillshade/${a##*/} -co "TILED=YES" -co "COMPRESS=LZW" -combined -z 3;
-done
-```
+Run this and copy the contents of hillshade.mml into your project.mml __after__ the landcover layers.
 
-Copy the hillshade folder to /var/lib/mod_tile/.
+:warning: I use the JSON format MML file, if you use yaml you will need to change this.
 
-Run this and copy the contents of hillshade.mml into your project.mml __after__ the landcover layer.
 ```
 i=0
 for a in $(find /var/lib/mod_tile/hillshade/*); do 
   echo { \"id\": \"hillshade-$i\", \"class\": \"hillshade\", \"geometry\": \"raster\", \"extent\": [-9.5, 49, 2.75, 62], \"srs-name\": \"900913\", \"srs\": \"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over\", \"Datasource\": { \"file\": \"$a\", \"type\": \"gdal\" }, \"properties\": { \"minzoom\": 8 } }, >> hillshade.mml; 
   ((i=i+1))
 done
+```
+
+edit `openstreetmap-carto/style/landcover.mss` and add the following lines just before the line that says `#landcover-low-zoom[zoom < 10],`
+```
+.hillshade{
+  raster-opacity:1;
+  raster-comp-op: multiply;
+  raster-scaling: bilinear;
+}
 ```
