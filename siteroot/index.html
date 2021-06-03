@@ -5,7 +5,7 @@
     <title>Custom Tile Server</title>
 
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Load Leaflet from CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
@@ -51,85 +51,168 @@
     <div id="map"></div>
     <div id="basemaps-wrapper" class="leaflet-bar">
         <select id="basemaps">
-            <option value="None">None</option>
-            <option value="Topographic">Topographic</option>
-            <option value="Oceans">Oceans</option>
-            <option value="ImageryClarity">Imagery (Clarity)</option>
-        </select><br />
-        <input type="checkbox" id="kml" name="kml" value="KML">
-        <label for="kml">Show KML layer</label><br />
-        <label id="zoom"></label><br />
+        <option value="None">None</option>
+        <option value="Oceans">Oceans</option>
+        <option value="ESRIWorldImagery">ESRI WorldImagery</option>
+        <option value="AzureImagery">Azure Imagery</option></select
+      ><br />
+      <select id="tileLayer">
+        <option value="None">None</option>
+        <option value="OpenSeaMap">OpenSeaMap</option>
+        <option value="OpenAIP">OpenAIP</option>
+        <option value="AzureWeather">Azure Weather</option></select
+      ><br />
+      <input type="checkbox" id="kml" name="kml" value="KML" />
+      <label for="kml">Show KML layer</label><br />
+      <label id="zoom"></label><br />
     </div>
 
     <script>
-        var map = L.map('map').setView([0, 0], 3);
+      var map = L.map("map").setView([0, 0], 3);
 
-        L.tileLayer('/tile/{z}/{x}/{y}.png', {
-            maxZoom: 17,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            id: 'base'
-        }).addTo(map);
+      var basemapLayer;
+      var tileLayer;
+      var basemapLayerLabels;
+      var kmlLayer;
 
-        var basemapLayer;
-        var basemapLayerLabels;
-        var kmlLayer;
-
-        function setBasemap(basemap) {
-            if (basemapLayer) {
-                map.removeLayer(basemapLayer);
-            }
-            if (basemapLayerLabels) {
-                map.removeLayer(basemapLayerLabels);
-            }
-
-            if (!basemap.includes('None')) {
-                basemapLayer = L.esri.basemapLayer(basemap);
-
-                map.addLayer(basemapLayer);
-
-                if (basemap.includes('Imagery')) {
-                    basemapLayerLabels = L.esri.basemapLayer('ImageryLabels');
-                    map.addLayer(basemapLayerLabels);
-                }
-            }
+      function setTileLayer(tilelayer) {
+        if (tileLayer) {
+          map.removeLayer(tileLayer);
         }
 
-        function setKMLLayer(showKml) {
-            if (kmlLayer) {
-                map.removeLayer(kmlLayer);
-            }
+        switch (tilelayer) {
+          case "OpenAIP":
+            var openAIP = L.tileLayer(
+              "http://{s}.tile.maps.openaip.net/geowebcache/service/tms/1.0.0/openaip_basemap@EPSG%3A900913@png/{z}/{x}/{y}.{ext}",
+              {
+                attribution:
+                  '<a href="https://www.openaip.net/">openAIP Data</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-NC-SA</a>)',
+                ext: "png",
+                minZoom: 9,
+                maxZoom: 14,
+                tms: true,
+                detectRetina: false,
+                subdomains: "12",
+              }
+            );
+            map.addLayer(openAIP);
+            tileLayer = openAIP;
+            break;
+          case "OpenSeaMap":
+            var openSeaMap = L.tileLayer(
+              "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
+              {
+                attribution:
+                  'Map data: &copy; <a href="http://www.openseamap.org">OpenSeaMap</a> contributors',
+              }
+            );
+            map.addLayer(openSeaMap);
+            tileLayer = openSeaMap;
+            break;
+          case "AzureWeather":
+            var AzureMaps_MicrosoftWeatherRadarMain = L.tileLayer(
+              "https://atlas.microsoft.com/map/tile?api-version={apiVersion}&tilesetId=microsoft.weather.radar.main&x={x}&y={y}&zoom={z}&language={language}&subscription-key={subscriptionKey}",
+              {
+                attribution:
+                  "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
+                apiVersion: "2.0",
+                subscriptionKey: "<%=ENV['MAPS_API_KEY ']%>",
+                language: "en-US",
+              }
+            );
+            map.addLayer(AzureMaps_MicrosoftWeatherRadarMain);
+            tileLayer = AzureMaps_MicrosoftWeatherRadarMain;
+          default:
+            break;
+        }
+      }
 
-            if (showKml) {
-                // Load kml file
-                fetch('kml/MyPlaces.kml')
-                    .then(res => res.text())
-                    .then(kmltext => {
-                        // Create new kml overlay
-                        const parser = new DOMParser();
-                        const kml = parser.parseFromString(kmltext, 'text/xml');
-                        kmlLayer = new L.KML(kml);
-                        map.addLayer(kmlLayer);
-                    });
-            }
+      function setBasemap(basemap) {
+        if (basemapLayer) {
+          map.removeLayer(basemapLayer);
         }
 
-        document
-            .querySelector('#basemaps')
-            .addEventListener('change', function(e) {
-                var basemap = e.target.value;
-                setBasemap(basemap);
-            });
-        document
-            .querySelector('#kml')
-            .addEventListener('change', function() {
-                var showKml = this.checked;
-                setKMLLayer(showKml);
+        switch (basemap) {
+          case "ESRIWorldImagery":
+            var Esri_WorldImagery = L.tileLayer(
+              "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+              {
+                attribution:
+                  "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+              }
+            );
+            map.addLayer(Esri_WorldImagery);
+            basemapLayer = Esri_WorldImagery;
+            break;
+          case "AzureImagery":
+            var AzureMaps_Imagery = L.tileLayer(
+              "https://atlas.microsoft.com/map/tile?api-version={apiVersion}&tilesetId=microsoft.imagery&x={x}&y={y}&zoom={z}&language={language}&subscription-key={subscriptionKey}",
+              {
+                attribution:
+                  "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
+                apiVersion: "2.0",
+                subscriptionKey: "<%=ENV['MAPS_API_KEY ']%>",
+                language: "en-US",
+              }
+            );
+            map.addLayer(AzureMaps_Imagery);
+            basemapLayer = AzureMaps_Imagery;
+            break;
+          default:
+            var osmBaseLayer = L.tileLayer("/tile/{z}/{x}/{y}.png", {
+              maxZoom: 17,
+              attribution:
+                'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+              id: "base",
             });
 
-        map.on('zoomend', function(ev) {
-            document.getElementById('zoom').innerHTML = map.getZoom();
+            map.addLayer(osmBaseLayer);
+            basemapLayer = osmBaseLayer;
+            break;
+        }
+      }
+
+      function setKMLLayer(showKml) {
+        if (kmlLayer) {
+          map.removeLayer(kmlLayer);
+        }
+
+        if (showKml) {
+          // Load kml file
+          fetch("kml/MyPlaces.kml")
+            .then((res) => res.text())
+            .then((kmltext) => {
+              // Create new kml overlay
+              const parser = new DOMParser();
+              const kml = parser.parseFromString(kmltext, "text/xml");
+              kmlLayer = new L.KML(kml);
+              map.addLayer(kmlLayer);
+            });
+        }
+      }
+
+      document
+        .querySelector("#basemaps")
+        .addEventListener("change", function (e) {
+          var basemap = e.target.value;
+          setBasemap(basemap);
         });
-    </script>
-</body>
+      document
+        .querySelector("#tileLayer")
+        .addEventListener("change", function (e) {
+          var tilelayer = e.target.value;
+          setTileLayer(tilelayer);
+        });
+      document.querySelector("#kml").addEventListener("change", function () {
+        var showKml = this.checked;
+        setKMLLayer(showKml);
+      });
 
+      map.on("zoomend", function (ev) {
+        document.getElementById("zoom").innerHTML = map.getZoom();
+      });
+
+      setBasemap("None");
+    </script>
+  </body>
 </html>
