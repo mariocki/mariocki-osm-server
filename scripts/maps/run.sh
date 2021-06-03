@@ -5,6 +5,7 @@ set -x
 # Clean /tmp
 rm -rf /tmp/*
 
+echo "env= { AZURE_MAP_KEY: '{$AZURE_MAP_KEY}' }" >/var/www/html/env.js
 compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /etc/munin/munin.conf-orig >/etc/munin/munin.conf
 compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/openstreetmap-tiles-update-expire-orig >/usr/local/bin/openstreetmap-tiles-update-expire
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
@@ -47,13 +48,6 @@ while [[ true ]]; do
     if ! pgrep -x renderd >/dev/null 2>&1; then
         echo $(date) "renderd stopped ... restarting " | logger
         service renderd restart
-    fi
-
-    chsum2=$(md5deep -r -l . | sort | md5sum)
-    if [[ $chsum1 != $chsum2 ]]; then
-        carto project.mml >mapnik.xml 2>/dev/null
-        service renderd restart
-        chsum1=$chsum2
     fi
 
     sleep 5

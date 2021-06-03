@@ -67,6 +67,7 @@
       <label id="zoom"></label><br />
     </div>
 
+    <script src="env.js"></script>
     <script>
       var map = L.map("map").setView([0, 0], 3);
 
@@ -116,7 +117,7 @@
                 attribution:
                   "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
                 apiVersion: "2.0",
-                subscriptionKey: "<%=ENV['MAPS_API_KEY ']%>",
+                subscriptionKey: env.AZURE_MAP_KEY,
                 language: "en-US",
               }
             );
@@ -151,7 +152,7 @@
                 attribution:
                   "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
                 apiVersion: "2.0",
-                subscriptionKey: "<%=ENV['MAPS_API_KEY ']%>",
+                subscriptionKey: env.AZURE_MAP_KEY,
                 language: "en-US",
               }
             );
