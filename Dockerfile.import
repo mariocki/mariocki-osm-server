@@ -13,7 +13,8 @@ RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
-RUN mkdir -p /var/log/tiles
+RUN mkdir -p /var/log/tiles \
+  && chmod -R a+rw /var/log/tiles
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
