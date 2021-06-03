@@ -24,7 +24,7 @@ COPY ./configs/render/munin-node.conf /etc/munin/munin.conf-orig
 # https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
 COPY ./scripts/render/render_list_geo.pl /usr/local/bin/
 RUN chmod a+x /usr/local/bin/render_list_geo.pl
-
+ 
 # Start running
 COPY ./scripts/render/run.sh /
 RUN chmod +x /run.sh
