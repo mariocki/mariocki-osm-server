@@ -18,7 +18,7 @@ var AzureMaps_Imagery = L.tileLayer(
     "https://atlas.microsoft.com/map/tile?api-version={apiVersion}&tilesetId=microsoft.imagery&x={x}&y={y}&zoom={z}&language={language}&subscription-key={subscriptionKey}", {
         attribution: "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
         apiVersion: "2.0",
-        subscriptionKey: env.AZURE_MAP_KEY,
+        subscriptionKey: process.env.AZURE_MAP_KEY,
         language: "en-US",
     }
 );
@@ -44,7 +44,7 @@ var AzureMaps_MicrosoftWeatherRadarMain = L.tileLayer(
     "https://atlas.microsoft.com/map/tile?api-version={apiVersion}&tilesetId=microsoft.weather.radar.main&x={x}&y={y}&zoom={z}&language={language}&subscription-key={subscriptionKey}", {
         attribution: "See https://docs.microsoft.com/en-US/rest/api/maps/renderv2/getmaptilepreview#uri-parameters for details.",
         apiVersion: "2.0",
-        subscriptionKey: env.AZURE_MAP_KEY,
+        subscriptionKey: process.env.AZURE_MAP_KEY,
         language: "en-US",
     }
 );
