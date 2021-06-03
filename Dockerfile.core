@@ -1,0 +1,72 @@
+FROM mariocki/osm-server-build-stage:v1 AS build-stage
+FROM debian:testing-slim
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set up renderer user
+RUN adduser --disabled-password --gecos "" renderer
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+
+#install nodejs
+RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
+  && apt-get update \
+  && apt-get install -y nodejs --no-install-recommends
+
+RUN apt-get install -y --no-install-recommends \
+  cron \
+  logrotate \
+  lua5.3 \
+  mapnik-utils \
+  munin-node \
+  osmium-tool \
+  osmosis \
+  postgis \
+  postgresql-client \
+  python \
+  python3-lxml \  
+  python3-pip \
+  python3-psycopg2 \  
+  python3-shapely \
+  rsyslog 
+
+# Install latest osm2pgsql
+COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
+RUN apt-get install -y /osm2pgsql-git.deb \
+  && mkdir /nodes \
+  && chown renderer:renderer /nodes 
+
+# Configure stylesheet
+RUN npm install -g carto 
+
+# Configure mod_tile
+RUN mkdir -p /var/lib/mod_tile /var/run/renderd \
+  && chown renderer /var/lib/mod_tile \
+  && chown renderer /var/run/renderd 
+
+# configure munin
+RUN mkdir -p /etc/munin/plugins /var/run/munin 
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
+# configure rsyslog and logging
+COPY ./configs/core/logrotate.conf /etc/
+RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
+
+# Copy update scripts
+# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
+COPY ./scripts/core/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
+
+# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/master/osmosis-db_replag
+COPY ./scripts/core/osmosis-db_replag /usr/local/bin/
+RUN chmod a+x /usr/local/bin/osmosis-db_replag\
+  && mkdir -p /var/log/tiles \
+  && chmod -R a+rw /var/log/tiles \
+  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
+
+# Install trim_osc.py helper script
+# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
+COPY ./scripts/core/trim_osc.py /usr/local/bin/
+RUN chmod a+x /usr/local/bin/trim_osc.py
+

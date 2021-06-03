@@ -1,52 +1,13 @@
-FROM mariocki/osm-server-build-stage:v1 AS build-stage
-FROM debian:testing-slim
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# Set up renderer user
-RUN adduser --disabled-password --gecos "" renderer
-
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
-
-#install nodejs
-RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
-  && apt-get update \
-  && apt-get install -y nodejs --no-install-recommends
+FROM mariocki/osm-server-core:v1 
 
 RUN apt-get install -y --no-install-recommends \
   apache2 \
   apache2-utils \
-  cron \
   libapache2-mod-fcgid \
   libapache2-mod-tile \
   libcgi-fast-perl \
-  logrotate \
-  lua5.3 \
-  mapnik-utils \
-  md5deep \
   munin \
-  munin-node \
-  osmium-tool \
-  osmosis \
-  postgis \
-  postgresql-client \
-  python \
-  python3-lxml \  
-  python3-pip \
-  python3-psycopg2 \  
-  python3-shapely \
-  renderd \
-  rsyslog 
-
-# Install latest osm2pgsql
-COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
-RUN apt-get install -y /osm2pgsql-git.deb \
-  && mkdir /nodes \
-  && chown renderer:renderer /nodes 
-
-# Configure stylesheet
-RUN npm install -g carto 
+  renderd 
 
 RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
@@ -55,11 +16,7 @@ RUN apt-get clean autoclean -y \
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache
-RUN mkdir -p /var/lib/mod_tile \
-  && chown renderer /var/lib/mod_tile \
-  && mkdir -p /var/run/renderd \
-  && chown renderer /var/run/renderd \
-  && echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
+RUN echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
   && echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/conf-available/mod_headers.conf \
   && a2enconf mod_tile \
   && a2enconf mod_headers
@@ -67,6 +24,7 @@ COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 
 ## Configure renderd
 COPY ./configs/maps/renderd.conf  /etc/renderd.conf
+
 # https://raw.githubusercontent.com/openstreetmap/mod_tile/master/utils/munin/replication_delay
 COPY ./configs/maps/replication_delay /etc/munin/plugins/
 RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
@@ -74,12 +32,8 @@ RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
   && ln -s /usr/share/munin/plugins/mod_tile* /etc/munin/plugins/ \
   && chmod a+x /etc/munin/plugins/replication_delay
 
-# configure rsyslog and logging
-COPY ./configs/maps/logrotate.conf /etc/
-RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
-
 # configure munin
-RUN mkdir -p /etc/munin/plugins /var/run/munin /var/cache/munin/www
+RUN mkdir -p /var/cache/munin/www
 COPY ./configs/maps/munin.conf /etc/munin/munin.conf-orig
 COPY ./configs/maps/apache24.conf /etc/munin/
 RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
@@ -87,22 +41,6 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && chmod -R 775 /var/run/munin \
   && chmod -R 775 /var/cache/munin/www \
   && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
-
-# Copy update scripts
-# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
-COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
-
-# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/master/osmosis-db_replag
-COPY ./scripts/maps/osmosis-db_replag /usr/local/bin/
-RUN chmod a+x /usr/local/bin/osmosis-db_replag\
-  && mkdir -p /var/log/tiles \
-  && chmod -R a+rw /var/log/tiles \
-  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
-
-# Install trim_osc.py helper script
-# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
-COPY ./scripts/maps/trim_osc.py /usr/local/bin/
-RUN chmod a+x /usr/local/bin/trim_osc.py
 
 # Install render_list_geo helper script
 # https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl

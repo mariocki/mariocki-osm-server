@@ -1,47 +1,13 @@
-FROM mariocki/osm-server-build-stage:v1 AS build-stage
-FROM debian:testing-slim
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# Set up renderer user
-RUN adduser --disabled-password --gecos "" renderer
-
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
-
-#install nodejs
-RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
-  && apt-get update \
-  && apt-get install -y nodejs --no-install-recommends
+FROM mariocki/osm-server-core:v1 
 
 RUN apt-get install -y --no-install-recommends \
   gdal-bin \
-  libtool-bin \
-  lua5.3 \
-  osmium-tool \
-  osmosis \
-  patch \
-  postgis \
-  postgresql-client \
-  python \
-  python3-lxml \  
   python3-pip \
-  python3-psycopg2 \
-  python3-shapely \
-  renderd 
+  patch 
 
 # Install python libraries
 RUN pip3 install requests \ 
   && pip3 install pyyaml elevation
-
-# Install latest osm2pgsql
-COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
-RUN apt-get install -y /osm2pgsql-git.deb \
-  && mkdir /nodes \
-  && chown renderer:renderer /nodes 
-
-# Configure stylesheet
-RUN npm install -g carto
 
 RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
@@ -49,25 +15,17 @@ RUN apt-get clean autoclean -y \
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
-# Copy update scripts
-# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
-COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/bin/openstreetmap-tiles-update-expire-orig
-RUN mkdir -p /var/log/tiles \
-  && chmod a+rw /var/log/tiles 
-
-# Install trim_osc.py helper script
-# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
-COPY ./scripts/import/trim_osc.py /usr/local/bin/
-RUN chmod a+x /usr/local/bin/trim_osc.py
-
 # patch elevation to allow a reasonable number of downloads
 COPY ./patches/elevation.patch /elevation.patch
 RUN cd /usr/local/lib/python3.9/dist-packages/elevation \
   && patch < /elevation.patch
 
+# copy indexes just in case
+COPY ./openstreetmap-carto/indexes.psql /
+
 # Start running
 COPY ./scripts/import/run.sh /
-COPY ./openstreetmap-carto/indexes.psql /
+
 RUN chmod +x /run.sh
 ENTRYPOINT ["/run.sh"]
 CMD []

@@ -29,6 +29,13 @@ services:
       - .env
     networks:
       - my_network
+  core:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    image: mariocki/osm-server-core:v1
+    env_file:
+      - .env
   render:
     image: mariocki/osm-server-render:v1
     build:
