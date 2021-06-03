@@ -35,8 +35,14 @@ THREADS=2
 #used by pghero
 DATABASE_URL=postgres://postgres@db:5432/gis
 
-# Azure sub
+# Azure maps subscription key
 AZURE_MAP_KEY=
+
+# Azure AD authentication - leave blank unless you know what you are doing.
+AZURE_CLIENT_ID=
+AZURE_TENANT=
+AZURE_SECRET=
+AZURE_REDIRECT_URL=
 ```
 Most of these values you shouldn't need to change apart from maybe TZ and THREADS. If you do not have an Azure Maps subscription just leave it blank.
 
