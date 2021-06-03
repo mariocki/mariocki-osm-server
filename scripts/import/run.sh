@@ -5,8 +5,8 @@ set -x
 # Clean /tmp
 rm -rf /tmp/*
 
-compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/bin/openstreetmap-tiles-update-expire-orig >/usr/bin/openstreetmap-tiles-update-expire
-chmod a+x /usr/bin/openstreetmap-tiles-update-expire
+compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/openstreetmap-tiles-update-expire-orig >/usr/local/bin/openstreetmap-tiles-update-expire
+chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 
 import_map_data() {
     if [ -n "$DOWNLOAD_PBF" ]; then

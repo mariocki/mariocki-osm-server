@@ -45,11 +45,6 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && chmod -R 775 /var/cache/munin/www \
   && echo "*/5  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
 
-# Install render_list_geo helper script
-# https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
-COPY ./scripts/maps/render_list_geo.pl /usr/local/bin/
-RUN chmod a+x /usr/local/bin/render_list_geo.pl
-
 # Copy update scripts
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
 COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
@@ -68,6 +63,8 @@ RUN chmod a+x /usr/local/bin/trim_osc.py
 
 # Copy site
 ADD siteroot /var/www/html/
+
+RUN cd /var/www/html && npm install
 
 # Start running
 COPY ./scripts/maps/run.sh /
