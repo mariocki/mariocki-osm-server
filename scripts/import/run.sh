@@ -41,6 +41,7 @@ import_map_data() {
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
 
     #Import external data
+    mkdir -p /home/renderer/src
     sudo chown -R renderer: /home/renderer/src
     sudo -u renderer python3 /openstreetmap-carto/scripts/get-external-data.py -c /openstreetmap-carto/external-data.yml -D /openstreetmap-carto/data -H db
 
