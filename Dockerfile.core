@@ -16,6 +16,7 @@ RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \
 
 RUN apt-get install -y --no-install-recommends \
   cron \
+  htop \
   logrotate \
   lua5.3 \
   mapnik-utils \
@@ -24,12 +25,13 @@ RUN apt-get install -y --no-install-recommends \
   osmosis \
   postgis \
   postgresql-client \
+  psmisc \
   python \
   python3-lxml \  
   python3-pip \
   python3-psycopg2 \  
   python3-shapely \
-  rsyslog 
+  rsyslog
 
 # Install latest osm2pgsql
 COPY --from=build-stage /home/build/src/osm2pgsql/build/osm2pgsql-git.deb /
@@ -53,20 +55,4 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 # configure rsyslog and logging
 COPY ./configs/core/logrotate.conf /etc/
 RUN sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
-
-# Copy update scripts
-# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
-COPY ./scripts/core/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
-
-# https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/master/osmosis-db_replag
-COPY ./scripts/core/osmosis-db_replag /usr/local/bin/
-RUN chmod a+x /usr/local/bin/osmosis-db_replag\
-  && mkdir -p /var/log/tiles \
-  && chmod -R a+rw /var/log/tiles \
-  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
-
-# Install trim_osc.py helper script
-# https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
-COPY ./scripts/core/trim_osc.py /usr/local/bin/
-RUN chmod a+x /usr/local/bin/trim_osc.py
 

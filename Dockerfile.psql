@@ -6,11 +6,13 @@ RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca
 
 RUN apt-get install -y --no-install-recommends \
   cron \
+  htop \
   libdbd-pg-perl \
   libdbi-perl \
   libnet-cidr-perl \
   munin-node \
   patch \
+  psmisc \
   rsyslog
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
