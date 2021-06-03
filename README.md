@@ -18,6 +18,28 @@ cd mariocki-osm-server
 gh repo clone gravitystorm/openstreetmap-carto
 ```
 
+Create a new file named `.env` and copy this text into it:
+```
+# Environment settings for importing to a Docker container database
+PG_WORK_MEM=16MB
+PG_MAINTENANCE_WORK_MEM=256MB
+POSTGRES_HOST_AUTH_METHOD=trust
+PGHOST=db
+POSTGRES_USER=renderer
+POSTGRES_PASSWORD=renderer
+POSTGRES_DB=gis
+
+TZ=UTC
+THREADS=2
+
+#used by pghero
+DATABASE_URL=postgres://postgres@db:5432/gis
+
+# Azure sub
+AZURE_MAP_KEY=
+```
+Most of these values you shouldn't need to change apart from maybe TZ and THREADS. If you do not have an Azure Maps subscription just leave it blank.
+
 Create a folder in your home directory named "osm-maps/data":
 ```
 mkdir -p ~/osm-maps/data
