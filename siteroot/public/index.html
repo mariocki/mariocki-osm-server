@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mariocki's Tile Server</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Load Leaflet from CDN -->
+    <link rel="stylesheet" href="stylesheets/leaflet.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="basemaps-wrapper" class="leaflet-bar">
+        <select id="basemaps">
+          <option value="None">None</option>
+          <option value="Oceans">Oceans</option>
+          <option value="ESRIWorldImagery">ESRI WorldImagery</option>
+          <option value="AzureImagery">Azure Imagery</option>
+        </select><br />
+        <select id="tileLayer">
+          <option value="None">None</option>
+          <option value="OpenSeaMap">OpenSeaMap</option>
+          <option value="OpenAIP">OpenAIP</option>
+          <option value="AzureWeather">Azure Weather</option>
+        </select><br />
+        <input type="checkbox" id="kml" name="kml" value="KML" />
+        <label for="kml">Show KML layer</label><br />
+        <label id="zoom"></label><br />
+    </div>
+    <script src="javascripts/env.js"></script>
+    <script src="javascripts/webmap.js"></script>
+    <script src="javascripts/L.KML.js"></script>
+</body>
+
+</html>

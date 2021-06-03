@@ -1,0 +1,21 @@
+{
+    "name": "siteroot",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "build": "browserify webmap.js -o public/javascripts/webmap.js && cp node_modules/leaflet/dist/leaflet.css public/stylesheets/leaflet.css",
+        "start": "node ./bin/www"
+    },
+    "dependencies": {
+        "@azure/msal-node": "^1.1.0",
+        "cookie-parser": "~1.4.4",
+        "debug": "~2.6.9",
+        "dotenv": "^10.0.0",
+        "esri-leaflet": "^3.0.2",
+        "express": "~4.16.1",
+        "http-errors": "~1.6.3",
+        "leaflet": "^1.7.1",
+        "morgan": "~1.9.1",
+        "pug": "^3.0.2"
+    }
+}
