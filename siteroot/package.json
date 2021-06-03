@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "build": "browserify webmap.js -o public/javascripts/webmap.js && cp node_modules/leaflet/dist/leaflet.css public/stylesheets/leaflet.css",
+        "build": "browserify webmap.js -t [localenvify --envfile ../.env ] -o public/javascripts/webmap.js && cp node_modules/leaflet/dist/leaflet.css public/stylesheets/leaflet.css",
         "start": "node ./bin/www"
     },
     "dependencies": {
@@ -14,6 +14,7 @@
         "express": "~4.16.1",
         "http-errors": "~1.6.3",
         "leaflet": "^1.7.1",
+        "localenvify": "^1.0.1",
         "morgan": "~1.9.1",
         "pug": "^3.0.2"
     }
