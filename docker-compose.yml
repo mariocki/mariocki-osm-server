@@ -45,8 +45,8 @@ services:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/munin:/var/lib/munin
       - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
+    #    depends_on:
+    #      - db
     env_file:
       - .env
     networks:
@@ -60,8 +60,8 @@ services:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
+    #    depends_on:
+    #      - db
     env_file:
       - .env
     command: --create
@@ -76,8 +76,8 @@ services:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/munin:/var/lib/munin
       - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
+    #    depends_on:
+    #      - db
     ports:
       - "8080:80"
       - "3000:3000"
@@ -87,8 +87,8 @@ services:
       - my_network
   pghero:
     image: ankane/pghero
-    depends_on:
-      - db
+    #    depends_on:
+    #      - db
     ports:
       - "8081:8080"
     env_file:
@@ -103,8 +103,8 @@ services:
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
-    depends_on:
-      - db
+    #    depends_on:
+    #      - db
     ports:
       - "6789:6789"
     env_file:
