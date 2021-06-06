@@ -1,0 +1,6 @@
+psql -U renderer -d gis -h 127.0.0.1 -c "select mean_exec_time, query from pg_stat_statements where query not like '%analyze%' and query not like '%explain%' and query not like '%ANALYZE%' and query not like '%EXPLAIN%' and calls * mean_exec_time > 30000 order by mean_exec_time DESC;" >a.csv
+
+landcover_low_zoom
+text_poly_low_zoom
+roads_low_zoom
+roads_casing_sql
