@@ -13,7 +13,7 @@ RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
-RUN npm install -g browserify
+RUN npm install -g browserify typescript
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
