@@ -38,7 +38,7 @@ DATABASE_URL=postgres://postgres@db:5432/gis
 # Azure maps subscription key
 AZURE_MAP_KEY=
 
-# Azure AD authentication - leave blank unless you know what you are doing.
+# Azure AD authentication
 AZURE_CLIENT_ID=
 AZURE_TENANT=
 AZURE_SECRET=
