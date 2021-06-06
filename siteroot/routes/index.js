@@ -18,7 +18,7 @@ router.get('/maps', function(req, res, next) {
     if (!req.session.isAuthenticated) {
         res.redirect('/signin');
     }
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'My Maps' });
 });
 
 module.exports = router;

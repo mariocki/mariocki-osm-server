@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'c653dc05-cd07-4ed1-969e-94db847f52c6',
     resave: false,
     saveUninitialized: false
 }));
