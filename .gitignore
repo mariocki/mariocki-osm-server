@@ -1,5 +1,5 @@
 .env
 node_modules
-siteroot/public/javascripts/webmap.js
+siteroot/public/javascripts/*.js
 .vscode/settings.json
 a.csv
