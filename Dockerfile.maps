@@ -54,7 +54,7 @@ COPY ./scripts/maps/osmosis-db_replag /usr/local/bin/
 RUN chmod a+x /usr/local/bin/osmosis-db_replag\
   && mkdir -p /var/log/tiles \
   && chmod -R a+rw /var/log/tiles \
-  && echo "*  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
+  && echo "*/5  *    * * *   renderer    openstreetmap-tiles-update-expire\n" >> /etc/crontab
 
 # Install trim_osc.py helper script
 # https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
