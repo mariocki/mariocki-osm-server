@@ -29,7 +29,7 @@ chown munin.www-data /var/lib/munin
 chmod g+w /var/lib/munin
 
 cd /var/www/html
-npm start &
+npm install && npm run build && npm start &
 
 # Initialize Apache
 service rsyslog restart
