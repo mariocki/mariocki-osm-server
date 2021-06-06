@@ -11,6 +11,9 @@ carto project.mml >mapnik.xml 2>/dev/null
 # Configure renderd threads
 sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /etc/renderd.conf
 
+# just in case
+chown -R renderer /var/lib/mod_tile/ajt
+
 # Initialize Apache
 service rsyslog restart
 service munin-node restart
