@@ -47,7 +47,7 @@ if (($options->{x} || $options->{x}==0) &&
       #some stupid magic: aligning max range values to the border of meta-bundles (caused by internal bug of render_list)
       $X=(int($X/$bulkSize)+1)*$bulkSize-1;
       $y=(int($y/$bulkSize)+1)*$bulkSize-1;
-      $n = ((($iz - 12) < 1 ? 1: ($iz - 12)) * 2) - 1;
+      $n = (($iz - 13) < 1 ? 1: ($iz - 13)) * 2;
       #be careful! y and Y used in reversed order
       $cmd="render_list -a -z ".$iz." -Z ".$iz." -x ".$x." -X ".$X." -y ".$Y." -Y ".$y;
       $cmd = $cmd." -n ".$n;
