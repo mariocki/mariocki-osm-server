@@ -125,6 +125,12 @@ map.on("zoomend", function(ev) {
     document.getElementById("zoom").innerHTML = map.getZoom();
 });
 
+map.on("moveend", function(ev) {
+    var latlon = map.getCenter();
+
+    document.getElementById("latlon").innerHTML = latlon.toString();
+});
+
 document
     .querySelector("#basemaps")
     .addEventListener("change", function(e) {
