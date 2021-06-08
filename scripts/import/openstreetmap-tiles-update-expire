@@ -56,9 +56,9 @@ RUNLOG=$LOG_DIR/run.log
 # 13 and 18 and delete between 19 and 20.
 #------------------------------------------------------------------------------
 EXPIRY_MINZOOM=10
-EXPIRY_TOUCHFROM=15
+EXPIRY_TOUCHFROM=10
 EXPIRY_DELETEFROM=15
-EXPIRY_MAXZOOM=14
+EXPIRY_MAXZOOM=18
 
 #*************************************************************************
 #*************************************************************************

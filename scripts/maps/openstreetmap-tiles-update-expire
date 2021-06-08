@@ -52,13 +52,11 @@ RUNLOG=$LOG_DIR/run.log
 # By default, tiles between EXPIRY_MINZOOM and EXPIRY_MAXZOOM are rerendered.
 # "render_expired" can optionally delete (and/or dirty) tiles above a certail
 # threshold rather than rendering them.
-# Here we expire (but don't immediately rerender) tiles between zoom levels
-# 13 and 18 and delete between 19 and 20.
 #------------------------------------------------------------------------------
 EXPIRY_MINZOOM=10
-EXPIRY_TOUCHFROM=15
+EXPIRY_TOUCHFROM=10
 EXPIRY_DELETEFROM=15
-EXPIRY_MAXZOOM=14
+EXPIRY_MAXZOOM=18
 
 #*************************************************************************
 #*************************************************************************
