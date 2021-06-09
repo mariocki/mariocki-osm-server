@@ -52,8 +52,6 @@ RUNLOG=$LOG_DIR/run.log
 # By default, tiles between EXPIRY_MINZOOM and EXPIRY_MAXZOOM are rerendered.
 # "render_expired" can optionally delete (and/or dirty) tiles above a certail
 # threshold rather than rendering them.
-# Here we expire (but don't immediately rerender) tiles between zoom levels
-# 13 and 18 and delete between 19 and 20.
 #------------------------------------------------------------------------------
 EXPIRY_MINZOOM=10
 EXPIRY_TOUCHFROM=10
@@ -64,11 +62,11 @@ EXPIRY_MAXZOOM=18
 #*************************************************************************
 
 m_info() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" | tee -a "$RUNLOG" | logger
 }
 
 m_error() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1" | tee -a "$RUNLOG" | logger
 
     m_info "resetting state"
     /bin/cp $WORKOSM_DIR/last.state.txt $WORKOSM_DIR/state.txt || true
@@ -80,7 +78,7 @@ m_error() {
 }
 
 m_ok() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" >>"$RUNLOG"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" | tee -a "$RUNLOG" | logger
 }
 
 getlock() {
@@ -102,7 +100,7 @@ freelock() {
 if [ $# -eq 1 ]; then
     m_info "Initialising Osmosis replication system to $1"
     mkdir -p $WORKOSM_DIR
-    $OSMOSIS_BIN --read-replication-interval-init workingDirectory=$WORKOSM_DIR 2>&1 >>"$OSMOSISLOG"
+    $OSMOSIS_BIN --read-replication-interval-init workingDirectory=$WORKOSM_DIR 2>&1 | tee -a "$OSMOSISLOG" | logger
     wget "https://replicate-sequences.osm.mazdermind.de/?"$1"T00:00:00Z" -O $WORKOSM_DIR/state.txt
     mv $WORKOSM_DIR/configuration.txt $WORKOSM_DIR/configuration_orig.txt
     sed "s!baseUrl=http://planet.openstreetmap.org/replication/minute!baseUrl=https://planet.openstreetmap.org/replication/minute!" $WORKOSM_DIR/configuration_orig.txt >$WORKOSM_DIR/configuration.txt
@@ -136,13 +134,13 @@ else
     /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
     m_ok "downloading diff"
 
-    if ! $OSMOSIS_BIN --read-replication-interval workingDirectory=$WORKOSM_DIR --simplify-change --write-xml-change $CHANGE_FILE 2>&1 >>"$OSMOSISLOG"; then
+    if ! $OSMOSIS_BIN --read-replication-interval workingDirectory=$WORKOSM_DIR --simplify-change --write-xml-change $CHANGE_FILE 2>&1 | tee -a "$OSMOSISLOG" | logger; then
         m_error "Osmosis error"
     fi
 
     if [ -f $TRIM_POLY_FILE ]; then
         m_ok "filtering diff"
-        if ! $TRIM_BIN $TRIM_OPTIONS $TRIM_REGION_OPTIONS -z $CHANGE_FILE $CHANGE_FILE 2>&1 >>"$RUNLOG"; then
+        if ! $TRIM_BIN $TRIM_OPTIONS $TRIM_REGION_OPTIONS -z $CHANGE_FILE $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then
             m_error "Trim_osc error"
         fi
     else
@@ -155,7 +153,7 @@ else
     # tiles in range to the list (note the "-" rather than ":" in the "-e"
     # parameter).
     #------------------------------------------------------------------------------
-    if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 2>&1 >>"$OSM2PGSQLLOG"; then
+    if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 2>&1 | tee -a "$OSM2PGSQLLOG" | logger; then
         m_error "osm2pgsql error"
     fi
 
@@ -178,7 +176,7 @@ else
     # delete >= $EXPIRY_DELETEFROM and <= $EXPIRY_MAXZOOM.
     # The default path to renderd.sock is fixed.
     #------------------------------------------------------------------------------
-    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 >>"$EXPIRYLOG"; then
+    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$EXPIRYLOG" | logger; then
         m_info "Expiry failed"
     fi
 

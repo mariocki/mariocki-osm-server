@@ -10,7 +10,7 @@ compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /de
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 
 cd /openstreetmap-carto
-carto project.mml >mapnik.xml 2>/dev/null
+carto -q project.mml >mapnik.xml
 
 # Configure Apache CORS
 if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
@@ -34,7 +34,10 @@ cd /var/www/html && npm install && npm run build && npm start &
 chown -R renderer /var/lib/mod_tile/ajt
 
 # Initialize Apache
-service rsyslog restart
+service rsyslog stop
+rm /run/rsyslogd.pid
+service rsyslog start
+
 service munin restart
 service munin-node restart
 service apache2 restart
