@@ -122,13 +122,13 @@ function setKMLLayer(showKml) {
 }
 
 map.on("zoomend", function(ev) {
-    document.getElementById("zoom").innerHTML = map.getZoom();
+    document.getElementById("zoom").innerHTML = "Zoom: " + map.getZoom();
 });
 
 map.on("moveend", function(ev) {
     var latlon = map.getCenter();
 
-    document.getElementById("latlon").innerHTML = latlon.toString();
+    document.getElementById("latlon").innerHTML = parseFloat(latlon.lat).toFixed(4) + ", " + parseFloat(latlon.lng).toFixed(4);
 });
 
 document
