@@ -40,7 +40,8 @@ service rsyslog start
 
 service munin restart
 service munin-node restart
-service apache2 restart
+apachectl stop
+source /etc/apache2/envvars && apachectl start
 #service renderd restart
 service cron restart
 

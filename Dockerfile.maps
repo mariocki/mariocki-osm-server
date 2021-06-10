@@ -18,14 +18,20 @@ RUN npm install -g browserify typescript
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache
-RUN echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
+RUN apachectl stop \
+  && echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
   && echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/conf-available/mod_headers.conf \
   && echo "LoadModule proxy_module modules/mod_proxy.so" >> /etc/apache2/conf-available/mod_proxy.conf \
   && echo "LoadModule proxy_http_module modules/mod_proxy_http.so" >> /etc/apache2/conf-available/mod_proxy_http.conf \
   && a2enconf mod_tile \
   && a2enconf mod_headers \
-  && a2enmod proxy_http
+  && a2enmod proxy_http \
+  && a2dismod mpm_event \
+  && a2enmod mpm_prefork 
+
 COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
+COPY ./configs/maps/mpm_prefork.conf /etc/apache2/mods-available/
+RUN apachectl start
 
 ## Configure renderd
 COPY ./configs/maps/renderd.conf  /etc/renderd.conf
