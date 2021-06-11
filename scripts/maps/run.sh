@@ -10,7 +10,8 @@ compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /de
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 
 cd /openstreetmap-carto
-carto -q project.mml >mapnik.xml
+carto -q project.mml >mapnik.xml &
+CARTO_PID=$!
 
 # Configure Apache CORS
 if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
@@ -28,7 +29,7 @@ fi
 chown munin.www-data /var/lib/munin
 chmod g+w /var/lib/munin
 
-cd /var/www/html && npm install && npm run build && npm start &
+cd /var/www/html && npm run build && npm start &
 
 # just in case
 chown -R renderer /var/lib/mod_tile/ajt
@@ -41,6 +42,12 @@ service rsyslog start
 service munin restart
 service munin-node restart
 apachectl stop
+while kill -0 $CARTO_PID; do
+    echo "Waiting for Carto..."
+    sleep 1
+    # You can add a timeout here if you want
+done
+
 source /etc/apache2/envvars && apachectl start
 #service renderd restart
 service cron restart
