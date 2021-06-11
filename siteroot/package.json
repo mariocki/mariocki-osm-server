@@ -21,7 +21,7 @@
     "name": "mymaps",
     "private": true,
     "scripts": {
-        "build": "tsc && cp src/*.js public/javascripts/ && browserify src/webmap.js -t [localenvify --envfile ../.env ] -o public/javascripts/webmap.js && cp node_modules/leaflet/dist/leaflet.css public/stylesheets/leaflet.css",
+        "build": "tsc && cp src/*.js public/javascripts/ && browserify src/webmap.js -t [localenvify --envfile ../.env ] -o public/javascripts/webmap.js && browserify src/L.KML.js -t [localenvify --envfile ../.env ] -o public/javascripts/L.KML.js && cp node_modules/leaflet/dist/leaflet.css public/stylesheets/leaflet.css",
         "start": "node ./bin/www"
     },
     "version": "0.0.0"

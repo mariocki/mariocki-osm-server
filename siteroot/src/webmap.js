@@ -112,6 +112,7 @@ function setKMLLayer(showKml) {
         fetch("kml/MyPlaces.kml")
             .then((res) => res.text())
             .then((kmltext) => {
+                console.log("Here");
                 // Create new kml overlay
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmltext, "text/xml");
