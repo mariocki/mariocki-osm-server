@@ -128,7 +128,11 @@ manchester 53.4808/-2.2426
 
 `render_list_geo.pl -f -z 14 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
 
-
+### Handy bbox coords
+`-1219323.4752,6631065.0778,-598043.3093,7444355.0587` Eire
+`-570831.7272,7157257.5805,-449143.9782,7271913.1229` IOM
+`-307582.6018,6291684.6722,-218304.1528,6419487.3835` channel islands
+	 
 ## Importing contour lines
 :warning: This can take quite a long time to run. :warning:
 
@@ -182,6 +186,9 @@ done
 ```
 
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
+
+### Importing contours from Ordnance Survey (GB only)
+for a in *.shp; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h localhost -U renderer -d gis; done
 
 ### Hillshading
 Refs:
