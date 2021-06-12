@@ -9,7 +9,9 @@ compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /de
 compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/openstreetmap-tiles-update-expire-orig >/usr/local/bin/openstreetmap-tiles-update-expire
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 
-cd /openstreetmap-carto
+cd /openstreetmap-carto/style
+./merge.sh
+cd ..
 carto -q project.mml >mapnik.xml &
 CARTO_PID=$!
 

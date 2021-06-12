@@ -2,7 +2,9 @@
 
 export KOSMTIK_CONFIGPATH="/.kosmtik-config.yml"
 
-cd /openstreetmap-carto
+cd /openstreetmap-carto/style
+./merge.sh
+cd ..
 
 # Starting Kosmtik
 kosmtik serve project.mml --host 0.0.0.0

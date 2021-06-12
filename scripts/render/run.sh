@@ -5,7 +5,9 @@ set -x
 # Clean /tmp
 rm -rf /tmp/*
 
-cd /openstreetmap-carto
+cd /openstreetmap-carto/style
+./merge.sh
+cd ..
 carto project.mml >mapnik.xml 2>/dev/null
 
 # Configure renderd threads
