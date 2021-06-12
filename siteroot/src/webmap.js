@@ -5,7 +5,7 @@ var map = L.map('map').setView([52, 0], 5);
 
 // Base Layers
 var osmBaseLayer = L.tileLayer("/tile/{z}/{x}/{y}.png", {
-    maxZoom: 17,
+    maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
     id: "base",
 });
