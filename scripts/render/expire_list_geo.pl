@@ -24,17 +24,17 @@ if ($options->{h}) {
 my ($z, $Z);
 my $bulkSize=8;
 if (($options->{x} || $options->{x}==0) &&
-    ($options->{X} || $options->{X}==0) &&
+    ($options->{X} && $options->{X} > $options->{x}) &&
     ($options->{y} || $options->{y}==0) && 
-    ($options->{Y} || $options->{Y}==0) &&
+    ($options->{Y} && $options->{Y} > $options->{y}) &&
     ($options->{z} || $options->{z}==0) && 
-    ($options->{Z} || $options->{Z}==0))
+    ($options->{Z} && $options->{Z} > $options->{z}))
 {
   print "\nRendering started at: ";
   system("date");
   print("\n");
   $z = $options->{z};
-  $Z = $options->{Z};
+  $Z = $options->{Z}
 
   my ($zoom, $x, $X, $y, $Y, $cmd, $n);
   $zoom = 1 << $options->{Z};
@@ -68,4 +68,6 @@ if (($options->{x} || $options->{x}==0) &&
   print $cmd."\n";
   system($cmd);
   print ("\n");
-};
+} else {
+  print "Invalid arguments."
+}
