@@ -89,13 +89,10 @@ function setBasemap(basemap) {
             basemapLayer = Esri_WorldImagery;
             break;
         case "AzureImagery":
-
             map.addLayer(AzureMaps_Imagery);
             basemapLayer = AzureMaps_Imagery;
             break;
         default:
-
-
             map.addLayer(osmBaseLayer);
             basemapLayer = osmBaseLayer;
             break;
@@ -112,7 +109,6 @@ function setKMLLayer(showKml) {
         fetch("kml/MyPlaces.kml")
             .then((res) => res.text())
             .then((kmltext) => {
-                console.log("Here");
                 // Create new kml overlay
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmltext, "text/xml");
