@@ -123,7 +123,7 @@ function setKMLLayer(showKml) {
 }
 
 map.on("zoomend", function(ev) {
-    document.getElementById("zoom").innerHTML = "Zoom: " + map.getZoom();
+    document.getElementById("zoom").innerHTML = map.getZoom();
 });
 
 map.on("moveend", function(ev) {

@@ -1,5 +1,4 @@
 .env
 node_modules
-siteroot/public/javascripts/*.js
 .vscode/settings.json
 a.csv

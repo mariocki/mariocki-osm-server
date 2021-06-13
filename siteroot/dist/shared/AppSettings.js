@@ -1,4 +1,7 @@
-module.exports = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.settings = void 0;
+exports.settings = {
     credentials: {
         clientId: process.env.AZURE_CLIENT_ID,
         tenantId: process.env.AZURE_TENANT,
@@ -9,5 +12,7 @@ module.exports = {
         postLogoutRedirectUri: "https://google.com",
         homePageRoute: "/maps"
     },
-    resources: {}
-}
+    resources: null,
+    policies: null,
+    protected: null
+};
