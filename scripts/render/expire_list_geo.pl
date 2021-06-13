@@ -27,17 +27,17 @@ if (($options->{x} || $options->{x}==0) &&
     ($options->{X} && $options->{X} > $options->{x}) &&
     ($options->{y} || $options->{y}==0) && 
     ($options->{Y} && $options->{Y} > $options->{y}) &&
-    ($options->{z} || $options->{z}==0) && 
+    ($options->{z} && $options->{z} > 0) && 
     ($options->{Z} && $options->{Z} > $options->{z}))
 {
   print "\nRendering started at: ";
   system("date");
   print("\n");
   $z = $options->{z};
-  $Z = $options->{Z}
+  $Z = $options->{Z};
 
   my ($zoom, $x, $X, $y, $Y, $cmd, $n);
-  $zoom = 1 << $options->{Z};
+  $zoom = 1 << $options->{z};
   $x = int($zoom * ($options->{x} + 180) / 360);
   $X = int($zoom * ($options->{X} + 180) / 360);
   $y = int($zoom * (1 - log(tan($options->{y}*pi/180) + sec($options->{y}*pi/180))/pi)/2);
@@ -47,17 +47,17 @@ if (($options->{x} || $options->{x}==0) &&
   $y=(int($y/$bulkSize)+1)*$bulkSize-1;
   $n = 3;
 
-  open(FH, '>', "/tmp/tiles.".$options->{Z}) or die $!;
+  open(FH, '>', "/tmp/tiles.".$options->{z}) or die $!;
   for my $ix ($x..$X)
   {
     #be careful! y and Y used in reversed order
     for my $iy ($Y..$y)
     {
-      print FH $zoom."/".$ix."/".$iy."\n";
+      print FH $z."/".$ix."/".$iy."\n";
     }
   }
   close (FH);
-  $cmd="cat /tmp/tiles.".$options->{Z}." | render_expired -z ".$options->{z}." -Z ".$options->{Z};
+  $cmd="cat /tmp/tiles.".$options->{z}." | render_expired -z ".$options->{z}." -Z ".$options->{Z};
   $cmd = $cmd." -n ".$n;
   if ($options->{m}) {$cmd = $cmd." -m ".$options->{m}} else {$cmd = $cmd." -m ajt"};
   if ($options->{s}) {$cmd = $cmd." -s ".$options->{s}} else {$cmd = $cmd." -s /var/run/renderd/renderd.sock"};
