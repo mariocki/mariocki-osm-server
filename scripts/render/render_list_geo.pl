@@ -5,11 +5,10 @@ use Getopt::Std;
 use Math::Trig;
 
 my $options = {};
-getopts("n:l:m:s:t:fx:X:y:Y:z:Z:h", $options);
+getopts("l:m:s:t:fx:X:y:Y:z:Z:h", $options);
 
 if ($options->{h}) {
   print "options: (x,X,y,Y,z,Z - required, no checks, small letters should be less)\n";
-  print "  -n <n>         number of used concurrent threads\n";
   print "  -l <l>         maximum system load (defaults to 16)\n";
   print "  -m <m>         name of map\n";
   print "  -f             force rerender\n";

@@ -104,13 +104,13 @@ Edit docker-compose.yml and remove the following line: `    command: --create`.
 And then repeat the instructions under "Importing Data"
 
 ## Bulk rendering
-Connect to the maps server:
+Connect to the render server:
 ```
-docker-compose up -d maps
+docker-compose up -d render
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 
-and run one of the lines shown below which will generate the commands you need to run.
+and run one of the lines shown below which will execute the command.
 You can run `render_list_geo.pl -h` to view all the options.
 
 Taken from: https://github.com/alx77/render_list_geo.pl/blob/master/render_list_geo.pl
@@ -127,6 +127,18 @@ London 51.5074/-0.1278
 manchester 53.4808/-2.2426
 
 `render_list_geo.pl -f -z 14 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
+
+## Bulk Expiry
+Connect to the render server:
+```
+docker-compose up -d render
+docker exec -it mariocki-osm-server_maps_1 /bin/bash
+```
+and run one of the lines shown below which will execute the command.
+You can run `expire_list_geo.pl -h` to view all the options.
+
+manchester 53.4808/-2.2426
+`expire_list_geo.pl -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -z 13 -Z 18`
 
 ### Handy bbox coords
 `-1219323.4752,6631065.0778,-598043.3093,7444355.0587` Eire
