@@ -47,11 +47,10 @@ apachectl stop
 while kill -0 $CARTO_PID; do
     echo "Waiting for Carto..."
     sleep 1
-    # You can add a timeout here if you want
 done
 
 source /etc/apache2/envvars && apachectl start
-#service renderd restart
+service renderd restart
 service cron restart
 
 sudo -u munin munin-cron &
