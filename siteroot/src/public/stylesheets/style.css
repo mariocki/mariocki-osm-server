@@ -36,6 +36,26 @@ h2 {
     text-align: center;
 }
 
+#zoom:before {
+    content: "";
+    display: block;
+    background: url("/img/magnifying-glass.svg") no-repeat;
+    width: 14px;
+    height: 14px;
+    float: left;
+    margin: 2px 6px 0 0;
+}
+
+#latlon:before {
+    content: "";
+    display: block;
+    background: url("/img/pin.svg") no-repeat;
+    width: 14px;
+    height: 14px;
+    float: left;
+    margin: 2px 6px 0 0;
+}
+
 
 /* *********** */
 
