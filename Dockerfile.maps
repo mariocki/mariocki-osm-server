@@ -19,18 +19,20 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache
 RUN apachectl stop \
-  && echo "LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so" >> /etc/apache2/conf-available/mod_tile.conf \
-  && echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/conf-available/mod_headers.conf \
-  && echo "LoadModule proxy_module modules/mod_proxy.so" >> /etc/apache2/conf-available/mod_proxy.conf \
-  && echo "LoadModule proxy_http_module modules/mod_proxy_http.so" >> /etc/apache2/conf-available/mod_proxy_http.conf \
-  && a2enconf mod_tile \
-  && a2enconf mod_headers \
-  && a2enmod proxy_http \
-  && a2dismod mpm_event \
-  && a2enmod mpm_prefork 
+  && mkdir -p /var/cache/renderd/tiles \
+  && chown root.root /var/cache/renderd \
+  && chown -R renderer.www-data /var/cache/renderd/tiles \
+  && chmod 775 /var/cache/renderd/tiles
 
 COPY ./configs/maps/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY ./configs/maps/mpm_prefork.conf /etc/apache2/mods-available/
+
+RUN a2enmod proxy_http \
+  && a2enmod tile \
+  && a2enmod headers \
+  && a2dismod mpm_event \
+  && a2enmod mpm_prefork 
+
 RUN apachectl start
 
 ## Configure renderd
