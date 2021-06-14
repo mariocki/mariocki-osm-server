@@ -1,3 +1,4 @@
+FROM mariocki/osm-server-build-stage:v1 AS build-stage
 FROM mariocki/osm-server-core:v1 
 
 RUN apt-get install -y --no-install-recommends \
@@ -8,6 +9,10 @@ RUN apt-get install -y --no-install-recommends \
   libcgi-fast-perl \
   munin \
   renderd 
+
+# Install latest mod_tile
+#COPY --from=build-stage /home/build/src/mod_tile/mod_tile-git.deb /
+#RUN dpkg -i --force-overwrite /mod_tile-git.deb
 
 RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \
@@ -54,6 +59,11 @@ RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && chmod -R 775 /var/run/munin \
   && chmod -R 775 /var/cache/munin/www \
   && echo "*/3  *   * * *   munin /usr/bin/munin-cron\n" >> /etc/crontab
+# dont ask why we need to do this...vagaries of mod_tile I guess
+RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/munin/plugins/mod_tile_fresh
+RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/munin/plugins/mod_tile_latency
+RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/munin/plugins/mod_tile_response
+RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/munin/plugins/mod_tile_zoom
 
 # Copy update scripts
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire

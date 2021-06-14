@@ -11,13 +11,6 @@ RUN apt-get install -y --no-install-recommends \
   git-core \
   cmake
 
-WORKDIR /home/build/src
-
-# Install latest osm2pgsql
-RUN git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 
-
-WORKDIR /home/build/src/osm2pgsql
-
 RUN apt-get install -y --no-install-recommends \
   libboost-dev \
   libboost-filesystem-dev \
@@ -32,6 +25,13 @@ RUN apt-get install -y --no-install-recommends \
   osmium-tool \
   pandoc \
   zlib1g-dev
+
+WORKDIR /home/build/src
+
+# Install latest osm2pgsql
+RUN git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 
+
+WORKDIR /home/build/src/osm2pgsql
 
 RUN mkdir -p build/osm2pgsql-git/DEBIAN 
 
@@ -51,3 +51,36 @@ RUN echo "Maintainer: Your Name <you@email.com>" >> osm2pgsql-git/DEBIAN/control
 RUN echo "Description: Hello World" >> osm2pgsql-git/DEBIAN/control
 
 RUN dpkg-deb --build osm2pgsql-git
+
+RUN apt install -y --no-install-recommends build-essential \
+  autoconf \
+  apache2-dev \
+  libcairo2-dev \
+  libcurl4-gnutls-dev \
+  libiniparser-dev \
+  libmapnik-dev
+
+WORKDIR /home/build/src
+
+RUN git clone -b master https://github.com/openstreetmap/mod_tile.git --depth 1
+
+WORKDIR /home/build/src/mod_tile
+
+RUN mkdir -p renderd-git/DEBIAN mod_tile-git/DEBIAN
+
+RUN ./autogen.sh \
+  && ./configure \
+  && make \
+  && make DESTDIR=/home/build/src/mod_tile/renderd-git install \
+  && make DESTDIR=/home/build/src/mod_tile/mod_tile-git install-mod_tile
+
+RUN echo "Package:mod-tile-git" > mod_tile-git/DEBIAN/control
+RUN echo "Version: 1.0" >> mod_tile-git/DEBIAN/control
+RUN echo "Section: base" >> mod_tile-git/DEBIAN/control
+RUN echo "Priority: optional" >> mod_tile-git/DEBIAN/control
+RUN echo "Architecture: amd64" >> mod_tile-git/DEBIAN/control
+RUN echo "Depends: apache2" >> mod_tile-git/DEBIAN/control
+RUN echo "Maintainer: Your Name <you@email.com>" >> mod_tile-git/DEBIAN/control
+RUN echo "Description: Hello World" >> mod_tile-git/DEBIAN/control
+
+RUN dpkg-deb --build mod_tile-git

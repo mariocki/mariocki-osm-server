@@ -53,8 +53,8 @@ RUNLOG=$LOG_DIR/run.log
 # "render_expired" can optionally delete (and/or dirty) tiles above a certail
 # threshold rather than rendering them.
 #------------------------------------------------------------------------------
-EXPIRY_MINZOOM=10
-EXPIRY_TOUCHFROM=10
+EXPIRY_MINZOOM=13
+EXPIRY_TOUCHFROM=13
 EXPIRY_DELETEFROM=15
 EXPIRY_MAXZOOM=18
 
