@@ -55,18 +55,6 @@ service cron restart
 
 sudo -u munin munin-cron &
 
-chsum1=""
-
-cd /openstreetmap-carto
-
-while [[ true ]]; do
-
-    if ! pgrep -x renderd >/dev/null 2>&1; then
-        echo $(date) "renderd stopped ... restarting " | logger
-        service renderd restart
-    fi
-
-    sleep 5
-done
+sleep infinity
 
 exit 0
