@@ -6,6 +6,52 @@ h2 {
     font-size: 15px;
 }
 
+#latlon:before,
+#latlon:after {
+    width: 16px;
+    height: 16px;
+}
+
+#kmlInput {
+    padding-top: 5px;
+}
+
+select {
+    height: 22px;
+}
+
+.leaflet-control-geosearch form {
+    background-color: #444;
+}
+
+.leaflet-control-geosearch form input {
+    height: 30px;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.leaflet-control-geosearch a.reset {
+    background-color: #444;
+    color: #ecf0f1;
+}
+
+.leaflet-control-geosearch .results {
+    background-color: #444;
+}
+
+.leaflet-control-geosearch .results>* {
+    line-height: 18px;
+}
+
+.leaflet-control-geosearch .results>.active,
+.leaflet-control-geosearch .results> :hover {
+    background-color: #444;
+}
+
+.leaflet-control-geosearch a.reset:hover {
+    background: #666;
+}
+
 .leaflet-touch .leaflet-bar {
     background-color: #444;
     color: #ecf0f1;
@@ -183,7 +229,7 @@ label {
 input[type="checkbox"]+label,
 input[type="radio"]+label {
     display: inline;
-    padding: 0 14px;
+    padding: 0px;
 }
 
 select+.error,

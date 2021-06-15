@@ -1,5 +1,7 @@
 FROM mariocki/osm-server-core:v1 
 
+RUN apt-get update
+
 RUN apt-get install -y --no-install-recommends \
   gdal-bin \
   python3-pip \
