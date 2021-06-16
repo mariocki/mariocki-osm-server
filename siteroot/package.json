@@ -90,8 +90,8 @@
     ],
     "name": "siteroot2",
     "nodemonConfig": {
-        "exec": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./src",
-        "ext": "ts, html",
+        "exec": "./node_modules/.bin/ts-node -r module-alias/register ./src --env=production",
+        "ext": "js, ts, html",
         "ignore": [
             "src/public"
         ],
@@ -100,7 +100,7 @@
         ]
     },
     "scripts": {
-        "build": "./node_modules/.bin/ts-node build.ts && browserify dist/public/scripts/webmap.js -t [localenvify --envfile dist/pre-start/env/.env ] -o dist/public/scripts/webmap-browser.js && cp node_modules/leaflet-geosearch/dist/geosearch.css dist/public/stylesheets/ && cp node_modules/leaflet/dist/leaflet.css dist/public/stylesheets/",
+        "build": "cp node_modules/leaflet-geosearch/dist/geosearch.css src/public/stylesheets/ && cp node_modules/leaflet/dist/leaflet.css src/public/stylesheets/ && ./node_modules/.bin/ts-node build.ts && browserify dist/public/scripts/webmap.js -t [localenvify --envfile dist/pre-start/env/.env ] -o dist/public/scripts/webmap-browser.js",
         "lint": "eslint . --ext .ts",
         "start": "node -r module-alias/register ./dist --env=production",
         "start:dev": "nodemon"

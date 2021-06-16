@@ -4,7 +4,7 @@
  */
 
 import L from 'leaflet';
-import KMLIcon from './L.KMLIcon';
+import { KMLIconOptions } from './L.KMLIcon';
 import KMLMarker from './L.KMLMarker';
 
 export interface KMLOptions {
@@ -19,7 +19,6 @@ class ParsedStyle {
     constructor() {
         this.rotation = 0;
         this.fill = false;
-        this.iconOptions = null;
         this.weight = 0;
         this.id = "";
         this.href = "";
@@ -29,14 +28,13 @@ class ParsedStyle {
         this.fillOpacity = 1.0;
         this.x = 0;
         this.y = 0;
-        this.xunits = "";
-        this.yunits = "";
-        this.icon = new KMLIcon();
+        this.xunits = "pixels";
+        this.yunits = "pixels";
+        this.iconOptions = null;
     }
 
     rotation: number;
     fill: boolean;
-    iconOptions: ParsedStyle;
     weight: number;
     id: string;
     href: string;
@@ -48,7 +46,8 @@ class ParsedStyle {
     y: number;
     xunits: string;
     yunits: string;
-    icon: KMLIcon;
+
+    iconOptions: KMLIconOptions;
 }
 
 export class KML extends L.FeatureGroup {
@@ -96,13 +95,16 @@ export class KML extends L.FeatureGroup {
     }
 
     parseKML(xml: Element): L.Layer[] {
+        console.log("parsing styles");
         this.parseStyles(xml); // checked
+        console.log("parsing style maps");
         this.parseStyleMap(xml); // checked
         const layers: L.Layer[] = new Array<L.Layer>(0);
 
         const folderElements: HTMLCollectionOf<Element> = xml.getElementsByTagName('Folder');
         for (let i = 0; i < folderElements.length; i++) {
             if (!this._check_folder(folderElements[i], (null as unknown) as Element)) { continue; }
+            console.log("parsing root folder");
             const layer: L.Layer = this.parseFolder(folderElements[i]);
             if (layer) { layers.push(layer); }
         }
@@ -110,12 +112,14 @@ export class KML extends L.FeatureGroup {
         const placemarkElements: HTMLCollectionOf<Element> = xml.getElementsByTagName('Placemark');
         for (let j = 0; j < placemarkElements.length; j++) {
             if (!this._check_folder(placemarkElements[j], (null as unknown) as Element)) { continue; }
+            console.log("parsing root placemark");
             const layer: L.Layer = this.parsePlacemark(placemarkElements[j]);
             if (layer) { layers.push(layer); }
         }
 
         const groundOverlayElements: HTMLCollectionOf<Element> = xml.getElementsByTagName('GroundOverlay');
         for (let k = 0; k < groundOverlayElements.length; k++) {
+            console.log("parsing root overlays");
             const layer: L.Layer = this.parseGroundOverlay(groundOverlayElements[k]);
             if (layer) { layers.push(layer); }
         }
@@ -162,13 +166,14 @@ export class KML extends L.FeatureGroup {
                             style.weight = parseInt(value);
                         } else if (key === 'Icon') {
                             const iconStyle: ParsedStyle = _parse(e);
-                            if (iconStyle.href) { style.href = iconStyle.href; }
+                            style.iconOptions = { iconUrl: iconStyle.href, anchorRef: { x: 0, y: 0 }, anchorType: { x: "pixels", y: "pixels" } };
                         } else if (key === 'href') {
                             style.href = value;
                         }
                     }
                 }
             }
+
             return style;
         }
 
@@ -192,27 +197,37 @@ export class KML extends L.FeatureGroup {
         const iconStyleElement: HTMLCollectionOf<Element> = xml.getElementsByTagName('IconStyle');
         if (iconStyleElement && iconStyleElement[0]) {
             const iconStyle: ParsedStyle = _parse(iconStyleElement[0]);
+            console.log("got this from icon style")
+            console.log(iconStyle);
 
-            if (iconStyle.href) {
-                const iconOptions = {
-                    iconUrl: iconStyle.href,
-                    shadowUrl: null,
-                    anchorRef: { x: iconStyle.x, y: iconStyle.y },
-                    anchorType: { x: iconStyle.xunits, y: iconStyle.yunits },
-                };
-
-                if (typeof existingStyle === 'object' && typeof existingStyle.iconOptions === 'object') {
-                    L.Util.extend(iconOptions, existingStyle.iconOptions);
-                }
-
-                style.icon = new KMLIcon();
+            if (iconStyle.iconOptions) {
+                iconStyle.iconOptions.shadowUrl = null ;
+                iconStyle.iconOptions.anchorRef = { x: iconStyle.x, y: iconStyle.y };
+                iconStyle.iconOptions.anchorType = { x: iconStyle.xunits, y: iconStyle.yunits };
             }
+
+            if (typeof existingStyle === 'object' && typeof existingStyle.iconOptions === 'object') {
+                L.Util.extend(iconStyle.iconOptions, existingStyle.iconOptions);
+            }
+            
+            console.log("existing iconoptions");
+            console.log(existingStyle.iconOptions);
+            console.log("new style");
+            console.log(iconStyle.iconOptions);
+
+            style.iconOptions = iconStyle.iconOptions;
+
+            console.log("resultant style");
+            console.log(style);
         }
 
         const id: string = xml.getAttribute('id') || "";
         if (id && style) {
             style.id = id;
         }
+
+        console.log("full parsed style is");
+        console.log(style);
 
         return style;
     }
@@ -244,6 +259,7 @@ export class KML extends L.FeatureGroup {
         const folderElements: HTMLCollectionOf<Element> = folderElement.getElementsByTagName('Folder');
         for (let i = 0; i < folderElements.length; i++) {
             if (!this._check_folder(folderElements[i], folderElement)) { continue; }
+            console.log("parsing sub folder " + folderElements[i].innerHTML);
             const layer: L.Layer = this.parseFolder(folderElements[i]);
             if (layer) { layers.push(layer); }
         }
@@ -251,6 +267,7 @@ export class KML extends L.FeatureGroup {
         const placemarkElements: HTMLCollectionOf<Element> = folderElement.getElementsByTagName('Placemark');
         for (let j = 0; j < placemarkElements.length; j++) {
             if (!this._check_folder(placemarkElements[j], folderElement)) { continue; }
+            console.log("parsing sub pm " + placemarkElements[j].innerHTML);
             const layer: L.Layer = this.parsePlacemark(placemarkElements[j]);
             if (layer) { layers.push(layer); }
         }
@@ -258,6 +275,7 @@ export class KML extends L.FeatureGroup {
         const groundOverlayElements: HTMLCollectionOf<Element> = folderElement.getElementsByTagName('GroundOverlay');
         for (let k = 0; k < groundOverlayElements.length; k++) {
             if (!this._check_folder(groundOverlayElements[k], folderElement)) { continue; }
+            console.log("parsing sub go " + groundOverlayElements[k].innerHTML);
             const layer: L.Layer = this.parseGroundOverlay(groundOverlayElements[k]);
             if (layer) { layers.push(layer); }
         }
@@ -326,7 +344,7 @@ export class KML extends L.FeatureGroup {
                         layer = this.parsePolygon(lineElement[i], style);
                         break;
                     case 'Point':
-                        layer = this.parsePoint(lineElement[i]);
+                        layer = this.parsePoint(lineElement[i], style);
                         break;
                     case 'gx:Track':
                     case 'Track':
@@ -405,13 +423,16 @@ export class KML extends L.FeatureGroup {
     }
 
     // DONE
-    parsePoint(line: Element): KMLMarker {
+    parsePoint(line: Element, style :ParsedStyle): KMLMarker {
         const coordinateElements: HTMLCollectionOf<Element> = line.getElementsByTagName('coordinates');
         if (!coordinateElements.length) {
             return null as unknown as KMLMarker;
         }
         const latlonStrings: string[] = coordinateElements[0] && coordinateElements[0].childNodes[0] && coordinateElements[0].childNodes[0].nodeValue ? coordinateElements[0].childNodes[0].nodeValue.split(',') : new Array<string>(0);
-        return new KMLMarker(new L.LatLng(Number(latlonStrings[1]), Number(latlonStrings[0])), {} as L.MarkerOptions);
+        console.log("creating marker with style...");
+        console.log("latlon: " + Number(latlonStrings[1]) + ", " + Number(latlonStrings[0]));
+        console.log(style.iconOptions)
+        return new KMLMarker(new L.LatLng(Number(latlonStrings[1]), Number(latlonStrings[0])), style.iconOptions);
     }
 
     // DONE ish

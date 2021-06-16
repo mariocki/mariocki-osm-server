@@ -1,12 +1,13 @@
 import L from 'leaflet';
-import KMLIcon from './L.KMLIcon';
-
-interface KMLMarkerOptions extends L.MarkerOptions {
-    icon : L.Icon.Default
-}
+import KMLIcon, { KMLIconOptions } from './L.KMLIcon';
 
 export default class KMLMarker extends L.Marker {
-    options: KMLMarkerOptions = {
-      icon: new KMLIcon.Default(),
-    }
+
+  constructor(latlng: L.LatLngExpression, style: KMLIconOptions) {
+    super(latlng, style);
+    const icon: KMLIcon = new KMLIcon(style);
+    
+    console.log(icon);
+    this.options.icon = icon;
+  }
 }
