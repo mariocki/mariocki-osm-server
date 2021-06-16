@@ -303,6 +303,7 @@ export class KML extends L.FeatureGroup {
     parsePlacemark(placeMark: Element): L.Layer {
         let style: ParsedStyle = new ParsedStyle();
 
+        console.log("processing " + placeMark.getElementsByTagName('name')[0].innerHTML);
         const placemarkStyleUrlElement: HTMLCollectionOf<Element> = placeMark.getElementsByTagName('styleUrl');
         for (let i = 0; i < placemarkStyleUrlElement.length; i++) {
             const url = placemarkStyleUrlElement[i].childNodes[0].nodeValue || "";
@@ -339,22 +340,24 @@ export class KML extends L.FeatureGroup {
 
                 switch (tag) {
                     case 'LineString':
+                        //console.log("parsing linestring");
                         layer = this.parseLineString(lineElement[i], style);
                         break;
                     case 'Polygon':
-                        console.log("parsing polygon");
+                        //console.log("parsing polygon");
                         layer = this.parsePolygon(lineElement[i], style);
                         break;
                     case 'Point':
+                        //console.log("parsing point");
                         layer = this.parsePoint(lineElement[i], style);
                         break;
                     case 'gx:Track':
                     case 'Track':
-                        console.log("parsing track");
+                        //console.log("parsing track");
                         layer = this.parseTrack(lineElement[i], style);
                         break;
                     default:
-                        console.log("unknown tag " + tag);
+                        //console.log("unknown tag " + tag);
                         layer = null as unknown as L.Layer;
                         break;
                 }
@@ -365,9 +368,11 @@ export class KML extends L.FeatureGroup {
         if (!layers.length) {
             return null as unknown as L.Layer;
         }
-        let layer: L.Layer = layers[0];
+        let layer: L.Layer;
         if (layers.length > 1) {
             layer = new L.FeatureGroup(layers);
+        } else {
+            layer = layers[0];
         }
 
         this.addPlacePopup(placeMark, layer);
@@ -406,6 +411,10 @@ export class KML extends L.FeatureGroup {
             return null as unknown as L.Polyline;
         }
 
+        console.log("rendered new polyline with style ");
+        console.log(coords);
+        console.log(style);
+        style.color = 'red';
         return new L.Polyline(coords, style);
     }
 
