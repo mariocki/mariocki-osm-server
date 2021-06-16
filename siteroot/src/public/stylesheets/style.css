@@ -6,6 +6,10 @@ h2 {
     font-size: 15px;
 }
 
+.leaflet-popup-content {
+    width: unset !important;
+}
+
 #latlon:before,
 #latlon:after {
     width: 16px;

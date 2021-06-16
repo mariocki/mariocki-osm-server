@@ -1,16 +1,17 @@
 import { Router } from 'express';
-if (process.env.NODE_ENV === 'production') {
-    import { settings } from '../shared/AppSettings';
-    import { AuthProvider } from '../shared/AuthProvider';
-}
+import { settings } from '../shared/AppSettings';
+import { AuthProvider } from '../shared/AuthProvider';
 
-const authProvider = new AuthProvider(settings);
+let authProvider: AuthProvider;
 
 // Export the base-router
 const baseRouter = Router();
-// authentication routes
+
 baseRouter.get('/', (req, res) => res.redirect('/maps'));
+
 if (process.env.NODE_ENV === 'production') {
+    authProvider = new AuthProvider(settings);
+
     baseRouter.get('/signin', authProvider.signIn);
     baseRouter.get('/signout', authProvider.signOut);
     baseRouter.get('/redirect', authProvider.handleRedirect);

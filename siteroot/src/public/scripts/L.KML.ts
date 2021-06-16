@@ -380,16 +380,19 @@ export class KML extends L.FeatureGroup {
     }
 
     addPlacePopup(place: Element, layer: L.Layer): void {
-        let el; let i; let j; let name; let
-            descr = '';
-        el = place.getElementsByTagName('name');
-        if (el.length && el[0].childNodes.length) {
-            name = el[0].childNodes[0].nodeValue;
+        let name: string;
+        let descr: string;
+
+        const nameElement : HTMLCollectionOf<Element>  = place.getElementsByTagName('name');
+        if (nameElement.length && nameElement[0].childNodes.length) {
+            name = nameElement[0].childNodes[0].nodeValue;
         }
-        el = place.getElementsByTagName('description');
-        for (i = 0; i < el.length; i++) {
-            for (j = 0; j < el[i].childNodes.length; j++) {
-                descr += el[i].childNodes[j].nodeValue;
+        
+        descr = "";
+        const descriptionElement : HTMLCollectionOf<Element> = place.getElementsByTagName('description');
+        for (let i = 0; i < descriptionElement.length; i++) {
+            for (let j = 0; j < descriptionElement[i].childNodes.length; j++) {
+                descr += descriptionElement[i].childNodes[j].nodeValue;
             }
         }
 
