@@ -7,7 +7,7 @@ export default class KMLMarker extends L.Marker {
     super(latlng, style);
     const icon: KMLIcon = new KMLIcon(style);
     
-    console.log(icon);
+    //console.log(icon);
     this.options.icon = icon;
   }
 }

@@ -4,6 +4,7 @@
  */
 
 import L from 'leaflet';
+import 'esri-leaflet';
 import { KMLIconOptions } from './L.KMLIcon';
 import KMLMarker from './L.KMLMarker';
 
@@ -95,16 +96,16 @@ export class KML extends L.FeatureGroup {
     }
 
     parseKML(xml: Element): L.Layer[] {
-        console.log("parsing styles");
+        //console.log("parsing styles");
         this.parseStyles(xml); // checked
-        console.log("parsing style maps");
+        //console.log("parsing style maps");
         this.parseStyleMap(xml); // checked
         const layers: L.Layer[] = new Array<L.Layer>(0);
 
         const folderElements: HTMLCollectionOf<Element> = xml.getElementsByTagName('Folder');
         for (let i = 0; i < folderElements.length; i++) {
             if (!this._check_folder(folderElements[i], (null as unknown) as Element)) { continue; }
-            console.log("parsing root folder");
+            //console.log("parsing root folder");
             const layer: L.Layer = this.parseFolder(folderElements[i]);
             if (layer) { layers.push(layer); }
         }
@@ -112,7 +113,7 @@ export class KML extends L.FeatureGroup {
         const placemarkElements: HTMLCollectionOf<Element> = xml.getElementsByTagName('Placemark');
         for (let j = 0; j < placemarkElements.length; j++) {
             if (!this._check_folder(placemarkElements[j], (null as unknown) as Element)) { continue; }
-            console.log("parsing root placemark");
+            //console.log("parsing root placemark");
             const layer: L.Layer = this.parsePlacemark(placemarkElements[j]);
             if (layer) { layers.push(layer); }
         }
@@ -197,8 +198,8 @@ export class KML extends L.FeatureGroup {
         const iconStyleElement: HTMLCollectionOf<Element> = xml.getElementsByTagName('IconStyle');
         if (iconStyleElement && iconStyleElement[0]) {
             const iconStyle: ParsedStyle = _parse(iconStyleElement[0]);
-            console.log("got this from icon style")
-            console.log(iconStyle);
+            //console.log("got this from icon style")
+            //console.log(iconStyle);
 
             if (iconStyle.iconOptions) {
                 iconStyle.iconOptions.shadowUrl = null ;
@@ -210,15 +211,15 @@ export class KML extends L.FeatureGroup {
                 L.Util.extend(iconStyle.iconOptions, existingStyle.iconOptions);
             }
             
-            console.log("existing iconoptions");
-            console.log(existingStyle.iconOptions);
-            console.log("new style");
-            console.log(iconStyle.iconOptions);
+            //console.log("existing iconoptions");
+            //console.log(existingStyle.iconOptions);
+            //console.log("new style");
+            //console.log(iconStyle.iconOptions);
 
             style.iconOptions = iconStyle.iconOptions;
 
-            console.log("resultant style");
-            console.log(style);
+            //console.log("resultant style");
+            //console.log(style);
         }
 
         const id: string = xml.getAttribute('id') || "";
@@ -226,8 +227,8 @@ export class KML extends L.FeatureGroup {
             style.id = id;
         }
 
-        console.log("full parsed style is");
-        console.log(style);
+        //console.log("full parsed style is");
+        //console.log(style);
 
         return style;
     }
@@ -259,7 +260,7 @@ export class KML extends L.FeatureGroup {
         const folderElements: HTMLCollectionOf<Element> = folderElement.getElementsByTagName('Folder');
         for (let i = 0; i < folderElements.length; i++) {
             if (!this._check_folder(folderElements[i], folderElement)) { continue; }
-            console.log("parsing sub folder " + folderElements[i].innerHTML);
+            //console.log("parsing sub folder " + folderElements[i].innerHTML);
             const layer: L.Layer = this.parseFolder(folderElements[i]);
             if (layer) { layers.push(layer); }
         }
@@ -267,7 +268,7 @@ export class KML extends L.FeatureGroup {
         const placemarkElements: HTMLCollectionOf<Element> = folderElement.getElementsByTagName('Placemark');
         for (let j = 0; j < placemarkElements.length; j++) {
             if (!this._check_folder(placemarkElements[j], folderElement)) { continue; }
-            console.log("parsing sub pm " + placemarkElements[j].innerHTML);
+            //console.log("parsing sub pm " + placemarkElements[j].innerHTML);
             const layer: L.Layer = this.parsePlacemark(placemarkElements[j]);
             if (layer) { layers.push(layer); }
         }
@@ -341,6 +342,7 @@ export class KML extends L.FeatureGroup {
                         layer = this.parseLineString(lineElement[i], style);
                         break;
                     case 'Polygon':
+                        console.log("parsing polygon");
                         layer = this.parsePolygon(lineElement[i], style);
                         break;
                     case 'Point':
@@ -348,9 +350,11 @@ export class KML extends L.FeatureGroup {
                         break;
                     case 'gx:Track':
                     case 'Track':
+                        console.log("parsing track");
                         layer = this.parseTrack(lineElement[i], style);
                         break;
                     default:
+                        console.log("unknown tag " + tag);
                         layer = null as unknown as L.Layer;
                         break;
                 }
@@ -429,22 +433,23 @@ export class KML extends L.FeatureGroup {
             return null as unknown as KMLMarker;
         }
         const latlonStrings: string[] = coordinateElements[0] && coordinateElements[0].childNodes[0] && coordinateElements[0].childNodes[0].nodeValue ? coordinateElements[0].childNodes[0].nodeValue.split(',') : new Array<string>(0);
-        console.log("creating marker with style...");
-        console.log("latlon: " + Number(latlonStrings[1]) + ", " + Number(latlonStrings[0]));
-        console.log(style.iconOptions)
+        //console.log("creating marker with style...");
+        //console.log("latlon: " + Number(latlonStrings[1]) + ", " + Number(latlonStrings[0]));
+        //console.log(style.iconOptions)
         return new KMLMarker(new L.LatLng(Number(latlonStrings[1]), Number(latlonStrings[0])), style.iconOptions);
     }
 
     // DONE ish
     parsePolygon(line: Element, style: ParsedStyle): L.Polygon {
-        const polys: L.LatLng[] = new Array<L.LatLng>(0);
-        const inner: L.LatLng[] = new Array<L.LatLng>(0);
+        let polys: L.LatLng[] = [];
+        let inner: L.LatLng[] = [];
 
         const outerBoundaryElements: HTMLCollectionOf<Element> = line.getElementsByTagName('outerBoundaryIs');
         for (let i = 0; i < outerBoundaryElements.length; i++) {
             const coords: L.LatLng[] = this.parseCoords(outerBoundaryElements[i]);
             if (coords) {
-                polys.concat(coords);
+                //console.log("poly concatting " + coords.length)
+                polys = polys.concat(coords);
             }
         }
 
@@ -452,25 +457,19 @@ export class KML extends L.FeatureGroup {
         for (let i = 0; i < innerBoundaryElements.length; i++) {
             const coords: L.LatLng[] = this.parseCoords(innerBoundaryElements[i]);
             if (coords) {
-                inner.concat(coords);
+                //console.log("inner concatting " + coords.length)
+                inner = inner.concat(coords);
             }
         }
 
-        if (!polys.length) {
-            return null as unknown as L.Polygon;
-        }
+        //console.log("generated " + polys.length + " + " + inner.length + " polygons with style");
+        //console.log(style);
+
         if (style.fillColor) {
             style.fill = true;
         }
-        if (polys.length === 1) {
-            return new L.Polygon(polys.concat(inner), style);
-        }
-
-        return null as unknown as L.Polygon;
-        /*
-           * ?????
-           * return new L.MultiPolygon(polys, options);
-           */
+        
+        return new L.Polygon(polys.concat(inner), style);
     }
 
     // DONE
