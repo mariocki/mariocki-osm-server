@@ -36,21 +36,6 @@ services:
     image: mariocki/osm-server-core:v1
     env_file:
       - .env
-  render:
-    image: mariocki/osm-server-render:v1
-    build:
-      context: .
-      dockerfile: Dockerfile.render
-    volumes:
-      - ~/osm-maps/mod_tile:/var/lib/mod_tile
-      - ~/osm-maps/munin:/var/lib/munin
-      - ./openstreetmap-carto:/openstreetmap-carto
-    #    depends_on:
-    #      - db
-    env_file:
-      - .env
-    networks:
-      - my_network
   import:
     build:
       context: .

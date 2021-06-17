@@ -81,9 +81,16 @@ RUN chmod a+x /usr/local/bin/osmosis-db_replag\
 COPY ./scripts/maps/trim_osc.py /usr/local/bin/
 RUN chmod a+x /usr/local/bin/trim_osc.py
 
+# Install render_list_geo helper script
+# https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
+COPY ./scripts/maps/render_list_geo.pl /usr/local/bin/
+COPY ./scripts/maps/expire_list_geo.pl /usr/local/bin/
+RUN chmod a+x /usr/local/bin/render_list_geo.pl /usr/local/bin/expire_list_geo.pl
+
 # Copy site
 ADD siteroot /var/www/html/
 COPY .env /var/www/html/src/pre-start/env/.env
+RUN cd /var/www/html && npm install
 
 # Start running
 COPY ./scripts/maps/run.sh /
