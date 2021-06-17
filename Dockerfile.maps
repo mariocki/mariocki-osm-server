@@ -84,7 +84,6 @@ RUN chmod a+x /usr/local/bin/trim_osc.py
 # Copy site
 ADD siteroot /var/www/html/
 COPY .env /var/www/html/src/pre-start/env/.env
-RUN cd /var/www/html && npm install
 
 # Start running
 COPY ./scripts/maps/run.sh /
