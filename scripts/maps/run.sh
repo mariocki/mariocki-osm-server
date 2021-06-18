@@ -38,11 +38,15 @@ chown -R renderer /var/lib/mod_tile/ajt
 
 # Initialize Apache
 service rsyslog stop
-rm /run/rsyslogd.pid
-service rsyslog start
+service munin stop
+service munin-node stop
 
-service munin restart
-service munin-node restart
+rm /run/rsyslogd.pid
+rm /var/run/munin/munin-node.pid
+
+service rsyslog start
+service munin start
+service munin-node start
 apachectl stop
 while kill -0 $CARTO_PID; do
     echo "Waiting for Carto..."
