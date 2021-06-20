@@ -104,9 +104,9 @@ Edit docker-compose.yml and remove the following line: `    command: --create`.
 And then repeat the instructions under "Importing Data"
 
 ## Bulk rendering
-Connect to the render server:
+Connect to the map server:
 ```
-docker-compose up -d render
+docker-compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 
@@ -129,9 +129,9 @@ manchester 53.4808/-2.2426
 `render_list_geo.pl -f -z 14 -Z 16 -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -m ajt`
 
 ## Bulk Expiry
-Connect to the render server:
+Connect to the maps server:
 ```
-docker-compose up -d render
+docker-compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 and run one of the lines shown below which will execute the command.
