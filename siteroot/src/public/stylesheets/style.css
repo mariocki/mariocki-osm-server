@@ -6,8 +6,24 @@ h2 {
     font-size: 15px;
 }
 
+#basemaps-wrapper {
+    width: max-content;
+    top: 60px !important;
+    z-index: 800;
+}
+
 .leaflet-popup-content {
     width: unset !important;
+}
+
+.leaflet-control-layers {
+    background: #444;
+    color: #ecf0f1;
+}
+
+.leaflet-control-layers-expanded {
+    background: #444;
+    color: #ecf0f1;
 }
 
 #latlon:before,
