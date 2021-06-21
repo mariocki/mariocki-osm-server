@@ -20,6 +20,8 @@ RUN apt-get clean autoclean -y \
 
 RUN npm install -g browserify typescript
 
+COPY configs/maps/*.ttf /usr/share/fonts/truetype/
+
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache

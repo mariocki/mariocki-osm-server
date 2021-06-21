@@ -52,6 +52,8 @@ RUN apt-get clean autoclean \
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
+COPY configs/maps/*.ttf /usr/share/fonts/truetype/
+
 COPY ./patches/kosmtik.patch /kosmtik.patch
 RUN cd /usr/lib/node_modules/kosmtik \
   && patch -p1 < /kosmtik.patch
