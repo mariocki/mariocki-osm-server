@@ -20,7 +20,7 @@ RUN apt-get clean autoclean -y \
 
 RUN npm install -g browserify typescript
 
-COPY configs/maps/*.ttf /usr/share/fonts/truetype/
+COPY configs/maps/fonts/* /usr/share/fonts/truetype/
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
@@ -85,9 +85,8 @@ RUN chmod a+x /usr/local/bin/trim_osc.py
 
 # Install render_list_geo helper script
 # https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
-COPY ./scripts/maps/render_list_geo.pl /usr/local/bin/
-COPY ./scripts/maps/expire_list_geo.pl /usr/local/bin/
-RUN chmod a+x /usr/local/bin/render_list_geo.pl /usr/local/bin/expire_list_geo.pl
+COPY ./scripts/maps/*.pl /usr/local/bin/
+RUN chmod a+x /usr/local/bin/*.pl
 
 # Copy site
 ADD siteroot /var/www/html/
