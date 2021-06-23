@@ -54,8 +54,8 @@ RUNLOG=$LOG_DIR/run.log
 # threshold rather than rendering them.
 #------------------------------------------------------------------------------
 EXPIRY_MINZOOM=13
-EXPIRY_TOUCHFROM=13
-EXPIRY_DELETEFROM=15
+EXPIRY_TOUCHFROM=16
+EXPIRY_DELETEFROM=17
 EXPIRY_MAXZOOM=18
 
 #*************************************************************************
