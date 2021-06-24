@@ -1,5 +1,5 @@
-FROM mariocki/osm-server-build-stage:v1 AS build-stage
-FROM mariocki/osm-server-core:v1 
+FROM mariocki/osm-server-build-stage:latest AS build-stage
+FROM mariocki/osm-server-core:latest 
 
 RUN apt-get install -y --no-install-recommends \
   apache2 \

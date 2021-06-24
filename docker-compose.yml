@@ -8,8 +8,8 @@ services:
   db:
     build:
       context: .
-      dockerfile: Dockerfile.psql
-    image: mariocki/osm-server-db:v1
+      dockerfile: Dockerfile.osm-server-db
+    image: mariocki/osm-server-db:latest
     shm_size: "1gb"
     volumes:
       - ~/osm-maps/gis:/var/lib/postgresql/data
@@ -23,8 +23,8 @@ services:
   build-stage:
     build:
       context: .
-      dockerfile: Dockerfile.build-stage
-    image: mariocki/osm-server-build-stage:v1
+      dockerfile: Dockerfile.osm-server-build-stage
+    image: mariocki/osm-server-build-stage:latest
     env_file:
       - .env
     networks:
@@ -32,15 +32,15 @@ services:
   core:
     build:
       context: .
-      dockerfile: Dockerfile.core
-    image: mariocki/osm-server-core:v1
+      dockerfile: Dockerfile.osm-server-core
+    image: mariocki/osm-server-core:latest
     env_file:
       - .env
   import:
     build:
       context: .
-      dockerfile: Dockerfile.import
-    image: mariocki/osm-server-import:v1
+      dockerfile: Dockerfile.osm-server-import
+    image: mariocki/osm-server-import:latest
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/data:/data
@@ -53,10 +53,10 @@ services:
     networks:
       - my_network
   maps:
-    image: mariocki/osm-server-maps:v1
+    image: mariocki/osm-server-maps:latest
     build:
       context: .
-      dockerfile: Dockerfile.maps
+      dockerfile: Dockerfile.osm-server-maps
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/munin:/var/lib/munin
@@ -89,10 +89,10 @@ services:
     networks:
       - my_network
   kosmtik:
-    image: mariocki/osm-server-kosmtik:v1
+    image: mariocki/osm-server-kosmtik:latest
     build:
       context: .
-      dockerfile: Dockerfile.kosmtik
+      dockerfile: Dockerfile.osm-server-kosmtik
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto

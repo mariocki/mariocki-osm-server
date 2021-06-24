@@ -1,4 +1,4 @@
-FROM mariocki/osm-server-core:v1 
+FROM mariocki/osm-server-core:latest
 
 RUN apt-get update
 
