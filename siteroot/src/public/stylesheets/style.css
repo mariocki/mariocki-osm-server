@@ -4,6 +4,7 @@ a {
 
 h2 {
     font-size: 15px;
+    width: max-content;
 }
 
 #basemaps-wrapper {
