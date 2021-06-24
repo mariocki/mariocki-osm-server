@@ -22,7 +22,7 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Copy update scripts
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
-COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
+COPY ./scripts/import/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
 
 # patch elevation to allow a reasonable number of downloads
 COPY ./patches/elevation.patch /elevation.patch

@@ -53,9 +53,9 @@ RUNLOG=$LOG_DIR/run.log
 # "render_expired" can optionally delete (and/or dirty) tiles above a certail
 # threshold rather than rendering them.
 #------------------------------------------------------------------------------
-EXPIRY_MINZOOM=10
-EXPIRY_TOUCHFROM=10
-EXPIRY_DELETEFROM=15
+EXPIRY_MINZOOM=13
+EXPIRY_TOUCHFROM=16
+EXPIRY_DELETEFROM=17
 EXPIRY_MAXZOOM=18
 
 #*************************************************************************
@@ -137,6 +137,8 @@ else
     if ! $OSMOSIS_BIN --read-replication-interval workingDirectory=$WORKOSM_DIR --simplify-change --write-xml-change $CHANGE_FILE 2>&1 | tee -a "$OSMOSISLOG" | logger; then
         m_error "Osmosis error"
     fi
+
+    echo $(zgrep -cie mariocki $CHANGE_FILE) "changes by me out of" $(zgrep -cie changeset $CHANGE_FILE) | logger
 
     if [ -f $TRIM_POLY_FILE ]; then
         m_ok "filtering diff"
