@@ -4,3 +4,8 @@ node_modules
 a.csv
 *.log
 dist/
+osm-server-build-stage
+osm-server-core
+osm-server-db
+osm-server-kosmtik
+osm-server-maps
