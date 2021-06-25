@@ -1,0 +1,13 @@
+-- Table: public.rail_routes
+-- DROP TABLE public.rail_routes;
+CREATE TABLE IF NOT EXISTS public.rail_routes (
+  route_operator text COLLATE pg_catalog."default",
+  part bigint)
+TABLESPACE pg_default;
+
+ALTER TABLE public.rail_routes OWNER TO renderer;
+
+-- Index: part_idx
+-- DROP INDEX public.part_idx;
+CREATE UNIQUE INDEX part_idx ON public.rail_routes USING btree (part ASC NULLS LAST) TABLESPACE pg_default;
+

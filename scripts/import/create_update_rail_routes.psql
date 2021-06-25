@@ -1,0 +1,16 @@
+-- PROCEDURE: public.update_rail_routes()
+-- DROP PROCEDURE public.update_rail_routes();
+CREATE OR REPLACE PROCEDURE public.update_rail_routes ()
+LANGUAGE 'sql'
+AS $BODY$
+  TRUNCATE TABLE rail_routes;
+  INSERT INTO rail_routes (route_operator, part)
+  SELECT DISTINCT
+    'London Overground'::text AS route_operator,
+    unnest(parts) AS part
+  FROM
+    planet_osm_rels
+  WHERE
+    hstore (tags) -> 'name' LIKE 'Overground:%';
+$BODY$;
+

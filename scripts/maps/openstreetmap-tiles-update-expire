@@ -186,6 +186,8 @@ else
         rm -f "$EXPIRY_FILE.$$"
     fi
 
+    psql -h ${PGHOST} -U ${ACCOUNT} -d ${DBNAME} -c 'CALL update_rail_routes();'
+
     #------------------------------------------------------------------------------
     # Only remove the lock file after expiry (if system is slow we want to delay
     # the next import, not have multiple render_expired processes running)

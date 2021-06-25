@@ -40,6 +40,10 @@ import_map_data() {
     # Create indexes
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
 
+    # create rail_routes table and SP
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_rail_routes.psql
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_update_rail_routes.psql
+
     #Import external data
     mkdir -p /home/renderer/src
     sudo chown -R renderer: /home/renderer/src

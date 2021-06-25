@@ -31,6 +31,7 @@ RUN cd /usr/local/lib/python3.9/dist-packages/elevation \
 
 # copy indexes just in case
 COPY ./openstreetmap-carto/indexes.psql /
+COPY ./scripts/import/*.psql /
 
 # Start running
 COPY ./scripts/import/run.sh /
