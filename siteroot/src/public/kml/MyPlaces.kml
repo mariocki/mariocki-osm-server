@@ -2,113 +2,54 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>MyPlaces.kml</name>
-	<Style id="sn_cabs01">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/cabs.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_hospitals0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/hospitals.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<Style id="sh_cabs00">
-		<IconStyle>
-			<scale>0.827273</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/cabs.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_bus0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/bus.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<Style id="sh_radio-station-2400">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sn_bus">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/bus.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_laboratory0010">
+	<StyleMap id="msn_snack_bar221">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_laboratory012</styleUrl>
+			<styleUrl>#sn_snack_bar1</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_laboratory02</styleUrl>
+			<styleUrl>#sh_snack_bar1011</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sn_music_rock1">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/arts.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<StyleMap id="m_ylw-pushpin32">
+	<StyleMap id="msn_ylw-stars103">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin03</styleUrl>
+			<styleUrl>#sn_ylw-stars4</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#s_ylw-pushpin_hl16</styleUrl>
+			<styleUrl>#sh_ylw-stars00</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_snack_bar22">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_snack_bar11</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_snack_bar1010</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_music_rock20">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_music_rock1</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_music_rock3</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_arts31">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_arts00</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_arts00</styleUrl>
 		</Pair>
 	</StyleMap>
 	<StyleMap id="msn_spaceport-20">
@@ -121,295 +62,73 @@
 			<styleUrl>#sh_spaceport-20</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_electronics1">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/electronics.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<Style id="sh_rail0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/rail.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>80ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_info_circle1">
+	<StyleMap id="msn_play1">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_info_circle</styleUrl>
+			<styleUrl>#sn_play</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_info_circle</styleUrl>
+			<styleUrl>#sh_play</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_track">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/camera.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_track">
+	<StyleMap id="msn_ylw-stars10">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_track</styleUrl>
+			<styleUrl>#sn_ylw-stars43</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_track</styleUrl>
+			<styleUrl>#sh_ylw-stars000</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sn_radar41">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<StyleMap id="msn_ferry">
+	<StyleMap id="msn_ylw-stars102">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_ferry</styleUrl>
+			<styleUrl>#sn_ylw-stars40</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_ferry0</styleUrl>
+			<styleUrl>#sh_ylw-stars001</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sn_ylw-stars43">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_snack_bar1011">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_arts00">
-		<IconStyle>
-			<scale>1.06364</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/arts.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_golf">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/golf.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<Style id="sh_info_circle">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/info_circle.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_police">
+	<StyleMap id="msn_rail0">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_police</styleUrl>
+			<styleUrl>#sn_rail0</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_police</styleUrl>
+			<styleUrl>#sh_rail0</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="s_ylw-pushpin2">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/P.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/P-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_music_rock3">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/arts.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_golf11">
+	<StyleMap id="msn_cabs">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_golf2</styleUrl>
+			<styleUrl>#sn_cabs</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_golf2</styleUrl>
+			<styleUrl>#sh_cabs</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_spaceport-20">
-		<IconStyle>
-			<scale>0.590909</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/mapiconscollection-industry-00fffb-default/missile-2.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<Style id="sn_snack_bar10">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/snack_bar.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_golf2">
+	<StyleMap id="msn_hospitals0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_hospitals00</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_hospitals0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_bars">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/golf.png</href>
+				<href>http://localhost:8080/kml/bars.png</href>
 			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
-	</Style>
-	<Style id="sn_ylw-stars42">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-circle.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-circle-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sn_info_circle">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/info_circle.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<Style id="sn_golf2">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/golf.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sn_ylw-stars40">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sn_laboratory012">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
 		<LineStyle>
 			<color>ff0000ff</color>
 			<width>3</width>
@@ -447,40 +166,86 @@
 			</Icon>
 		</IconStyle>
 	</Style>
-	<Style id="sh_radar2000">
+	<StyleMap id="msn_laboratory0010">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_laboratory012</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_laboratory02</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_radar200">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar41</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar2004</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_police">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_police</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_police</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="m_ylw-pushpin00">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin11</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl010</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_donut">
 		<IconStyle>
-			<scale>0.945455</scale>
+			<scale>0.8</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+				<href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
 			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
 	</Style>
-	<Style id="sh_laboratory02">
+	<Style id="sn_play">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/play.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_ylw-stars101">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-stars42</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-stars003</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_radar2003">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
 			</Icon>
 			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
 		<ListStyle>
 			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle-lv.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
 	</Style>
 	<Style id="s_ylw-pushpin11">
 		<IconStyle>
@@ -491,27 +256,17 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	<StyleMap id="msn_electronics4">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_electronics01</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_electronics1</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_radar40">
+	<Style id="sh_ylw-stars003">
 		<IconStyle>
-			<scale>0.8</scale>
+			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-circle.png</href>
 			</Icon>
 			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
 		<ListStyle>
 			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-circle-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
 	</Style>
@@ -528,6 +283,227 @@
 				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
+	</Style>
+	<Style id="sh_spaceport-20">
+		<IconStyle>
+			<scale>0.590909</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/mapiconscollection-industry-00fffb-default/missile-2.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl012">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/movies.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sh_hospitals00">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/hospitals.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sn_golf2">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/golf.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_ylw-stars4">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_radar2002">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>80ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sh_info_circle">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/info_circle.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_radar203">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar40</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar200</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_snack_bar10">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/snack_bar.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_ylw-stars41">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-square.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-square-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_ferry">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/ferry.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sh_golf2">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/golf.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_golf11">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_golf2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_golf2</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_horsebackriding000">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/horsebackriding.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_police">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/police.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="sn_hospitals00">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/hospitals.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_bus">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_bus</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_bus0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_play00">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/play.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
 	</Style>
 	<Style id="sh_radar2001">
 		<IconStyle>
@@ -550,6 +526,68 @@
 			<color>80ffffff</color>
 		</PolyStyle>
 	</Style>
+	<Style id="s_ylw-pushpin0">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_play">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/play.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_donut">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_donut</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_donut</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_laboratory012">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sh_music_rock3">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/arts.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
 	<Style id="s_ylw-pushpin">
 		<IconStyle>
 			<scale>0.8</scale>
@@ -571,195 +609,6 @@
 			<color>66ffffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="sn_ferry">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/ferry.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<StyleMap id="m_ylw-pushpin">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin1</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_play00">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/play.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_hospitals00">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/hospitals.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_ylw-stars102">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_ylw-stars40</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_ylw-stars001</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_radar2003">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sn_truck">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/truck.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sn_hospitals00">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/hospitals.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="m_ylw-pushpin121">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin50</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#s_ylw-pushpin_hl012</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_cabs">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_cabs</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_cabs</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_radar4">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_play">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/play.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_play1">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_play</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_play</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_snack_bar221">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_snack_bar1</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_snack_bar1011</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_donut">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_donut</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_donut</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="s_ylw-pushpin0">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<StyleMap id="msn_rail0">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_rail0</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_rail0</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Style id="sn_golf">
 		<IconStyle>
 			<scale>0.8</scale>
@@ -768,51 +617,44 @@
 			</Icon>
 		</IconStyle>
 	</Style>
-	<StyleMap id="msn_radar203">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_radar40</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_radar200</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_hospitals0">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_hospitals00</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_hospitals0</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_bus">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_bus</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_bus0</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="m_ylw-pushpin00">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin11</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#s_ylw-pushpin_hl010</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_spaceport-21">
+	<Style id="s_ylw-pushpin2">
 		<IconStyle>
-			<scale>0.5</scale>
+			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/mapiconscollection-industry-00fffb-default/missile-2.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/P.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/P-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_snack_bar11">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/dollar.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_lighthouse-20">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_lighthouse-21</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_lighthouse-21</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_electronics1">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/electronics.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -824,47 +666,98 @@
 			<color>66ffffff</color>
 		</PolyStyle>
 	</Style>
-	<StyleMap id="msn_radar200">
+	<Style id="sh_hospitals0">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/hospitals.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sh_cabs00">
+		<IconStyle>
+			<scale>0.827273</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/cabs.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sh_radio-station-2400">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<StyleMap id="msn_ferry">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_radar41</styleUrl>
+			<styleUrl>#sn_ferry</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_radar2004</styleUrl>
+			<styleUrl>#sh_ferry0</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sn_police">
+	<Style id="sn_radar43">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/police.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
 			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
 	</Style>
-	<Style id="sn_horsebackriding000">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/horsebackriding.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_horsebackriding2">
+	<StyleMap id="msn_ylw-stars100">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-stars41</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-stars002</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_lighthouse-21">
 		<IconStyle>
 			<scale>0.945458</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/horsebackriding.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond.png</href>
 			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
 	</Style>
-	<Style id="sn_electronics01">
+	<Style id="sn_spaceport-21">
 		<IconStyle>
-			<scale>0.8</scale>
+			<scale>0.5</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/electronics.png</href>
+				<href>http://localhost:8080/kml/mapiconscollection-industry-00fffb-default/missile-2.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -890,19 +783,85 @@
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<StyleMap id="msn_snack_bar22">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_snack_bar11</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_snack_bar1010</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_ylw-stars41">
+	<Style id="sh_ferry0">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/ferry.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_bus">
 		<IconStyle>
 			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/bus.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sn_bars">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/bars.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sh_ylw-stars000">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_ylw-stars001">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_police">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/police.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="sh_ylw-stars002">
+		<IconStyle>
+			<scale>0.945455</scale>
 			<Icon>
 				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-square.png</href>
 			</Icon>
@@ -914,19 +873,53 @@
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<StyleMap id="msn_music_rock20">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_music_rock1</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_music_rock3</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_rail0">
+	<Style id="sn_cabs">
 		<IconStyle>
 			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/cabs.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="sh_play0">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/play.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="sn_lighthouse-21">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_radar41">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_rail0">
+		<IconStyle>
+			<scale>0.945455</scale>
 			<Icon>
 				<href>http://localhost:8080/kml/rail.png</href>
 			</Icon>
@@ -940,28 +933,97 @@
 			<color>80ffffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="sh_snack_bar1010">
+	<Style id="sn_ylw-stars43">
 		<IconStyle>
-			<scale>0.945455</scale>
+			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/dollar.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_truck">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/truck.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	<StyleMap id="msn_radar20">
+	<Style id="sn_arts00">
+		<IconStyle>
+			<scale>0.9</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/arts.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_golf">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_radar4</styleUrl>
+			<styleUrl>#sn_golf</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_radar2000</styleUrl>
+			<styleUrl>#sh_golf</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_ylw-stars003">
+	<Style id="sh_snack_bar1011">
 		<IconStyle>
 			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_play1">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/play.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sh_snack_bar101">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/snack_bar.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_snack_bar1">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_ylw-stars42">
+		<IconStyle>
+			<scale>0.8</scale>
 			<Icon>
 				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-circle.png</href>
 			</Icon>
@@ -973,67 +1035,11 @@
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<Style id="sn_ylw-stars4">
+	<Style id="sh_info_circle000">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_snack_bar101">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/snack_bar.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_radar200">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<StyleMap id="msn_ylw-stars10">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_ylw-stars43</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_ylw-stars000</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_track">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/camera.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="s_ylw-pushpin_hl012">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/movies.png</href>
+				<href>http://localhost:8080/kml/airports.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -1054,135 +1060,25 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	<Style id="sn_play">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/play.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_horsebackriding000">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_horsebackriding000</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_horsebackriding2</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_bars">
+	<Style id="sh_radar2000">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/bars.png</href>
-			</Icon>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="ms_ylw-pushpin0">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_P</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_arts31">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_arts00</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_arts00</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_ferry0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/ferry.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_ylw-stars101">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_ylw-stars42</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_ylw-stars003</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_info_circle0">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_info_circle00</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_info_circle000</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_lighthouse-21">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
 			</Icon>
 			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
 		<ListStyle>
 			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<StyleMap id="msn_bars">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_bars</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_bars</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_ylw-stars100">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_ylw-stars41</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_ylw-stars002</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_cabs">
+	<Style id="s_ylw-pushpin03">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/cabs.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<Style id="sn_snack_bar11">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/dollar.png</href>
+				<href>http://localhost:8080/kml/firedept.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -1208,28 +1104,182 @@
 			<color>80ffffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="sh_ylw-stars000">
+	<Style id="s_ylw-pushpin_hl010">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond.png</href>
+				<href>http://localhost:8080/kml/homegardenbusiness.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="ms_ylw-pushpin0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_P</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_horsebackriding2">
+		<IconStyle>
+			<scale>0.945458</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/horsebackriding.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_electronics01">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/electronics.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sn_cabs01">
+		<IconStyle>
+			<scale>0.7</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/cabs.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_info_circle0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_info_circle00</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_info_circle000</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_horsebackriding000">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_horsebackriding000</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_horsebackriding2</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_radio-station-250">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radio-station-211</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radio-station-2400</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_electronics4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_electronics01</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_electronics1</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_ylw-stars40">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png</href>
 			</Icon>
 			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
 		<ListStyle>
 			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-diamond-lv.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<StyleMap id="msn_radar204">
+	<Style id="sh_laboratory02">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/blu-circle-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_cabs00">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#sn_radar43</styleUrl>
+			<styleUrl>#sn_cabs01</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#sh_radar2003</styleUrl>
+			<styleUrl>#sh_cabs00</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_radar200">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_info_circle">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/info_circle.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="ms_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_P0</styleUrl>
 		</Pair>
 	</StyleMap>
 	<StyleMap id="msn_hospitals00">
@@ -1242,167 +1292,6 @@
 			<styleUrl>#sh_hospitals00</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sn_radar43">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<StyleMap id="msn_golf">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_golf</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_golf</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_play">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_play0</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_play0</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_radar2002">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>80ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_truck1">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_truck</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_truck</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="s_ylw-pushpin03">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/firedept.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="s_ylw-pushpin_hl16">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/firedept.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_play0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/play.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_radio-station-250">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_radio-station-211</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_radio-station-2400</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_ylw-stars001">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_cabs">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/cabs.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<StyleMap id="msn_snack_bar220">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_snack_bar10</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_snack_bar101</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_lighthouse-21">
-		<IconStyle>
-			<scale>0.945458</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_P0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/P.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/P-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
 	<StyleMap id="msn_play0">
 		<Pair>
 			<key>normal</key>
@@ -1413,52 +1302,55 @@
 			<styleUrl>#sh_play1</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_play1">
+	<StyleMap id="msn_bars">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_bars</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_bars</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_radar4">
 		<IconStyle>
-			<scale>0.945455</scale>
+			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/play.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	<Style id="sh_ylw-stars002">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-square.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
 			</Icon>
 			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
 		<ListStyle>
 			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-square-lv.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href>
 			</ItemIcon>
 		</ListStyle>
 	</Style>
-	<Style id="sn_donut">
+	<Style id="sh_donut">
 		<IconStyle>
-			<scale>0.8</scale>
+			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href>
+				<href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
 			</Icon>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	<Style id="sn_arts00">
+	<Style id="sh_arts00">
 		<IconStyle>
-			<scale>0.9</scale>
+			<scale>1.06364</scale>
 			<Icon>
 				<href>http://localhost:8080/kml/arts.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	<Style id="sn_bars">
+	<Style id="sn_hospitals0">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/bars.png</href>
+				<href>http://localhost:8080/kml/hospitals.png</href>
 			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 		<LineStyle>
 			<color>ff0000ff</color>
@@ -1468,95 +1360,30 @@
 			<color>66ffffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="sh_radar2004">
+	<Style id="sh_bus0">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond.png</href>
+				<href>http://localhost:8080/kml/bus.png</href>
 			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
 	</Style>
-	<StyleMap id="msn_radar201">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_radar42</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_radar2001</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_ylw-stars103">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_ylw-stars4</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_ylw-stars00</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_radio-station-211">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sh_ylw-stars00">
+	<Style id="s_ylw-pushpin_hl16">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars.png</href>
+				<href>http://localhost:8080/kml/firedept.png</href>
 			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="sn_snack_bar1">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
-	</Style>
-	<Style id="s_ylw-pushpin_hl0">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
-			</Icon>
-			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
-		</IconStyle>
-		<ListStyle>
-			<ItemIcon>
-				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
-			</ItemIcon>
-		</ListStyle>
 	</Style>
 	<Style id="sn_info_circle00">
 		<IconStyle>
@@ -1573,6 +1400,175 @@
 		<PolyStyle>
 			<color>66ffffff</color>
 		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_radar20">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar4</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar2000</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_radar2004">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-diamond-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_music_rock1">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/arts.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl0">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_cabs">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/cabs.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_radar201">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar42</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar2001</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_P0">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/P.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/P-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sh_golf">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/golf.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="sh_ylw-stars00">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ltblu-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<Style id="sn_radio-station-211">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>
+			</Icon>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
+	</Style>
+	<StyleMap id="msn_truck1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_truck</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_truck</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_track">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/camera.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin50">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/movies.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>66ffffff</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_play">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_play0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_play0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_track">
+		<IconStyle>
+			<scale>0.945455</scale>
+			<Icon>
+				<href>http://localhost:8080/kml/camera.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
 	</Style>
 	<Style id="sn_radar44">
 		<IconStyle>
@@ -1595,41 +1591,11 @@
 			<color>80ffffff</color>
 		</PolyStyle>
 	</Style>
-	<StyleMap id="ms_ylw-pushpin">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#s_ylw-pushpin2</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_P0</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_radar202">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_radar44</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_radar2002</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="msn_cabs00">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_cabs01</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_cabs00</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sn_hospitals0">
+	<Style id="sn_rail0">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/hospitals.png</href>
+				<href>http://localhost:8080/kml/rail.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -1638,64 +1604,28 @@
 			<width>3</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>66ffffff</color>
+			<color>80ffffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="s_ylw-pushpin50">
+	<Style id="sn_radar40">
 		<IconStyle>
 			<scale>0.8</scale>
 			<Icon>
-				<href>http://localhost:8080/kml/movies.png</href>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href>
 			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+			<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
 		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
+		<ListStyle>
+			<ItemIcon>
+				<href>http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png</href>
+			</ItemIcon>
+		</ListStyle>
 	</Style>
-	<Style id="sh_info_circle000">
-		<IconStyle>
-			<scale>0.8</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/airports.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-		<LineStyle>
-			<color>ff0000ff</color>
-			<width>3</width>
-		</LineStyle>
-		<PolyStyle>
-			<color>66ffffff</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="msn_lighthouse-20">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#sn_lighthouse-21</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#sh_lighthouse-21</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="sh_donut">
+	<Style id="sh_snack_bar1010">
 		<IconStyle>
 			<scale>0.945455</scale>
 			<Icon>
-				<href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
-	<Style id="s_ylw-pushpin_hl010">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/homegardenbusiness.png</href>
+				<href>http://localhost:8080/kml/dollar.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -1710,14 +1640,86 @@
 			<styleUrl>#s_ylw-pushpin_hl0</styleUrl>
 		</Pair>
 	</StyleMap>
-	<Style id="sh_police">
-		<IconStyle>
-			<scale>0.945455</scale>
-			<Icon>
-				<href>http://localhost:8080/kml/police.png</href>
-			</Icon>
-		</IconStyle>
-	</Style>
+	<StyleMap id="msn_track">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_track</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_track</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_radar202">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar44</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar2002</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_snack_bar220">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_snack_bar10</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_snack_bar101</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_radar204">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_radar43</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_radar2003</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin1</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="m_ylw-pushpin32">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin03</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl16</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="m_ylw-pushpin121">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin50</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl012</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_info_circle1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_info_circle</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_info_circle</styleUrl>
+		</Pair>
+	</StyleMap>
 	<Folder>
 		<name>My Places</name>
 		<open>1</open>
@@ -7557,7 +7559,6 @@
 				</Folder>
 				<Folder>
 					<name>Landmarks</name>
-					<open>1</open>
 					<Placemark>
 						<name>80 Eire painted on ground</name>
 						<description><![CDATA[<a href="https://en.wikipedia.org/wiki/Malin_Head#Wartime_use">Wiki</a>]]></description>
