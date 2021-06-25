@@ -4,7 +4,7 @@ db: osm-server-db
 kosmtik: osm-server-kosmtik
 import: osm-server-import
 
-osm-server-maps: osm-server-db osm-server-core siteroot Dockerfile.osm-server-maps 
+osm-server-maps: osm-server-db osm-server-core $(shell find siteroot -type f | sed 's/ /\\ /g') Dockerfile.osm-server-maps 
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
@@ -27,8 +27,6 @@ osm-server-import: osm-server-core Dockerfile.osm-server-import
 osm-server-kosmtik: Dockerfile.osm-server-kosmtik
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
-
-siteroot: $(shell find siteroot -type f | sed 's/ /\\ /g')
 
 pgadmin: osm-server-db
 	docker compose build pgadmin
