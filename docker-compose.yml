@@ -49,7 +49,7 @@ services:
     #      - db
     env_file:
       - .env
-    command: --create
+    #command: --create
     networks:
       - my_network
   maps:
