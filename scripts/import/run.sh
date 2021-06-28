@@ -35,7 +35,7 @@ import_map_data() {
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf --append
+    sudo -u renderer osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
 
     # Create indexes
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
