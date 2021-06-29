@@ -37,20 +37,22 @@ import_map_data() {
     # Import data
     sudo -u renderer osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
 
-    # Create indexes
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
+    if [ -z "$1" ]; then
+        # Create indexes
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
 
-    # create rail_routes table and SP
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_rail_routes.psql
-    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_update_rail_routes.psql
+        # create rail_routes table and SP
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_rail_routes.psql
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_update_rail_routes.psql
 
-    #Import external data
-    mkdir -p /home/renderer/src
-    sudo chown -R renderer: /home/renderer/src
-    sudo -u renderer python3 /openstreetmap-carto/scripts/get-external-data.py -c /openstreetmap-carto/external-data.yml -D /openstreetmap-carto/data -H db
+        #Import external data
+        mkdir -p /home/renderer/src
+        sudo chown -R renderer: /home/renderer/src
+        sudo -u renderer python3 /openstreetmap-carto/scripts/get-external-data.py -c /openstreetmap-carto/external-data.yml -D /openstreetmap-carto/data -H db
 
-    # Register that data has changed for mod_tile caching purposes
-    touch /var/lib/mod_tile/planet-import-complete
+        # Register that data has changed for mod_tile caching purposes
+        touch /var/lib/mod_tile/planet-import-complete
+    fi
 }
 
 chown -R renderer /var/lib/mod_tile
