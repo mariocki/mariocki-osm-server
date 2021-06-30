@@ -9,3 +9,6 @@ osm-server-core
 osm-server-db
 osm-server-kosmtik
 osm-server-maps
+pgadmin
+pghero
+osm-server-import
