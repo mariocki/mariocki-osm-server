@@ -16,7 +16,7 @@ map.addControl(
 
 // Base Layers
 const osmBaseLayer = L.tileLayer("http://localhost:8080/tile/{z}/{x}/{y}.png", {
-    maxZoom: 18,
+    maxZoom: 20,
     attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
     id: "base",

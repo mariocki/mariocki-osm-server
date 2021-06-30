@@ -36,6 +36,8 @@ services:
     image: mariocki/osm-server-core:latest
     env_file:
       - .env
+    depends_on:
+      - build-stage
   import:
     build:
       context: .
@@ -45,8 +47,8 @@ services:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
-    #    depends_on:
-    #      - db
+    depends_on:
+      - db
     env_file:
       - .env
     #command: --create
@@ -61,8 +63,9 @@ services:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ~/osm-maps/munin:/var/lib/munin
       - ./openstreetmap-carto:/openstreetmap-carto
-    #    depends_on:
-    #      - db
+    depends_on:
+      - core
+      - db
     ports:
       - "8080:80"
       - "3000:3000"
@@ -72,8 +75,8 @@ services:
       - my_network
   pghero:
     image: ankane/pghero
-    #    depends_on:
-    #      - db
+    depends_on:
+      - db
     ports:
       - "8081:8080"
     env_file:
@@ -88,6 +91,8 @@ services:
       - .env
     networks:
       - my_network
+    depends_on:
+      - db
   kosmtik:
     image: mariocki/osm-server-kosmtik:latest
     build:
@@ -96,8 +101,8 @@ services:
     volumes:
       - ~/osm-maps/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
-    #    depends_on:
-    #      - db
+    depends_on:
+      - db
     ports:
       - "6789:6789"
     env_file:
