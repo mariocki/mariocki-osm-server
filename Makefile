@@ -8,11 +8,11 @@ db: osm-server-db
 kosmtik: osm-server-kosmtik
 import: osm-server-import
 
-osm-server-maps: osm-server-db osm-server-core $(shell find siteroot -type f | sed 's/ /\\ /g') $(shell find scripts/maps -type f | sed 's/ /\\ /g') $(shell find configs/maps -type f | sed 's/ /\\ /g') Dockerfile.osm-server-maps 
+osm-server-maps: osm-server-db osm-server-core $(shell find siteroot scripts/maps configs/maps -type f | sed 's/ /\\ /g') Dockerfile.osm-server-maps 
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
-osm-server-db: Dockerfile.osm-server-db $(shell find scripts/db -type f | sed 's/ /\\ /g')
+osm-server-db: Dockerfile.osm-server-db $(shell find patches scripts/db configs/db -type f | sed 's/ /\\ /g')
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
@@ -28,7 +28,7 @@ osm-server-import: osm-server-core Dockerfile.osm-server-import $(shell find scr
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
-osm-server-kosmtik: Dockerfile.osm-server-kosmtik $(shell find scripts/kosmtik -type f | sed 's/ /\\ /g') $(shell find configs/kosmtik -type f | sed 's/ /\\ /g')
+osm-server-kosmtik: Dockerfile.osm-server-kosmtik $(shell find patches scripts/kosmtik configs/kosmtik -type f | sed 's/ /\\ /g')
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 

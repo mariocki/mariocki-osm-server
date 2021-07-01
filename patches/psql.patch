@@ -1,9 +1,10 @@
 --- docker-entrypoint.sh-orig   2021-05-30 01:52:31.090000000 +0000
 +++ docker-entrypoint.sh        2021-05-30 01:53:01.180000000 +0000
-@@ -322,6 +322,8 @@
+@@ -322,6 +322,9 @@
         exec "$@"
  }
 
++gosu root rm -f /var/run/munin/munin-node.pid
 +gosu root /etc/init.d/munin-node start
 +
  if ! _is_sourced; then
