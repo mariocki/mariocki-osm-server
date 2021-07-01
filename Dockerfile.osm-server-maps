@@ -87,7 +87,7 @@ RUN chmod a+x /usr/local/bin/trim_osc.py
 # https://raw.githubusercontent.com/alx77/render_list_geo.pl/master/render_list_geo.pl
 COPY ./scripts/maps/*.pl /usr/local/bin/
 RUN chmod a+x /usr/local/bin/*.pl
-RUN echo "* * 1 * *   renderer /usr/local/bin/render_list_geo.pl -a -f -z 12 -Z 12 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt\n" >> /etc/crontab
+RUN echo "* * 1 * *   flock -n -F /tmp/render.lockfile -c '/usr/local/bin/render_list_geo.pl -a -f -z 12 -Z 12 -x -9.5 -X 2.72 -y 49.39 -Y 61.26 -m ajt'\n" >> /etc/crontab
 
 # Copy site
 ADD siteroot /var/www/html/
