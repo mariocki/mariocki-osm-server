@@ -122,7 +122,7 @@ UK
 
 London 51.5074/-0.1278
 
-`render_list_geo.pl -f -z 14 -Z 18 -x -7.4 -X 0.57 -y 51.29 -Y 51.8 -m ajt`
+`render_list_geo.pl -f -z 14 -Z 18 -x -0.54 -X 0.31 -y 51.34 -Y 51.67 -m ajt`
 
 manchester 53.4808/-2.2426
 
@@ -137,12 +137,14 @@ docker exec -it mariocki-osm-server_maps_1 /bin/bash
 and run one of the lines shown below which will execute the command.
 You can run `expire_list_geo.pl -h` to view all the options.
 
-manchester 53.4808/-2.2426
+manchester 
 `expire_list_geo.pl -x -2.5 -X -1.99 -y 53.36 -Y 53.61 -z 13 -Z 18`
 
 ### Handy bbox coords
 `-1219323.4752,6631065.0778,-598043.3093,7444355.0587` Eire
+
 `-570831.7272,7157257.5805,-449143.9782,7271913.1229` IOM
+
 `-307582.6018,6291684.6722,-218304.1528,6419487.3835` channel islands
 	 
 ## Importing contour lines
