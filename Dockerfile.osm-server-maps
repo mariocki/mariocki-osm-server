@@ -1,4 +1,3 @@
-FROM mariocki/osm-server-build-stage:latest AS build-stage
 FROM mariocki/osm-server-core:latest 
 
 RUN apt-get install -y --no-install-recommends \
@@ -9,10 +8,6 @@ RUN apt-get install -y --no-install-recommends \
   libcgi-fast-perl \
   munin \
   renderd 
-
-# Install latest mod_tile
-#COPY --from=build-stage /home/build/src/mod_tile/mod_tile-git.deb /
-#RUN dpkg -i --force-overwrite /mod_tile-git.deb
 
 RUN apt-get clean autoclean -y \
   && apt-get autoremove --yes \

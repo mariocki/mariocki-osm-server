@@ -20,15 +20,6 @@ services:
     command: "-c config_file=/etc/postgresql/postgresql.conf"
     networks:
       - my_network
-  build-stage:
-    build:
-      context: .
-      dockerfile: Dockerfile.osm-server-build-stage
-    image: mariocki/osm-server-build-stage:latest
-    env_file:
-      - .env
-    networks:
-      - my_network
   core:
     build:
       context: .

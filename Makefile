@@ -16,11 +16,7 @@ osm-server-db: Dockerfile.osm-server-db $(shell find patches scripts/db configs/
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
-osm-server-core: osm-server-build-stage Dockerfile.osm-server-core $(shell find configs/core -type f | sed 's/ /\\ /g')
-	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
-	touch $@
-
-osm-server-build-stage: Dockerfile.osm-server-build-stage
+osm-server-core: Dockerfile.osm-server-core $(shell find configs/core -type f | sed 's/ /\\ /g')
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 

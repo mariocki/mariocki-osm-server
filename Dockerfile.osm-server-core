@@ -1,4 +1,57 @@
-FROM mariocki/osm-server-build-stage:latest AS build-stage
+FROM debian:testing-slim as build-stage
+
+# Set up build user
+RUN adduser --disabled-password --gecos "" build
+
+RUN apt-get update
+RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+
+RUN apt-get install -y --no-install-recommends \
+  build-essential \
+  git-core \
+  cmake
+
+RUN apt-get install -y --no-install-recommends \
+  libboost-dev \
+  libboost-filesystem-dev \
+  libboost-system-dev \
+  libbz2-dev \
+  libexpat1-dev \
+  liblua5.3-dev \
+  libluajit-5.1-dev \
+  libpq-dev \
+  libproj-dev \
+  lua5.3 \
+  osmium-tool \
+  pandoc \
+  zlib1g-dev
+
+WORKDIR /home/build/src
+
+# Install latest osm2pgsql
+RUN git clone -b master https://github.com/openstreetmap/osm2pgsql.git --depth 1 
+
+WORKDIR /home/build/src/osm2pgsql
+
+RUN mkdir -p build/osm2pgsql-git/DEBIAN 
+
+WORKDIR /home/build/src/osm2pgsql/build
+
+RUN cmake -D WITH_LUAJIT=ON .. \
+  && make \
+  && make DESTDIR=./osm2pgsql-git install 
+
+RUN echo "Package:osm2pgsql-git" > osm2pgsql-git/DEBIAN/control
+RUN echo "Version: 1.0" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Section: base" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Priority: optional" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Architecture: amd64" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Depends: liblua5.3-0, libpq5, zlib1g (>= 1:1.2.6), libexpat1 (>= 2.0.1), libbz2-1.0, libproj19 (>= 4.8.0), libluajit-5.1-2, libboost-filesystem1.74.0 (>= 1.74.0),libgcc-s1 (>= 3.0)" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Maintainer: Your Name <you@email.com>" >> osm2pgsql-git/DEBIAN/control
+RUN echo "Description: Hello World" >> osm2pgsql-git/DEBIAN/control
+
+RUN dpkg-deb --build osm2pgsql-git
+
 FROM debian:testing-slim
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
