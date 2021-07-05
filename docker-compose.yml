@@ -27,8 +27,6 @@ services:
     image: mariocki/osm-server-core:latest
     env_file:
       - .env
-    depends_on:
-      - build-stage
   import:
     build:
       context: .
