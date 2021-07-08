@@ -5,8 +5,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Set up renderer user
 RUN adduser --disabled-password --gecos "" renderer
 
-RUN apt-get update
-RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl
+RUN apt-get update && apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl
 
 #install nodejs
 RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash - \

@@ -1,6 +1,6 @@
 FROM mariocki/osm-server-core:latest 
 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   apache2 \
   apache2-utils \
   libapache2-mod-fcgid \

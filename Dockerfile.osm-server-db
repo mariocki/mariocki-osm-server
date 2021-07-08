@@ -1,8 +1,6 @@
 FROM postgis/postgis:13-master
 
-RUN apt-get update
-
-RUN apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl 
+RUN apt-get update && apt-get install -y screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl
 
 RUN apt-get install -y --no-install-recommends \
   cron \
