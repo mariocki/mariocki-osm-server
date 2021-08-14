@@ -17,6 +17,9 @@ RUN npm install -g browserify typescript
 
 COPY configs/maps/fonts/* /usr/share/fonts/truetype/
 
+# Install python libraries
+RUN pip3 install psycopg2
+
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Configure Apache
@@ -70,8 +73,8 @@ COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetm
 COPY ./scripts/maps/osmosis-db_replag /usr/local/bin/
 RUN chmod a+x /usr/local/bin/osmosis-db_replag\
   && mkdir -p /var/log/tiles \
-  && chmod -R a+rw /var/log/tiles 
-#  && echo "*/7  *    * * *   renderer    /usr/local/bin/openstreetmap-tiles-update-expire | logger\n" >> /etc/crontab
+  && chmod -R a+rw /var/log/tiles \
+  && echo "*/7  *    * * *   renderer    /usr/local/bin/openstreetmap-tiles-update-expire | logger\n" >> /etc/crontab
 
 # Install trim_osc.py helper script
 # https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py
