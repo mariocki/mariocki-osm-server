@@ -21,7 +21,7 @@ import_map_data() {
     cd /openstreetmap-carto
     carto project.mml >mapnik.xml 2>/dev/null
 
-    if [ "${1:---append}" != "--append"]; then
+    if [ "${1:---append}" != '--append' ]; then
         # determine and set osmosis_replication_timestamp (for consecutive updates)
         osmium fileinfo /data/data.osm.pbf >/var/lib/mod_tile/data.osm.pbf.info
         osmium fileinfo /data/data.osm.pbf | grep 'osmosis_replication_timestamp=' | cut -b35-44 >/var/lib/mod_tile/replication_timestamp.txt
@@ -39,7 +39,7 @@ import_map_data() {
     # Import data
     sudo -u renderer osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style /data/data.osm.pbf ${1:---append}
 
-    if [ "${1:---append}" != "--append"]; then
+    if [ "${1:---append}" != '--append' ]; then
         # Create indexes
         psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
 
