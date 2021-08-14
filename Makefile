@@ -37,6 +37,9 @@ pghero: osm-server-db
 	touch $@
 
 clean:
+	rm -f osm-server-maps osm-server-kosmtik osm-server-import osm-server-db osm-server-core pgadmin pghero
+
+fullclean:
 	docker system prune -f
 	
 carto: $(shell find openstreetmap-carto -type f | sed 's/ /\\ /g')
