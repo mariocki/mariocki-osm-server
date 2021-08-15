@@ -144,4 +144,4 @@ os.rename(inputFileFullPathandName, inputFilenameAndPath + ".orig")
 os.rename(inputFilenameAndPath + ".new", inputFileFullPathandName)
 
 
-# sudo -u ${POSTGRES_USER} osm2pgsql -a --slim -d ${POSTGRES_DB} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style -r xml /var/lib/mod_tile/myChanges/<<file>>
+# osm2pgsql -a --slim -U ${POSTGRES_USER} -d ${POSTGRES_DB} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style xml /var/lib/mod_tile/myChanges/<<file>>.osm
