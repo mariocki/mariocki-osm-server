@@ -11,6 +11,8 @@ if  numArgs != 2:
   print("Import file not specified.")
   exit()
 
+inputFileFullPathandName = sys.argv[1]
+inputFilenameAndPath = os.path.splitext(inputFileFullPathandName)[0]
 nextNodeId = 0
 nextWayId = 0;
 nextRelsId = 0;
@@ -46,7 +48,7 @@ print("nodes=", nextNodeId)
 print("ways=", nextWayId)
 print("rels=", nextRelsId)
 
-osmDoc = ET.parse(sys.argv[1])
+osmDoc = ET.parse(inputFileFullPathandName)
 
 nodesToProcess = []
 
@@ -136,6 +138,10 @@ def sortchildrenby(parent):
     parent[:] = sorted(parent, key=lambda child: sorter(child))
 
 sortchildrenby(osmDoc.getroot())
-osmDoc.write(sys.argv[1] + ".new")
+osmDoc.write(inputFilenameAndPath + ".new")
 
-# sudo -u renderer osm2pgsql -a --slim -d gis -H db -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style -r xml /var/lib/mod_tile/MyChanges/<<file>>
+os.rename(inputFileFullPathandName, inputFilenameAndPath + ".orig")
+os.rename(inputFilenameAndPath + ".new", inputFileFullPathandName)
+
+
+# sudo -u ${POSTGRES_USER} osm2pgsql -a --slim -d ${POSTGRES_DB} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style -r xml /var/lib/mod_tile/myChanges/<<file>>
