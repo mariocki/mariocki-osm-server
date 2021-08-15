@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 import xml.etree.ElementTree as ET
 import psycopg2
@@ -14,7 +15,7 @@ nextNodeId = 0
 nextWayId = 0;
 nextRelsId = 0;
 
-con = psycopg2.connect(database="gis", user="renderer", password="renderer", host="localhost", port="5432")
+con = psycopg2.connect(database=os.environ['POSTGRES_DB'], user=os.environ['POSTGRES_USER'], password=os.environ['POSTGRES_PASSWORD'], host=os.environ['PGHOST'], port="5432")
 cur = con.cursor()
 cur.execute("select max(id) from planet_osm_nodes;")
 rows = cur.fetchall()
@@ -136,3 +137,5 @@ def sortchildrenby(parent):
 
 sortchildrenby(osmDoc.getroot())
 osmDoc.write(sys.argv[1] + ".new")
+
+# sudo -u renderer osm2pgsql -a --slim -d gis -H db -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style -r xml /var/lib/mod_tile/MyChanges/<<file>>
