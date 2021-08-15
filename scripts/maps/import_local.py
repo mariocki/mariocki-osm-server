@@ -65,17 +65,14 @@ for nodeToProcess in nodesToProcess:
   path = ".//node[@id='" + str(nodeToProcess) + "']"
   for node in osmDoc.findall(path):
     node.set('id', str(nextNodeId))
-    #print("N    %s" % node)
 
   path = ".//way/nd[@ref='" + str(nodeToProcess) + "']"
   for way in osmDoc.findall(path):
     way.set('ref', str(nextNodeId))
-    #print("W    %s" % way)
 
   path = ".//relation/member[@type='node'][@ref='" + str(nodeToProcess) + "']"
   for rel in osmDoc.findall(path):
     rel.set('ref', str(nextNodeId))
-    #print("R    %s" % rel)
 
   nextNodeId = nextNodeId + 1
 
@@ -91,16 +88,13 @@ print("%s ways to process" % len(waysToProcess))
 for wayToProcess in waysToProcess:
   print("Processing way " + str(wayToProcess) + " to " + str(nextWayId))
 
-
   path = ".//way[@id='" + str(wayToProcess) + "']"
   for way in osmDoc.findall(path):
     way.set('id', str(nextWayId))
-    #print("W    %s" % way)
 
   path = ".//relation/member[@type='way'][@ref='" + str(wayToProcess) + "']"
   for rel in osmDoc.findall(path):
     rel.set('ref', str(nextWayId))
-    #print("R    %s" % rel)
 
   nextWayId = nextWayId + 1
 
@@ -119,10 +113,8 @@ for relToProcess in relsToProcess:
   path = ".//relation[@id='" + str(wayToProcess) + "']"
   for rel in osmDoc.findall(path):
     rel.set('id', str(nextRelsId))
-    #print("R    %s" % rel)
 
   nextRelsId = nextRelsId + 1
-
 
 def sorter(elem):
   if elem.tag == 'node':
@@ -137,11 +129,12 @@ def sorter(elem):
 def sortchildrenby(parent):
     parent[:] = sorted(parent, key=lambda child: sorter(child))
 
-sortchildrenby(osmDoc.getroot())
-osmDoc.write(inputFilenameAndPath + ".new")
+if (len(nodesToProcess) + len(waysToProcess) + len(relsToProcess)) > 0:
+  sortchildrenby(osmDoc.getroot())
+  osmDoc.write(inputFilenameAndPath + ".new")
 
-os.rename(inputFileFullPathandName, inputFilenameAndPath + ".orig")
-os.rename(inputFilenameAndPath + ".new", inputFileFullPathandName)
+  os.rename(inputFileFullPathandName, inputFilenameAndPath + ".orig")
+  os.rename(inputFilenameAndPath + ".new", inputFileFullPathandName)
 
 
 # osm2pgsql -a --slim -U ${POSTGRES_USER} -d ${POSTGRES_DB} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style xml /var/lib/mod_tile/myChanges/<<file>>.osm
