@@ -67,12 +67,12 @@ services:
     image: mariocki/osm-server-web-build:latest
     build:
       context: openstreetmap-website/
-      dockerfile: openstreetmap-website/Dockerfile
+      dockerfile: Dockerfile
   web:
     image: mariocki/osm-server-web:latest
     build:
       context: .
-      dockerfile: Docker.osm-server-web
+      dockerfile: Dockerfile.osm-server-web
     volumes:
       - /mnt/data/osm/traces:/mnt/data/osm/traces
       - /mnt/data/osm/images:/mnt/data/images
