@@ -137,8 +137,6 @@ else
         m_error "Osmosis error"
     fi
 
-    echo $(zgrep -cie mariocki $CHANGE_FILE) "changes by me out of" $(zgrep -cie changeset $CHANGE_FILE) | logger
-
     if [ -f $TRIM_POLY_FILE ]; then
         m_ok "filtering diff"
         if ! $TRIM_BIN $TRIM_OPTIONS $TRIM_REGION_OPTIONS -z $CHANGE_FILE $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then

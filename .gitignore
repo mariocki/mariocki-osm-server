@@ -12,3 +12,5 @@ osm-server-maps
 pgadmin
 pghero
 osm-server-import
+osm-server-web
+osm-server-web-build

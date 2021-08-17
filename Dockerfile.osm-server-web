@@ -1,0 +1,12 @@
+FROM mariocki/osm-server-web-build:latest
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends screen procps vim sudo wget gnupg2 apt-transport-https ca-certificates curl gnupg gnupg1 gnupg2 htop
+
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc > pgsql.key && apt-key add pgsql.key
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+RUN apt-get update \
+  && apt-get install --no-install-recommends -y \
+  postgresql-client-13
+

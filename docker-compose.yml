@@ -34,7 +34,7 @@ services:
     image: mariocki/osm-server-import:latest
     volumes:
       - /mnt/data/osm-maps/mod_tile:/var/lib/mod_tile
-      - /mnt/data/osm-maps/data:/data
+      - /mnt/data/osm/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
@@ -51,7 +51,7 @@ services:
     volumes:
       - /mnt/data/osm-maps/mod_tile:/var/lib/mod_tile
       - /mnt/data/osm-maps/munin:/var/lib/munin
-      - /mnt/data/osm-maps/data:/data
+      - /mnt/data/osm/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - core
@@ -63,6 +63,29 @@ services:
       - .env
     networks:
       - my_network
+  web-build:
+    image: mariocki/osm-server-web-build:latest
+    build:
+      context: openstreetmap-website/
+      dockerfile: openstreetmap-website/Dockerfile
+  web:
+    image: mariocki/osm-server-web:latest
+    build:
+      context: .
+      dockerfile: Docker.osm-server-web
+    volumes:
+      - /mnt/data/osm/traces:/mnt/data/osm/traces
+      - /mnt/data/osm/images:/mnt/data/images
+      - /mnt/data/osm/data:/mnt/data/data
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env      
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    networks:
+      - my_network    
+    depends_on:
+      - db
   pghero:
     image: ankane/pghero
     depends_on:
