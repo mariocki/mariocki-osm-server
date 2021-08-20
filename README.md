@@ -43,6 +43,12 @@ AZURE_CLIENT_ID=
 AZURE_TENANT=
 AZURE_SECRET=
 AZURE_REDIRECT_URL=
+
+# openstreetmap-web
+RAILS_MAX_THREADS=4
+OSM_DB=openstreetmap
+OSM_USER=openstreetmap
+
 ```
 Most of these values you shouldn't need to change apart from maybe TZ and THREADS. If you do not have an Azure Maps subscription just leave it blank.
 
@@ -68,7 +74,7 @@ curl https://download.geofabrik.de/europe/liechtenstein.poly -o ~/osm-maps/data/
 
 Then run this, this will create a postgis database server and start importing the data into the database.
 ```
-docker-compose up --build import
+docker compose up --build import
 ```
 
 [Optional]
@@ -81,32 +87,32 @@ psql -U renderer -h localhost -d gis -c "CREATE USER postgres SUPERUSER;"
 ### Viewing your maps
 To view your maps run this and open a browser at http://localhost:8080/.
 ```
-docker-compose up -d maps
+docker compose up -d maps
 ```
 
 ### Monitoring the database
 [Optional]
 If you want to monitor the database then run this and open a browser at http://localhost:8081/.
 ```
-docker-compose up -d pghero
+docker compose up -d pghero
 ```
 
 ### Editing the map style
 [Optional]
 If you want to start editing the carto styles then run this and open a browser at http://localhost:6789/openstreetmap-carto/#4/0.00/0.00
 ```
-docker-compose up kosmtik
+docker compose up kosmtik
 ```
 More information about Kosmtik can be found here https://github.com/kosmtik/kosmtik
 
 ## Adding more countries to your database
-Edit docker-compose.yml and remove the following line: `    command: --create`.
-And then repeat the instructions under "Importing Data"
+~~Edit docker-compose.yml and remove the following line: `    command: --create`.
+And then repeat the instructions under "Importing Data"~~
 
 ## Bulk rendering
 Connect to the map server:
 ```
-docker-compose up -d maps
+docker compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 
@@ -131,7 +137,7 @@ manchester 53.4808/-2.2426
 ## Bulk Expiry
 Connect to the maps server:
 ```
-docker-compose up -d maps
+docker compose up -d maps
 docker exec -it mariocki-osm-server_maps_1 /bin/bash
 ```
 and run one of the lines shown below which will execute the command.
@@ -159,7 +165,7 @@ mv ~/osm-maps/data/data.poly ~/osm-maps/data/data-old.poly
 
 start and connect to the import server:
 ```
-docker-compose up -d import
+docker compose up -d import
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
@@ -225,7 +231,7 @@ Assuming you have followed the steps above for contours...
 
 start and connect to the import server if not already done:
 ```
-docker-compose up -d import
+docker compose up -d import
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
@@ -251,6 +257,18 @@ edit `openstreetmap-carto/style/landcover.mss` and add the following lines just 
   raster-scaling: bilinear;
 }
 ```
+
+## Updating via JOSM to local API
+Run these in pgadmin to ensure we dont get any clashes in id's:
+```
+SELECT setval('changesets_id_seq', 1000000000, FALSE);
+SELECT setval('current_nodes_id_seq', 99000000000, FALSE);
+SELECT setval('current_ways_id_seq', 99000000000, FALSE);
+SELECT setval('current_relations_id_seq', 99000000000, FALSE);
+
+```
+
+Then follow instructions as per https://github.com/openstreetmap/openstreetmap-website/blob/master/CONFIGURE.md to create a user and configure OAuth.
 
 ## References
 
