@@ -148,6 +148,7 @@ manchester
 `-307582.6018,6291684.6722,-218304.1528,6419487.3835` channel islands
 	 
 ## Importing contour lines
+## Using SRTM contour data
 :warning: This can take quite a long time to run. :warning:
 
 Make sure you don't have any datafiles in the data folder (or else it'll try and re-import them :smile:):
@@ -202,7 +203,20 @@ done
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
 
 ### Importing contours from Ordnance Survey (GB only)
-for a in *.shp; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h localhost -U renderer -d gis; done
+Download from https://osdatahub.os.uk/downloads/open/Terrain50
+Extract the zip file into a folder. Then exctract all the subfolders...
+```
+find . -name "*.zip" | while read filename; do unzip -o -d "`dirname "$filename"`" "$filename"; done;
+```
+
+Create the table and import the data.
+```
+## pick a random SHP file from one of the sub directories ... doesn't matter which.
+shp2pgsql -p -I -g way -s 27700:3857 data/hp/HP40_line.shp contour_os | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+
+
+for a in `find . -name *.shp`; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}; done
+```
 
 ### Hillshading
 Refs:

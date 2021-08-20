@@ -3,16 +3,27 @@
 # Perform all actions as $POSTGRES_USER
 export PGUSER="$POSTGRES_USER"
 
+"${psql[@]}" --dbname="postgres" <<-EOSQL3
+  CREATE USER renderer SUPERUSER PASSWORD 'renderer';
+  createdb -E UTF8 -O renderer $POSTGRES_DB
+  GRANT ALL PRIVILEGES ON DATABASE gis TO renderer;
+
+  CREATE USER openstreetmap SUPERUSER PASSWORD 'openstreetmap';
+  createdb -E UTF8 -O renderer $OSM_DB
+  GRANT ALL PRIVILEGES ON DATABASE openstreetmap TO openstreetmap;
+EOSQL3
+
 "${psql[@]}" --dbname="$POSTGRES_DB" <<-EOSQL
   CREATE EXTENSION IF NOT EXISTS hstore;
+  CREATE EXTENSION IF NOT EXISTS postgis;
+
+  ALTER TABLE geometry_columns OWNER TO renderer;
+  ALTER TABLE spatial_ref_sys OWNER TO renderer;
 EOSQL
 
 "${psql[@]}" --dbname="$OSM_DB" <<-EOSQL2
   CREATE EXTENSION IF NOT EXISTS btree_gist;
   CREATE EXTENSION IF NOT EXISTS hstore;
-
-  CREATE USER openstreetmap SUPERUSER PASSWORD 'openstreetmap';
-  GRANT ALL PRIVILEGES ON DATABASE openstreetmap TO openstreetmap;
 
   --------------------------------------------------------------------------------
   -- SQL versions of the C database functions.
