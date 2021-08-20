@@ -202,7 +202,7 @@ done
 
 And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
 
-### Importing contours from Ordnance Survey (GB only)
+### Using Ordnance Survey data (GB only)
 Download from https://osdatahub.os.uk/downloads/open/Terrain50
 Extract the zip file into a folder. Then exctract all the subfolders...
 ```
