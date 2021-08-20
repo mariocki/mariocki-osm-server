@@ -10,3 +10,8 @@ RUN apt-get update \
   && apt-get install --no-install-recommends -y \
   postgresql-client-13
 
+# Start running
+COPY ./scripts/web/run.sh /
+RUN chmod +x /run.sh
+ENTRYPOINT ["/run.sh"]
+CMD []  

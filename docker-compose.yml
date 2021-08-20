@@ -77,7 +77,8 @@ services:
       - ./openstreetmap-website/:/app
       # Prevent these directories from mounting so they're not shared between host OS and Docker
       - /app/node_modules/
-      - /app/tmp/      
+      - /app/tmp/
+      # main data folders
       - /mnt/data/osm/traces:/mnt/data/osm/traces
       - /mnt/data/osm/images:/mnt/data/images
       - /mnt/data/osm/data:/mnt/data/data
@@ -85,7 +86,6 @@ services:
       - "3001:3000"
     env_file:
       - .env      
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
     networks:
       - my_network    
     depends_on:
