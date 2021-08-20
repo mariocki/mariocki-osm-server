@@ -3,6 +3,6 @@
 set -x
 
 cd /app
-bundle exec rails dev:cache
+touch tmp/caching-dev.txt
 bundle exec rails s -p 3000 -b '0.0.0.0'
 exit 0
