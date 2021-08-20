@@ -12,7 +12,7 @@ services:
     image: mariocki/osm-server-db:latest
     shm_size: "1gb"
     volumes:
-      - /mnt/data/osm-maps/gis:/var/lib/postgresql/data
+      - /mnt/data/osm/gis:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     env_file:
@@ -33,14 +33,14 @@ services:
       dockerfile: Dockerfile.osm-server-import
     image: mariocki/osm-server-import:latest
     volumes:
-      - /mnt/data/osm-maps/mod_tile:/var/lib/mod_tile
+      - /mnt/data/osm/mod_tile:/var/lib/mod_tile
       - /mnt/data/osm/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
     env_file:
       - .env
-    #command: --create
+    #command: --append
     networks:
       - my_network
   maps:
@@ -49,8 +49,8 @@ services:
       context: .
       dockerfile: Dockerfile.osm-server-maps
     volumes:
-      - /mnt/data/osm-maps/mod_tile:/var/lib/mod_tile
-      - /mnt/data/osm-maps/munin:/var/lib/munin
+      - /mnt/data/osm/mod_tile:/var/lib/mod_tile
+      - /mnt/data/osm/munin:/var/lib/munin
       - /mnt/data/osm/data:/data
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
@@ -74,6 +74,10 @@ services:
       context: .
       dockerfile: Dockerfile.osm-server-web
     volumes:
+      - ./openstreetmap-website/:/app
+      # Prevent these directories from mounting so they're not shared between host OS and Docker
+      - /app/node_modules/
+      - /app/tmp/      
       - /mnt/data/osm/traces:/mnt/data/osm/traces
       - /mnt/data/osm/images:/mnt/data/images
       - /mnt/data/osm/data:/mnt/data/data
@@ -98,6 +102,9 @@ services:
       - my_network
   pgadmin:
     image: dpage/pgadmin4:latest
+    user: pgadmin:1000
+    volumes:
+      - /mnt/data/osm/pgadmin:/var/lib/pgadmin
     ports:
       - "8082:80"
     env_file:
@@ -112,7 +119,7 @@ services:
       context: .
       dockerfile: Dockerfile.osm-server-kosmtik
     volumes:
-      - /mnt/data/osm-maps/mod_tile:/var/lib/mod_tile
+      - /mnt/data/osm/mod_tile:/var/lib/mod_tile
       - ./openstreetmap-carto:/openstreetmap-carto
     depends_on:
       - db
