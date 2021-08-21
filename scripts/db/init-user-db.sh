@@ -53,7 +53,7 @@ EOSQL3
   inner join way_tags wt on wt.way_id = _.way_id and wt.version = _.version
   where
       rank = 1
-  and wt.k in ('name', 'railway', 'usage', 'abandoned:railway', 'service', 'razed:railway', 'disused:railway')
+  and wt.k in ('name', 'railway', 'usage', 'abandoned:railway', 'service', 'razed:railway', 'disused:railway', 'historical:railway', 'historic:railway')
   ON CONFLICT DO NOTHING
   $BODY$;
 EOSQL
