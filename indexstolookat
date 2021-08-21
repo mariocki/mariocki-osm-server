@@ -1,6 +1,14 @@
-psql -U renderer -d gis -h 127.0.0.1 -c "select mean_exec_time, query from pg_stat_statements where query not like '%analyze%' and query not like '%explain%' and query not like '%ANALYZE%' and query not like '%EXPLAIN%' and calls * mean_exec_time > 30000 order by mean_exec_time DESC;" >a.csv
 
-landcover_low_zoom
-text_poly_low_zoom
-roads_low_zoom
-roads_casing_sql
+--insert into way_tags (way_id, k, v, version)
+select
+    w.id,
+    wt.k,
+    wt.v,
+    (select max(version) from ways as w2 where w2.way_id = w.way_id)
+from
+    way_tags as wt
+inner join mytagchanges as mtc on wt.way_id = mtc.way_id and wt.version > mtc.version
+inner join ways as w on wt.way_id = w.way_id and wt.version = w.version
+inner join changesets as c1 on w.changeset_id = c1.id and c1.created_at > '2021-08-15' and c1.user_id <> 2
+where
+    wt.way_id < 99000000000
