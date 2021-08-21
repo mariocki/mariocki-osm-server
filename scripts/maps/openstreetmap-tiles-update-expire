@@ -126,6 +126,8 @@ else
         exit 4
     fi
 
+    psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'CALL public.extractmychanges();'
+
     seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
     old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
 

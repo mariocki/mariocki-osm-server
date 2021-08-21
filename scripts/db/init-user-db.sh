@@ -19,6 +19,43 @@ EOSQL3
 
   ALTER TABLE geometry_columns OWNER TO renderer;
   ALTER TABLE spatial_ref_sys OWNER TO renderer;
+
+  CREATE TABLE IF NOT EXISTS public.mytagchanges
+  (
+      way_id bigint,
+      version bigint,
+      k character varying COLLATE pg_catalog."default",
+      v character varying COLLATE pg_catalog."default"
+  )
+
+  TABLESPACE pg_default;
+
+  ALTER TABLE public.mytagchanges
+      OWNER to renderer;
+
+  CREATE OR REPLACE PROCEDURE public.extractmychanges(
+    )
+  LANGUAGE 'sql'
+  AS $BODY$
+  INSERT INTO MyTagChanges 
+  select _.way_id, _.version, wt.k, wt.v
+  from (
+      select
+          w1.way_id,
+          w1.version,
+          rank() OVER (partition by w1.way_id ORDER BY w1.timestamp DESC) as rank
+      from
+          ways as w1
+      inner join changesets as c1 on w1.changeset_id = c1.id and c1.created_at > '2021-08-15'
+      where 
+          c1.user_id = 2
+  ) _
+  inner join way_tags wt on wt.way_id = _.way_id and wt.version = _.version
+  where
+      rank = 1
+  and wt.k in ('name', 'railway', 'usage', 'abandoned:railway', 'service', 'razed:railway', 'disused:railway')
+  ON CONFLICT DO NOTHING
+  $BODY$;
 EOSQL
 
 "${psql[@]}" --dbname="$OSM_DB" <<-EOSQL2
