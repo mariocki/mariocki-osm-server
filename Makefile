@@ -37,11 +37,11 @@ osm-server-kosmtik: Dockerfile.osm-server-kosmtik $(shell find patches scripts/k
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
-pgadmin: osm-server-db
+pgadmin: 
 	docker compose build pgadmin
 	touch $@
 
-pghero: osm-server-db
+pghero: 
 	docker compose build pghero
 	touch $@
 
