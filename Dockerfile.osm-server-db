@@ -20,6 +20,7 @@ RUN cd /usr/local/bin \
   && patch < /psql.patch
 
 COPY ./scripts/db/init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh
+COPY ./scripts/db/shadowtables.pgsql /docker-entrypoint-initdb.d/shadowtables.pgsql
 
 COPY ./configs/db/munin-node.conf /etc/munin/munin-node.conf
 COPY ./configs/db/postgresql.conf /etc/postgresql/postgresql.conf

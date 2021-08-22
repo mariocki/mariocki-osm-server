@@ -1,0 +1,55 @@
+SET session_replication_role = 'replica';
+
+CREATE TEMP TABLE _changesets AS SELECT * FROM changesets WITH NO DATA;
+CREATE TEMP TABLE _nodes AS SELECT * FROM nodes WITH NO DATA;
+CREATE TEMP TABLE _node_tags AS SELECT * FROM node_tags WITH NO DATA;
+CREATE TEMP TABLE _ways AS SELECT * FROM ways WITH NO DATA;
+CREATE TEMP TABLE _way_tags AS SELECT * FROM way_tags WITH NO DATA;
+CREATE TEMP TABLE _way_nodes AS SELECT * FROM way_nodes WITH NO DATA;
+CREATE TEMP TABLE _relations AS SELECT * FROM relations WITH NO DATA;
+CREATE TEMP TABLE _relation_tags AS SELECT * FROM relation_tags WITH NO DATA;
+CREATE TEMP TABLE _relation_members AS SELECT * FROM relation_members WITH NO DATA;
+CREATE TEMP TABLE _current_ways AS SELECT * FROM current_ways WITH NO DATA;
+CREATE TEMP TABLE _current_way_tags AS SELECT * FROM current_way_tags WITH NO DATA;
+CREATE TEMP TABLE _current_nodes AS SELECT * FROM current_nodes WITH NO DATA;
+CREATE TEMP TABLE _current_node_tags AS SELECT * FROM current_node_tags WITH NO DATA;
+CREATE TEMP TABLE _current_way_nodes AS SELECT * FROM current_way_nodes WITH NO DATA;
+CREATE TEMP TABLE _current_relations AS SELECT * FROM current_relations WITH NO DATA;
+CREATE TEMP TABLE _current_relation_tags AS SELECT * FROM current_relation_tags WITH NO DATA;
+CREATE TEMP TABLE _current_relation_members AS SELECT * FROM current_relation_members WITH NO DATA;
+
+\copy _changesets from 'c.csv' with (format csv, header, delimiter ',');
+\copy _nodes from 'n.csv' with (format csv, header, delimiter ',');
+\copy _node_tags from 'nt.csv' with (format csv, header, delimiter ',');
+\copy _ways from 'w.csv' with (format csv, header, delimiter ',');
+\copy _way_tags from 'wt.csv' with (format csv, header, delimiter ',');
+\copy _way_nodes from 'wn.csv' with (format csv, header, delimiter ',');
+\copy _relations from 'r.csv' with (format csv, header, delimiter ',');
+\copy _relation_tags from 'rt.csv' with (format csv, header, delimiter ',');
+\copy _relation_members from 'rm.csv' with (format csv, header, delimiter ',');
+\copy _current_ways from 'cw.csv' with (format csv, header, delimiter ',');
+\copy _current_way_tags from 'cwt.csv' with (format csv, header, delimiter ',');
+\copy _current_nodes from 'cn.csv' with (format csv, header, delimiter ',');
+\copy _current_node_tags from 'cnt.csv' with (format csv, header, delimiter ',');
+\copy _current_way_nodes from 'cwn.csv' with (format csv, header, delimiter ',');
+\copy _current_relations from 'cr.csv' with (format csv, header, delimiter ',');
+\copy _current_relation_tags from 'crt.csv' with (format csv, header, delimiter ',');
+\copy _current_relation_members from 'crm.csv' with (format csv, header, delimiter ',');
+
+insert into changesets select * from _changesets ON CONFLICT DO NOTHING;
+insert into ways select * from _ways ON CONFLICT DO NOTHING;
+insert into way_tags select * from _way_tags ON CONFLICT DO NOTHING;
+insert into way_nodes select * from _way_nodes ON CONFLICT DO NOTHING;
+insert into relations select * from _relations ON CONFLICT DO NOTHING;
+insert into relation_tags select * from _relation_tags ON CONFLICT DO NOTHING;
+insert into relation_members select * from _relation_members ON CONFLICT DO NOTHING;
+insert into current_ways select * from _current_ways ON CONFLICT DO NOTHING;
+insert into current_way_tags select * from _current_way_tags ON CONFLICT DO NOTHING;
+insert into current_nodes select * from _current_nodes ON CONFLICT DO NOTHING;
+insert into current_node_tags select * from _current_node_tags ON CONFLICT DO NOTHING;
+insert into current_way_nodes select * from _current_way_nodes ON CONFLICT DO NOTHING;
+insert into current_relations select * from _current_relations ON CONFLICT DO NOTHING;
+insert into current_relation_tags select * from _current_relation_tags ON CONFLICT DO NOTHING;
+insert into current_relation_members select * from _current_relation_members ON CONFLICT DO NOTHING;
+
+SET session_replication_role = 'origin';
