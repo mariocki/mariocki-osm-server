@@ -98,6 +98,7 @@ services:
       - "8081:3000"
     env_file:
       - .env
+      - .env_pghero
     networks:
       - my_network
   pgadmin:

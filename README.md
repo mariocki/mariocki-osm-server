@@ -20,6 +20,19 @@ gh repo clone gravitystorm/openstreetmap-carto
 
 Create a new file named `.env` and copy this text into it:
 ```
+## Environment ##
+NODE_ENV=production
+
+## Server ##
+PORT=3000
+HOST=localhost
+
+## Setup jet-logger ##
+JET_LOGGER_MODE=FILE
+JET_LOGGER_FILEPATH=jet-logger.log
+JET_LOGGER_TIMESTAMP=TRUE
+JET_LOGGER_FORMAT=LINE
+
 # Environment settings for importing to a Docker container database
 PG_WORK_MEM=16MB
 PG_MAINTENANCE_WORK_MEM=256MB
@@ -30,27 +43,36 @@ POSTGRES_PASSWORD=renderer
 POSTGRES_DB=gis
 
 TZ=UTC
-THREADS=2
-
-#used by pghero
-DATABASE_URL=postgres://postgres@db:5432/gis
+THREADS=4
 
 # Azure maps subscription key
 AZURE_MAP_KEY=
 
 # Azure AD authentication
+ENABLE_AZURE_AUTH=false
 AZURE_CLIENT_ID=
 AZURE_TENANT=
 AZURE_SECRET=
 AZURE_REDIRECT_URL=
 
+# pgadmin
+PGADMIN_DEFAULT_EMAIL=
+PGADMIN_DEFAULT_PASSWORD=
+
+#Bing maps
+BING_KEY=
+
+#OpenWeather Maps
+OWM_MAP_KEY=
+
 # openstreetmap-web
-RAILS_MAX_THREADS=4
+RAILS_MAX_THREADS=2
 OSM_DB=openstreetmap
 OSM_USER=openstreetmap
 
+LOCAL_CHANGES_DB=local_changes
 ```
-Most of these values you shouldn't need to change apart from maybe TZ and THREADS. If you do not have an Azure Maps subscription just leave it blank.
+Most of these values you shouldn't need to change apart from maybe TZ and THREADS. If you do not have an Azure or Bing Maps subscriptions just leave them blank.
 
 Create a folder in your home directory named "osm-maps/data":
 ```
