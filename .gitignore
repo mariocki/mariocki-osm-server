@@ -1,4 +1,4 @@
-.env
+.env*
 node_modules
 .vscode/settings.json
 a.csv
@@ -14,4 +14,3 @@ pghero
 osm-server-import
 osm-server-web
 osm-server-web-build
-.env_pghero
