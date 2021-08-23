@@ -17,7 +17,7 @@ osm-server-web: osm-server-web-build Dockerfile.osm-server-web
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
-osm-server-maps: osm-server-db osm-server-core $(shell find siteroot scripts/maps configs/maps -type f | sed 's/ /\\ /g') Dockerfile.osm-server-maps 
+osm-server-maps: osm-server-core $(shell find siteroot scripts/maps configs/maps -type f | sed 's/ /\\ /g') Dockerfile.osm-server-maps 
 	docker build -f Dockerfile.$@ -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) .
 	touch $@
 
