@@ -10,6 +10,14 @@ RUN apt-get update \
   && apt-get install --no-install-recommends -y \
   postgresql-client-13
 
+# Setup app location
+RUN mkdir -p /app/tmp /app/node_modules /app/log
+WORKDIR /app
+
+# Install Ruby packages
+RUN gem install bundler \
+  && bundle install
+
 # Start running
 COPY ./scripts/web/run.sh /
 RUN chmod +x /run.sh
