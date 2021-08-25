@@ -25,6 +25,16 @@ EOSQL
   CREATE EXTENSION IF NOT EXISTS btree_gist;
   CREATE EXTENSION IF NOT EXISTS hstore;
 
+  CREATE INDEX current_ways_changeset_idx
+      ON public.current_ways USING btree
+      (changeset_id ASC NULLS LAST)
+      TABLESPACE pg_default;
+
+  CREATE INDEX current_nodes_changeset_idx
+      ON public.current_nodes USING btree
+      (changeset_id ASC NULLS LAST)
+      TABLESPACE pg_default;
+
   --------------------------------------------------------------------------------
   -- SQL versions of the C database functions.
   --

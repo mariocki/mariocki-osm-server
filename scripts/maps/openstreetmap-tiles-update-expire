@@ -118,7 +118,7 @@ else
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${OSM_DB} -f /usr/local/share/extractchanges.pgsql
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${LOCAL_CHANGES_DB} -f /usr/local/share/importchanges.pgsql
-    rm -f *.csv
+    rm -f /tmp/*.csv
 
     seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
     old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')

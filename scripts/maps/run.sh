@@ -36,6 +36,10 @@ cd /var/www/html && npm install && npm run build && npm start &
 # just in case
 chown -R renderer /var/lib/mod_tile/ajt
 
+# fudge to force mod_tile to not re-render low level zooms 
+find /var/lib/mod_tile/ajt/[123456789] -type f -exec touch {} \;
+find /var/lib/mod_tile/ajt/1[012] -type f -exec touch {} \;
+
 # Initialize Apache
 service rsyslog stop
 service munin stop

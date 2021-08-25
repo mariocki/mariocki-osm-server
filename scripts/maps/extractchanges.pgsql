@@ -22,22 +22,22 @@ SELECT cr.* INTO TEMP _cr FROM current_relations cr INNER JOIN _c ON cr.changese
 SELECT crt.* INTO TEMP _crt FROM current_relation_tags crt INNER JOIN _cr ON _cr.id= crt.relation_id;
 SELECT crm.* INTO TEMP _crm FROM current_relation_members crm INNER JOIN _cr ON _cr.id= crm.relation_id;
 
-\copy (select * from _c) to 'c.csv' with (format csv, header, delimiter ',');
-\copy (select * from _n) to 'n.csv' with (format csv, header, delimiter ',');
-\copy (select * from _nt) to 'nt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _w) to 'w.csv' with (format csv, header, delimiter ',');
-\copy (select * from _wt) to 'wt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _wn) to 'wn.csv' with (format csv, header, delimiter ',');
-\copy (select * from _r) to 'r.csv' with (format csv, header, delimiter ',');
-\copy (select * from _rt) to 'rt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _rm) to 'rm.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cw) to 'cw.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cwt) to 'cwt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cwn) to 'cwn.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cn) to 'cn.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cnt) to 'cnt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _cr) to 'cr.csv' with (format csv, header, delimiter ',');
-\copy (select * from _crt) to 'crt.csv' with (format csv, header, delimiter ',');
-\copy (select * from _crm) to 'crm.csv' with (format csv, header, delimiter ',');
+\copy (select * from _c) to '/tmp/c.csv' with (format csv, header, delimiter ',');
+\copy (select * from _n) to '/tmp/n.csv' with (format csv, header, delimiter ',');
+\copy (select * from _nt) to '/tmp/nt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _w) to '/tmp/w.csv' with (format csv, header, delimiter ',');
+\copy (select * from _wt) to '/tmp/wt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _wn) to '/tmp/wn.csv' with (format csv, header, delimiter ',');
+\copy (select * from _r) to '/tmp/r.csv' with (format csv, header, delimiter ',');
+\copy (select * from _rt) to '/tmp/rt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _rm) to '/tmp/rm.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cw) to '/tmp/cw.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cwt) to '/tmp/cwt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cwn) to '/tmp/cwn.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cn) to '/tmp/cn.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cnt) to '/tmp/cnt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _cr) to '/tmp/cr.csv' with (format csv, header, delimiter ',');
+\copy (select * from _crt) to '/tmp/crt.csv' with (format csv, header, delimiter ',');
+\copy (select * from _crm) to '/tmp/crm.csv' with (format csv, header, delimiter ',');
 
 

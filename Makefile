@@ -9,7 +9,7 @@ db: osm-server-db
 kosmtik: osm-server-kosmtik
 import: osm-server-import
 
-osm-server-web-build: $(shell find openstreetmap-website -type f | sed 's/ /\\ /g')
+osm-server-web-build: $(shell find openstreetmap-website/config -type f -size 10c | sed 's/ /\\ /g') openstreetmap-website/Dockerfile
 	docker build -f openstreetmap-website/Dockerfile -t mariocki/$@:latest -t mariocki/$@:$(shell date +%FT%H%M%S) openstreetmap-website/
 	touch $@
 
