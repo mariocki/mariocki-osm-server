@@ -3,6 +3,7 @@
 set -x
 
 cd /app
+rm -f /app/tmp/pids/server.pid
 touch tmp/caching-dev.txt
 touch config/settings.local.yml
 

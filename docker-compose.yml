@@ -78,6 +78,7 @@ services:
       # Prevent these directories from mounting so they're not shared between host OS and Docker
       - /app/node_modules/
       - /app/tmp/
+      - /app/log/
       # main data folders
       - /mnt/data/osm/traces:/mnt/data/osm/traces
       - /mnt/data/osm/images:/mnt/data/images
