@@ -80,4 +80,4 @@ EOSQL
 
 EOSQL2
 
-"${psql[@]}" -f ./shadowtables.pgsql
+"${psql[@]}" --dbname="$OSM_DB" -f ./shadowtables.pgsql
