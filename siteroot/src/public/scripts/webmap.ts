@@ -22,6 +22,13 @@ const osmBaseLayer = L.tileLayer("http://localhost:8080/tile/{z}/{x}/{y}.png", {
     id: "base",
 });
 
+const rwyBaseLayer = L.tileLayer("http://localhost:8080/rwy/{z}/{x}/{y}.png", {
+    maxZoom: 20,
+    attribution:
+        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+    id: "base",
+});
+
 const Esri_WorldImagery = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
@@ -82,7 +89,7 @@ const AzureMaps_MicrosoftWeatherRadarMain = L.tileLayer(
 );
 
 map.addLayer(osmBaseLayer);
-const baseMaps = {"Base":osmBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery }
+const baseMaps = {"Base":osmBaseLayer, "Railways": rwyBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery }
 const overlayMaps = { "OpenAIP": openAIP, "OpenSeaMap": openSeaMap, "OpenWeatherMap Temp": openWeatherMapTemp, "AzureWeather": AzureMaps_MicrosoftWeatherRadarMain }
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);

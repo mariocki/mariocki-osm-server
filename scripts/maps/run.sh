@@ -34,7 +34,10 @@ chmod g+w /var/lib/munin
 cd /var/www/html && npm install && npm run build && npm start &
 
 # just in case
+mkdir -p /var/lib/mod_tile/ajt
+mkdir -p /var/lib/mod_tile/rwy
 chown -R renderer /var/lib/mod_tile/ajt
+chown -R renderer /var/lib/mod_tile/rwy
 
 # fudge to force mod_tile to not re-render low level zooms 
 find /var/lib/mod_tile/ajt/[123456789] -type f -exec touch {} \;
