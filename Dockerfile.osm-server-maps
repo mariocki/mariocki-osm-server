@@ -68,13 +68,15 @@ RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/muni
 # Copy update scripts
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
 COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
+COPY ./scripts/maps/local-tiles-update-expire /usr/local/bin/local-tiles-update-expire-orig
 
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/master/osmosis-db_replag
 COPY ./scripts/maps/osmosis-db_replag /usr/local/bin/
 RUN chmod a+x /usr/local/bin/osmosis-db_replag\
   && mkdir -p /var/log/tiles \
   && chmod -R a+rw /var/log/tiles \
-  && echo "*/7  *    * * *   renderer    /usr/local/bin/openstreetmap-tiles-update-expire | logger\n" >> /etc/crontab
+  && echo "*/60  *    * * *   renderer    /usr/local/bin/openstreetmap-tiles-update-expire | logger\n" >> /etc/crontab \
+  && echo "*/7  *    * * *   renderer    /usr/local/bin/local-tiles-update-expire | logger\n" >> /etc/crontab
 
 # Install trim_osc.py helper script
 # https://raw.githubusercontent.com/Zverik/regional/master/trim_osc.py

@@ -118,29 +118,34 @@ else
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${OSM_DB} -f /usr/local/share/extractchanges.pgsql
 
-    seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
-    old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
-
-    m_ok "start import from date $old_state_date seq-nr $seq, replag is $(osmosis-db_replag -h)"
-
-    /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
-    m_ok "downloading diff"
-
-    # update OSM database
-    if ! $OSMOSIS_BIN --rri workingDirectory="${WORKOSM_DIR}" --wdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no" 2>&1 | tee -a "$OSMOSISLOG" | logger; then
-        m_error "Osmosis error"
-    fi
-
     # extract changes from openstreetmap db
     if ! $OSMOSIS_BIN --rdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" intervalBegin="${old_state_date}" validateSchemaVersion="no" --simplify-change --write-xml-change $CHANGE_FILE 2>&1 | tee -a "$OSMOSISLOG" | logger; then
         m_error "Osmosis error"
     fi
 
     m_ok "importing diff"
-    if ! $OSM2PGSQL_BIN -a --slim $OSM2PGSQL_OPTIONS $CHANGE_FILE 2>&1 | tee -a "$OSM2PGSQLLOG" | logger; then
+    if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 2>&1 | tee -a "$OSM2PGSQLLOG" | logger; then
         m_error "osm2pgsql error"
     fi
 
+    m_ok "expiring tiles"
+    #------------------------------------------------------------------------------
+    # When expiring tiles we need to define the style sheet if it's not "default".
+    # In this case it's "ajt".
+    # Previously all tiles on the "dirty" list between $EXPIRY_MINZOOM and
+    # $EXPIRY_MAXZOOM were dirtied.  We currently re-render
+    # tiles >= $EXPIRY_MINZOOM and < $EXPIRY_DELETEFROM, expiry from 14 and
+    # delete >= $EXPIRY_DELETEFROM and <= $EXPIRY_MAXZOOM.
+    # The default path to renderd.sock is fixed.
+    #------------------------------------------------------------------------------
+    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$EXPIRYLOG" | logger; then
+        m_info "Expiry failed"
+    fi
+
+    if [ -f "$EXPIRY_FILE.$$" ]; then
+        rm -f "$EXPIRY_FILE.$$"
+    fi
+    
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'CALL update_rail_routes();'
 
     #------------------------------------------------------------------------------
