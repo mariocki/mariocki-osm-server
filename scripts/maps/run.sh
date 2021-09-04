@@ -7,9 +7,7 @@ rm -rf /tmp/*
 
 compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /etc/munin/munin.conf-orig >/etc/munin/munin.conf
 compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/openstreetmap-tiles-update-expire-orig >/usr/local/bin/openstreetmap-tiles-update-expire
-compgen -e | xargs -I @ bash -c 'printf "s|\${%q}|%q|g\n" "@" "$@"' | sed -f /dev/stdin /usr/local/bin/local-tiles-update-expire-orig >/usr/local/bin/local-tiles-update-expire
 chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
-chmod a+x /usr/local/bin/local-tiles-update-expire
 
 cd /openstreetmap-carto/style
 ./merge.sh
