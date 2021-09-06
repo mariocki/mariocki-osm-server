@@ -138,7 +138,7 @@ else
         # delete >= $EXPIRY_DELETEFROM and <= $EXPIRY_MAXZOOM.
         # The default path to renderd.sock is fixed.
         #------------------------------------------------------------------------------
-        if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$RUNLOG" | logger; then
+        if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} -tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$RUNLOG" | logger; then
             m_info "Expiry failed"
         fi
 
