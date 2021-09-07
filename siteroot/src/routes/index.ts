@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 baseRouter.get('/maps', function (req, res) {
-    if (process.env.NODE_ENV === 'production' && !req.session.isAuthenticated && process.env.ENABLE_AZURE_AUTH === 'true') {
+    if (process.env.NODE_ENV === 'production' && process.env.ENABLE_AZURE_AUTH === 'true') {
         res.redirect('/signin');
     }
     res.render('index', { title: 'My Maps' });

@@ -31,7 +31,7 @@ fi
 chown munin.www-data /var/lib/munin
 chmod g+w /var/lib/munin
 
-cd /var/www/html && npm install && npm run build && npm start &
+cd /var/www/html && npm install && npm start &
 
 # just in case
 mkdir -p /var/lib/mod_tile/ajt
