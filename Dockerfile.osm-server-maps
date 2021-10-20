@@ -52,7 +52,7 @@ RUN sed -i 's/^RUNASUSER=.*/RUNASUSER=renderer/' /etc/init.d/renderd \
 
 # configure munin
 RUN mkdir -p /var/cache/munin/www
-COPY ./configs/maps/munin.conf /etc/munin/munin.conf-orig
+COPY ./configs/maps/munin.conf-orig /etc/munin/
 COPY ./configs/maps/apache24.conf /etc/munin/
 RUN chown -R munin:www-data /var/log/munin /var/run/munin /var/cache/munin/www \
   && chmod -R 775 /var/log/munin \
@@ -67,7 +67,7 @@ RUN sed -i 's/localhost\/mod_tile /localhost\/mod_tile_stats /g' /usr/share/muni
 
 # Copy update scripts
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/blob/master/openstreetmap-tiles-update-expire
-COPY ./scripts/maps/openstreetmap-tiles-update-expire /usr/local/bin/openstreetmap-tiles-update-expire-orig
+COPY ./scripts/maps/openstreetmap-tiles-update-expire-orig /usr/local/bin/openstreetmap-tiles-update-expire-orig
 
 # https://raw.githubusercontent.com/SomeoneElseOSM/mod_tile/master/osmosis-db_replag
 COPY ./scripts/maps/osmosis-db_replag /usr/local/bin/

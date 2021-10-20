@@ -37,9 +37,9 @@ import_map_data() {
         if [ -f /data/data.poly ]; then
             sudo -u renderer cp /data/data.poly /var/lib/mod_tile/data.poly
         fi
-    fi
 
-    osmosis --td host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no"
+        osmosis --td host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no"
+    fi
 
     # Import data into OSM
     osmosis --rbf file="/data/data.osm.pbf" workers=${THREADS:-4} --wd host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no"
@@ -48,20 +48,20 @@ import_map_data() {
     osmosis --rdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no" --simplify-change --wxc ${CHANGE_FILE}
 
     # import change file to gis
-    osm2pgsql -H ${PGHOST} -d ${POSTGRES_DB} -U ${POSTGRES_USER} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${CHANGE_FILE} ${1:---append}
+    osm2pgsql -H ${PGHOST} -d ${GIS_DB} -U ${POSTGRES_USER} --slim -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${CHANGE_FILE} ${1:---append}
 
     if [ "${1:---append}" == "--create" ]; then
         # Create indexes
-        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /indexes.psql
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -f /indexes.psql
 
         # create rail_routes table and SP
-        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_rail_routes.psql
-        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /create_update_rail_routes.psql
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -f /create_rail_routes.psql
+        psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -f /create_update_rail_routes.psql
 
         #Import external data
         mkdir -p /home/renderer/src
         sudo chown -R renderer: /home/renderer/src
-        python3 /openstreetmap-carto/scripts/get-external-data.py -c /openstreetmap-carto/external-data.yml -D /openstreetmap-carto/data -H ${PGHOST} -d ${POSTGRES_DB} -U ${POSTGRES_USER}
+        python3 /openstreetmap-carto/scripts/get-external-data.py -c /openstreetmap-carto/external-data.yml -D /openstreetmap-carto/data -H ${PGHOST} -d ${GIS_DB} -U ${POSTGRES_USER}
     fi
 }
 
@@ -75,15 +75,15 @@ fi
 
 echo "Done..."
 
-sleep infinity
+#sleep infinity
 
-exit 0
+#exit 0
 
 ##### import contours (Ordnance Survey GB Only)
 #####
-shp2pgsql -p -I -g way -s 27700:3857 /data/contours/data/hp/HP40_line.shp contour_os | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} >>contour.log 2>&1
+shp2pgsql -p -I -g way -s 27700:3857 /data/contours/data/hp/HP40_line.shp contour_os | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} >>contour.log 2>&1
 
 for a in `find /data/contours/data/ -name *.shp`; do 
-    shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}; 
+    shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}; 
 done
 

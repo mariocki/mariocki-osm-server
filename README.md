@@ -40,7 +40,7 @@ POSTGRES_HOST_AUTH_METHOD=trust
 PGHOST=db
 POSTGRES_USER=renderer
 POSTGRES_PASSWORD=renderer
-POSTGRES_DB=gis
+GIS_DB=gis
 
 TZ=UTC
 THREADS=4
@@ -220,11 +220,11 @@ done
 
 ## https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
 ## pick a random contour.shp file from in the contour directory ... doesn't matter which.
-shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+shp2pgsql -p -I -g way -s 4326:3857 contours/N49E000/contour.shp contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}
 
 for a in $(find contours -name *.shp); do
     echo "Processing" $a
-    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+    shp2pgsql -a -e -g way -s 4326:3857 ${a} contour | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}
 done
 ```
 
@@ -240,10 +240,10 @@ find . -name "*.zip" | while read filename; do unzip -o -d "`dirname "$filename"
 Create the table and import the data.
 ```
 ## pick a random SHP file from one of the sub directories ... doesn't matter which.
-shp2pgsql -p -I -g way -s 27700:3857 data/hp/HP40_line.shp contour_os | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+shp2pgsql -p -I -g way -s 27700:3857 data/hp/HP40_line.shp contour_os | psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}
 
 
-for a in `find . -name *.shp`; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}; done
+for a in `find . -name *.shp`; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}; done
 ```
 
 ### Hillshading
