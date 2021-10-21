@@ -2,104 +2,24 @@
 
 set -e
 
-#------------------------------------------------------------------------------
-# AJT - change directory to mod_tile directory so that we can run replag
-# and other things directly from this script when run from cron.
-# Change the actual location to wherever installed locally.
-#------------------------------------------------------------------------------
 export PATH=.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ACCOUNT=renderer
-
-#------------------------------------------------------------------------------
-# Extra OSM2PGSQL_OPTIONS may need setting if a tag transform script is
-# in use.  See https://github.com/SomeoneElseOSM/SomeoneElse-style and
-# http://wiki.openstreetmap.org/wiki/User:SomeoneElse/Ubuntu_1404_tileserver_load
-# The database name always needs setting.
-#------------------------------------------------------------------------------
-OSMOSIS_BIN=osmosis
-OSM2PGSQL_BIN=osm2pgsql
-TRIM_BIN=trim_osc.py
-
-OSM2PGSQL_OPTIONS="-d ${GIS_DB} -H ${PGHOST} -G --hstore --tag-transform-script /openstreetmap-carto/openstreetmap-carto.lua --number-processes ${THREADS:-4} -S /openstreetmap-carto/openstreetmap-carto.style ${OSM2PGSQL_EXTRA_ARGS}"
-
-#------------------------------------------------------------------------------
-# When using trim_osc.py we can define either a bounding box (such as this
-# example for England and Wales) or a polygon.
-# See https://github.com/zverik/regional .
-# This area will usually correspond to the data originally loaded.
-#------------------------------------------------------------------------------
-TRIM_POLY_FILE="/var/lib/mod_tile/data.poly"
-TRIM_OPTIONS="-d ${GIS_DB} --host ${PGHOST}"
-TRIM_REGION_OPTIONS="-p $TRIM_POLY_FILE"
 
 BASE_DIR=/var/lib/mod_tile
 LOG_DIR=/var/log/tiles/
 WORKOSM_DIR=$BASE_DIR/.osmosis
 
-LOCK_FILE=/tmp/openstreetmap-update-expire-lock.txt
-CHANGE_FILE=$BASE_DIR/changes.osc.gz
-EXPIRY_FILE=$BASE_DIR/dirty_tiles
-STOP_FILE=$BASE_DIR/stop.txt
-
 OSMOSISLOG=$LOG_DIR/osmosis.log
-OSM2PGSQLLOG=$LOG_DIR/osm2pgsql.log
-EXPIRYLOG=$LOG_DIR/expiry.log
 RUNLOG=$LOG_DIR/run.log
-
-#------------------------------------------------------------------------------
-# The tile expiry section below can re-render, delete or dirty expired tiles.
-# By default, tiles between EXPIRY_MINZOOM and EXPIRY_MAXZOOM are rerendered.
-# "render_expired" can optionally delete (and/or dirty) tiles above a certail
-# threshold rather than rendering them.
-#------------------------------------------------------------------------------
-EXPIRY_MINZOOM=13
-EXPIRY_TOUCHFROM=16
-EXPIRY_DELETEFROM=17
-EXPIRY_MAXZOOM=20
-
-#*************************************************************************
-#*************************************************************************
 
 m_info() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" | tee -a "$RUNLOG" | logger
 }
 
-m_error() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ [error] $1" | tee -a "$RUNLOG" | logger
-
-    m_info "resetting state"
-    /bin/cp $WORKOSM_DIR/last.state.txt $WORKOSM_DIR/state.txt || true
-
-    rm -f "$CHANGE_FILE" || true
-    rm -f "$EXPIRY_FILE.$$" || true
-    rm -f "$LOCK_FILE" || true
-    exit
-}
-
-m_ok() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $$ $1" | tee -a "$RUNLOG" | logger
-}
-
-getlock() {
-    if [ -s $1 ]; then
-        if [ "$(ps -p $(cat $1) | wc -l)" -gt 1 ]; then
-            return 1 #false
-        fi
-    fi
-
-    echo $$ >"$1"
-    return 0 #true
-}
-
-freelock() {
-    rm "$1"
-    rm "$CHANGE_FILE"
-}
-
 if [ $# -eq 1 ]; then
     m_info "Initialising Osmosis replication system to $1"
     mkdir -p $WORKOSM_DIR
-    $OSMOSIS_BIN --read-replication-interval-init workingDirectory=$WORKOSM_DIR 2>&1 | tee -a "$OSMOSISLOG" | logger
+    osmosis --read-replication-interval-init workingDirectory=$WORKOSM_DIR 2>&1 | tee -a "$OSMOSISLOG" | logger
     wget "https://replicate-sequences.osm.mazdermind.de/?"$1"T00:00:00Z" -O $WORKOSM_DIR/state.txt
     mv $WORKOSM_DIR/configuration.txt $WORKOSM_DIR/configuration_orig.txt
     sed "s!baseUrl=http://planet.openstreetmap.org/replication/minute!baseUrl=https://planet.openstreetmap.org/replication/minute!" $WORKOSM_DIR/configuration_orig.txt >$WORKOSM_DIR/configuration.txt
