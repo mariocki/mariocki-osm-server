@@ -127,10 +127,6 @@ docker compose up kosmtik
 ```
 More information about Kosmtik can be found here https://github.com/kosmtik/kosmtik
 
-## Adding more countries to your database
-~~Edit docker-compose.yml and remove the following line: `    command: --create`.
-And then repeat the instructions under "Importing Data"~~
-
 ## Bulk rendering
 Connect to the map server:
 ```

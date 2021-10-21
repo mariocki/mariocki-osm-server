@@ -40,7 +40,6 @@ services:
       - db
     env_file:
       - .env
-    #command: --append
     networks:
       - my_network
   maps:
