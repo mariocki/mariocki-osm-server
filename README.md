@@ -112,13 +112,6 @@ To view your maps run this and open a browser at http://localhost:8080/.
 docker compose up -d maps
 ```
 
-### Monitoring the database
-[Optional]
-If you want to monitor the database then run this and open a browser at http://localhost:8081/.
-```
-docker compose up -d pghero
-```
-
 ### Editing the map style
 [Optional]
 If you want to start editing the carto styles then run this and open a browser at http://localhost:6789/openstreetmap-carto/#4/0.00/0.00
@@ -172,7 +165,7 @@ manchester
 `-307582.6018,6291684.6722,-218304.1528,6419487.3835` channel islands
 	 
 ## Importing contour lines
-## Using SRTM contour data
+### Using SRTM contour data
 :warning: This can take quite a long time to run. :warning:
 
 Make sure you don't have any datafiles in the data folder (or else it'll try and re-import them :smile:):
@@ -191,11 +184,12 @@ run these steps:
 ```
 ## import contours
 ## taken from https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
-#
+
 cd /data
 mkdir -p cache vrt translated warped hillshade
+
 # Download data if need-be (slow)
-eio --cache_dir=/tmp/cache seed --bounds -12.42 49.55 2.17 61.26 --cache_dir /data/cache #uk+eire
+eio --cache_dir=cache seed --bounds -12.42 49.55 2.17 61.26 #uk+eire
 
 for a in $(find cache -name *.tif); do
     fname=${a##*/}
@@ -211,6 +205,7 @@ for a in $(find cache -name *.tif); do
     mkdir -p contours/${fname%.tif}
     gdal_contour -q -i 10 -f "ESRI Shapefile" -a height warped/${fname} contours/${fname%.tif}
 
+    # this next line is only required if you want to generate hillshade data.
     gdaldem hillshade warped/${fname} hillshade/${fname} -co "TILED=YES" -co "COMPRESS=DEFLATE" -combined -z 3;
 done
 
@@ -242,18 +237,21 @@ shp2pgsql -p -I -g way -s 27700:3857 data/hp/HP40_line.shp contour_os | psql -h 
 for a in `find . -name *.shp`; do shp2pgsql -a -e -g way -s 27700:3857 $a contour_os | psql -h  ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB}; done
 ```
 
+And then add contours to your carto style as shown here https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik#Update_the_CSS_files
+
 ### Hillshading
-Refs:
+You will need to followed the steps above for generating contours from SRTM data.
 
-Assuming you have followed the steps above for contours...
-
-start and connect to the import server if not already done:
+Start and connect to the import server if not already done so:
 ```
 docker compose up -d import
 docker exec -it mariocki-osm-server_import_1 /bin/bash
 ```
 
 Copy the hillshade folder to `/var/lib/mod_tile/`
+```
+mv /data/hillshade /var/lib/mod_tile/
+```
 
 Run this and copy the contents of hillshade.mml into your `openstreetmap-carto/project.mml` __after__ the landcover layers.
 
@@ -303,8 +301,14 @@ Then follow instructions as per https://github.com/openstreetmap/openstreetmap-w
 * https://wiki.openstreetmap.org/wiki/Contour_relief_maps_using_mapnik
 * https://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide.bqg
 
+If you get `AddGeometryColumn() - invalid SRID` during SHP import then run this on the db server:
+```
+psql -U renderer -d gis -f /usr/share/postgresql/13/contrib/postgis-3.2/spatial_ref_sys.sql
+```
+
 ## Hillshading
 * https://wiki.openstreetmap.org/wiki/Shaded_relief_maps_using_mapnik
 * https://wiki.openstreetmap.org/wiki/HikingBikingMaps/HillShading
 * https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
 * https://gis.stackexchange.com/a/162390
+
