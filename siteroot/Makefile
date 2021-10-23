@@ -2,7 +2,7 @@
 
 all: $(shell find src -type f | sed 's/ /\\ /g')
 	$(RM) -rf dist/
-	mkdir -p ./dist/ ./dist/pre-start/env/
+	mkdir -p ./dist/pre-start/env/
 	cp -aR src/public dist/
 	cp -aR src/views dist/
 	cp src/pre-start/env/.env dist/pre-start/env/
