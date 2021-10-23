@@ -1,5 +1,6 @@
 import L from "leaflet";
 import { BingProvider, GeoSearchControl } from "leaflet-geosearch";
+import "leaflet-bing-layer";
 import { KML } from "./L.KML";
 
 const provider = new BingProvider({
@@ -88,8 +89,10 @@ const AzureMaps_MicrosoftWeatherRadarMain = L.tileLayer(
     } as L.TileLayerOptions
 );
 
+const OS_Imagery = L.tileLayer.bing({ bingMapsKey: process.env.BING_KEY, imagerySet: "OrdnanceSurvey", culture: "en-GB"})
+
 map.addLayer(osmBaseLayer);
-const baseMaps = {"Base":osmBaseLayer, "Railways": rwyBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery }
+const baseMaps = {"Base":osmBaseLayer, "Railways": rwyBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery, "OS": OS_Imagery }
 const overlayMaps = { "OpenAIP": openAIP, "OpenSeaMap": openSeaMap, "OpenWeatherMap Temp": openWeatherMapTemp, "AzureWeather": AzureMaps_MicrosoftWeatherRadarMain }
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
