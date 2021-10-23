@@ -90,6 +90,7 @@ services:
       - my_network    
     depends_on:
       - db
+      - web-build
   pghero:
     image: ankane/pghero
     depends_on:
