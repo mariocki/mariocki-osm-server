@@ -91,8 +91,14 @@ const AzureMaps_MicrosoftWeatherRadarMain = L.tileLayer(
 
 const OS_Imagery = L.tileLayer.bing({ bingMapsKey: process.env.BING_KEY, imagerySet: "OrdnanceSurvey", culture: "en-GB"})
 
+const nls10k = L.tileLayer('https://mapseries-tilesets.s3.amazonaws.com/os/britain10knatgrid/{z}/{x}/{y}.png', {
+    minZoom: 8,
+    maxZoom: 20,
+    attribution: 'Historical Maps Layer, from the <a href="http://maps.nls.uk/projects/api/">NLS Maps API</a>'
+});
+
 map.addLayer(osmBaseLayer);
-const baseMaps = {"Base":osmBaseLayer, "Railways": rwyBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery, "OS": OS_Imagery }
+const baseMaps = {"Base":osmBaseLayer, "Railways": rwyBaseLayer, "ESRIWorldImagery": Esri_WorldImagery, "AzureImagery": AzureMaps_Imagery, "OS": OS_Imagery, "NLS-10k": nls10k }
 const overlayMaps = { "OpenAIP": openAIP, "OpenSeaMap": openSeaMap, "OpenWeatherMap Temp": openWeatherMapTemp, "AzureWeather": AzureMaps_MicrosoftWeatherRadarMain }
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
