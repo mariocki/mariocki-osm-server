@@ -90,34 +90,24 @@ performImport() {
     m_ok "start import from date $old_state_date seq-nr $seq, replag is $(osmosis-db_replag -h)"
 
     /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
-    m_ok "downloading diff"
-
-    # update OSM database
+    
+    m_ok "Updating OSM from mirror"
     if ! $OSMOSIS_BIN --rri workingDirectory="${WORKOSM_DIR}" --wdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no" 2>&1 | tee -a "$RUNLOG" | logger; then
         m_error "Osmosis error"
     fi
 
-    # extract changes from openstreetmap db
+    m_ok "Extracting changes from OSM"
     if ! $OSMOSIS_BIN --rdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" intervalBegin="${old_state_date}" validateSchemaVersion="no" --simplify-change --write-xml-change $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then
         m_error "Osmosis error"
     fi
 
-    m_ok "importing diff"
+    m_ok "Importing changes into GIS"
     if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then
         m_error "osm2pgsql error"
     fi
 
     if [ -f "$EXPIRY_FILE.$$" ]; then
-        m_ok "expiring tiles"
-        #------------------------------------------------------------------------------
-        # When expiring tiles we need to define the style sheet if it's not "default".
-        # In this case it's "ajt".
-        # Previously all tiles on the "dirty" list between $EXPIRY_MINZOOM and
-        # $EXPIRY_MAXZOOM were dirtied.  We currently re-render
-        # tiles >= $EXPIRY_MINZOOM and < $EXPIRY_DELETEFROM, expiry from 14 and
-        # delete >= $EXPIRY_DELETEFROM and <= $EXPIRY_MAXZOOM.
-        # The default path to renderd.sock is fixed.
-        #------------------------------------------------------------------------------
+        m_ok "Expiring tiles"
         if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$RUNLOG" | logger; then
             m_info "Expiry failed"
         fi
@@ -158,10 +148,6 @@ else
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -c 'CALL update_rail_routes();' 2>&1 | tee -a "$RUNLOG" | logger
 
-    #------------------------------------------------------------------------------
-    # Only remove the lock file after expiry (if system is slow we want to delay
-    # the next import, not have multiple render_expired processes running)
-    #------------------------------------------------------------------------------
     freelock "$LOCK_FILE"
 
     m_ok "Done with import"
