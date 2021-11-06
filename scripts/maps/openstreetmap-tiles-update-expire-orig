@@ -105,17 +105,6 @@ performImport() {
     if ! $OSM2PGSQL_BIN -a --slim -e$EXPIRY_MINZOOM-$EXPIRY_MAXZOOM $OSM2PGSQL_OPTIONS -o "$EXPIRY_FILE.$$" $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then
         m_error "osm2pgsql error"
     fi
-
-    if [ -f "$EXPIRY_FILE.$$" ]; then
-        m_ok "Expiring tiles"
-        if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <"$EXPIRY_FILE.$$" 2>&1 | tee -a "$RUNLOG" | logger; then
-            m_info "Expiry failed"
-        fi
-
-        rm -f "$EXPIRY_FILE.$$"
-    else
-        m_ok "No tiles to expire"
-    fi 
 }
 
 if [ $# -eq 1 ]; then
@@ -140,11 +129,29 @@ else
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${OSM_DB} -f /usr/local/share/extractchanges.pgsql 2>&1 | tee -a "$RUNLOG" | logger
 
+    old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     performImport
-    while [ $(osmosis-db_replag) -gt 3610 ]
+    new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    while [ $(osmosis-db_replag) -gt 3600 ] && [ "${old_state_date}" != "${new_state_date}" ]
     do
+        old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
         performImport
+        new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     done
+
+    for dirtyfile in dirty_tiles.*; do
+        cat $dirtyfile >> dirty_tiles.merged
+        rm -f $dirtyfile
+    done
+
+    cat dirty_tiles.merged | sort | uniq > dirty_tiles.render
+    rm -f dirty_tiles.merged
+
+    m_ok "Expiring tiles"
+    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <dirty_tiles.render 2>&1 | tee -a "$RUNLOG" | logger; then
+        m_info "Expiry failed"
+    fi
+    rm -f dirty_tiles.render
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -c 'CALL update_rail_routes();' 2>&1 | tee -a "$RUNLOG" | logger
 
