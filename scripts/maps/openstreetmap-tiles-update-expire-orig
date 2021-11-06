@@ -39,7 +39,7 @@ RUNLOG=$LOG_DIR/import.log
 # threshold rather than rendering them.
 #------------------------------------------------------------------------------
 EXPIRY_MINZOOM=13
-EXPIRY_TOUCHFROM=14
+EXPIRY_TOUCHFROM=15
 EXPIRY_DELETEFROM=17
 EXPIRY_MAXZOOM=20
 
@@ -141,7 +141,7 @@ else
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${OSM_DB} -f /usr/local/share/extractchanges.pgsql 2>&1 | tee -a "$RUNLOG" | logger
 
     performImport
-    while [ $(osmosis-db_replag) -gt 3600 ]
+    while [ $(osmosis-db_replag) -gt 3610 ]
     do
         performImport
     done
