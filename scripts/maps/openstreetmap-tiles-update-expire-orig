@@ -139,16 +139,16 @@ else
         new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     done
 
-    for dirtyfile in dirty_tiles.*; do
-        cat $dirtyfile >> dirty_tiles.merged
+    for dirtyfile in $BASE_DIR/dirty_tiles.*; do
+        cat $dirtyfile >> $BASE_DIR/dirty_tiles.merged
         rm -f $dirtyfile
     done
 
-    cat dirty_tiles.merged | sort | uniq > dirty_tiles.render
-    rm -f dirty_tiles.merged
+    cat $BASE_DIR/dirty_tiles.merged | sort | uniq > $BASE_DIR/dirty_tiles.render
+    rm -f $BASE_DIR/dirty_tiles.merged
 
     m_ok "Expiring tiles"
-    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <dirty_tiles.render 2>&1 | tee -a "$RUNLOG" | logger; then
+    if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <$BASE_DIR/dirty_tiles.render 2>&1 | tee -a "$RUNLOG" | logger; then
         m_info "Expiry failed"
     fi
     rm -f dirty_tiles.render
