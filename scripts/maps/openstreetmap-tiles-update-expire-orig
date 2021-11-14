@@ -151,7 +151,7 @@ else
     if ! render_expired --map=ajt --min-zoom=$EXPIRY_MINZOOM --touch-from=$EXPIRY_TOUCHFROM --delete-from=$EXPIRY_DELETEFROM --max-zoom=$EXPIRY_MAXZOOM -n ${THREADS:-4} --tile-dir=$BASE_DIR -s /var/run/renderd/renderd.sock <$BASE_DIR/dirty_tiles.render 2>&1 | tee -a "$RUNLOG" | logger; then
         m_info "Expiry failed"
     fi
-    rm -f dirty_tiles.render
+    rm -f $BASE_DIR/dirty_tiles.render
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${GIS_DB} -c 'CALL update_rail_routes();' 2>&1 | tee -a "$RUNLOG" | logger
 
