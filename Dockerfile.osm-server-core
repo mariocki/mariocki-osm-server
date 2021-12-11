@@ -1,4 +1,4 @@
-FROM debian:sid-slim as build-stage
+FROM debian:stable-slim as build-stage
 
 # Set up build user
 RUN adduser --disabled-password --gecos "" build
@@ -51,7 +51,7 @@ RUN echo "Description: Hello World" >> osm2pgsql-git/DEBIAN/control
 
 RUN dpkg-deb --build osm2pgsql-git
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
