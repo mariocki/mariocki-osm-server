@@ -85,23 +85,23 @@ freelock() {
 
 performImport() {
 
-    mirror_url=$(cat $WORKOSM_DIR/configuration.txt | grep baseUrl | cut -d= -f2)
-    wget "${mirror_url}/state.txt" -O /tmp/mirror_state.txt
-    mirror_seq=$(cat /tmp/mirror_state.txt | grep sequenceNumber | cut -d= -f2)
+    #mirror_url=$(cat $WORKOSM_DIR/configuration.txt | grep baseUrl | cut -d= -f2)
+    #wget "${mirror_url}/state.txt" -O /tmp/mirror_state.txt
+    #mirror_seq=$(cat /tmp/mirror_state.txt | grep sequenceNumber | cut -d= -f2)
 
-    seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
-    old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    #seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
+    #old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
 
-    if [ "${mirror_seq}" != "${seq}" ]; then
-        m_ok "start import from date $old_state_date seq-nr $seq, replag is $(osmosis-db_replag -h)"
+    #if [ "${mirror_seq}" != "${seq}" ]; then
+    #    m_ok "start import from date $old_state_date seq-nr $seq, replag is $(osmosis-db_replag -h)"
 
-        /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
+    #    /bin/cp $WORKOSM_DIR/state.txt $WORKOSM_DIR/last.state.txt
         
-        m_ok "Updating OSM from mirror"
-        if ! $OSMOSIS_BIN --rri workingDirectory="${WORKOSM_DIR}" --wdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no" 2>&1 | tee -a "$RUNLOG" | logger; then
-            m_error "Osmosis error"
-        fi
-    fi
+    #    m_ok "Updating OSM from mirror"
+    #    if ! $OSMOSIS_BIN --rri workingDirectory="${WORKOSM_DIR}" --wdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" validateSchemaVersion="no" 2>&1 | tee -a "$RUNLOG" | logger; then
+    #        m_error "Osmosis error"
+    #    fi
+    #fi
 
     m_ok "Extracting changes from OSM"
     if ! $OSMOSIS_BIN --rdc host="${PGHOST}" database="${OSM_DB}" user="${OSM_USER}" intervalBegin="${old_state_date}" validateSchemaVersion="no" --simplify-change --write-xml-change $CHANGE_FILE 2>&1 | tee -a "$RUNLOG" | logger; then
