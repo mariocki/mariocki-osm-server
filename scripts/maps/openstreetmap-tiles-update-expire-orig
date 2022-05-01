@@ -136,15 +136,15 @@ else
 
     psql -h ${PGHOST} -U ${POSTGRES_USER} -d ${OSM_DB} -f /usr/local/share/extractchanges.pgsql 2>&1 | tee -a "$RUNLOG" | logger
 
-    old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    #old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     performImport
-    new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
-    while [ $(osmosis-db_replag) -gt 3600 ] && [ "${old_state_date}" != "${new_state_date}" ]
-    do
-        old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
-        performImport
-        new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
-    done
+    #new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    #while [ $(osmosis-db_replag) -gt 3600 ] && [ "${old_state_date}" != "${new_state_date}" ]
+    #do
+    #    old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    #    performImport
+    #    new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+    #done
 
     for dirtyfile in $BASE_DIR/dirty_tiles.*; do
         cat $dirtyfile >> $BASE_DIR/dirty_tiles.merged
