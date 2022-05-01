@@ -12,8 +12,7 @@ chmod a+x /usr/local/bin/openstreetmap-tiles-update-expire
 cd /openstreetmap-carto/style
 ./merge.sh
 cd ..
-carto -q project.mml >mapnik.xml &
-CARTO_PID=$!
+carto -q project.mml >mapnik.xml 
 
 # Configure Apache CORS
 if [ "$ALLOW_CORS" == "enabled" ] || [ "$ALLOW_CORS" == "1" ]; then
@@ -46,6 +45,7 @@ find /var/lib/mod_tile/ajt/1[012] -type f -exec touch {} \;
 service rsyslog stop
 service munin stop
 service munin-node stop
+apachectl stop
 
 rm /run/rsyslogd.pid
 rm /var/run/munin/munin-node.pid
@@ -53,11 +53,7 @@ rm /var/run/munin/munin-node.pid
 service rsyslog start
 service munin start
 service munin-node start
-apachectl stop
-while kill -0 $CARTO_PID; do
-    echo "Waiting for Carto..."
-    sleep 1
-done
+
 
 source /etc/apache2/envvars && apachectl start
 service renderd restart
