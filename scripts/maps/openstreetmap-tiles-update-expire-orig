@@ -92,6 +92,9 @@ performImport() {
     #seq=$(cat $WORKOSM_DIR/state.txt | grep sequenceNumber | cut -d= -f2)
     #old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
 
+    # NO_OSM: since we are not pulling from OSM directly only pull changes since last local pull
+    old_state_date=$(cat $WORKOSM_DIR/local.state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
+
     #if [ "${mirror_seq}" != "${seq}" ]; then
     #    m_ok "start import from date $old_state_date seq-nr $seq, replag is $(osmosis-db_replag -h)"
 
@@ -138,6 +141,10 @@ else
 
     #old_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     performImport
+
+    # NO_OSM: set local state to now so we dont re-import again next time
+    echo "timestamp=`date +'%Y-%m-%d_%H:%M:%S'`" >$WORKOSM_DIR/local.state.txt
+
     #new_state_date=$(cat $WORKOSM_DIR/state.txt |grep timestamp|cut -b11-31| sed 's/\\//g'| sed 's/T/_/')
     #while [ $(osmosis-db_replag) -gt 3600 ] && [ "${old_state_date}" != "${new_state_date}" ]
     #do
